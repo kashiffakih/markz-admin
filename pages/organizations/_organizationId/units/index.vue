@@ -27,7 +27,7 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
-              <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by IMEI No">
+              <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by unit">
               <a class="refresh" href="#" @click="getData">Refresh</a>
               <br>
               <div class="card">
@@ -42,7 +42,8 @@
                       <tr>
                         <th>Sr. No.</th>
                         <th>Actions</th>
-                        <th>IMEI No</th>
+                        <th>Unit</th>
+                        <th>Divide By</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -51,7 +52,7 @@
                       > 
                         <td colspan="13">Loading...</td>
                       </tr>
-                      <tr v-for="(unit, i) in sorteditems"
+                      <tr v-for="(unit, i) in items"
                         :key="`unit${i}`"
                       >
                         <td>{{ i + 1 }}</td>
@@ -63,10 +64,10 @@
                             <span @click="del(unit.id)">
                               <i class="fa fa-trash"></i>
                             </span>
-                          </nuxt-link>&nbsp;&nbsp;
-                          <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/units/${unit.id}/data`">View Data</nuxt-link>
+                          </nuxt-link>
                         </td>
-                        <td>{{ unit.imei_number }}</td>
+                        <td>{{ unit.name }}</td>
+                        <td>{{ unit.divide_by }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -92,22 +93,9 @@ export default {
     searchData: '',
     items: [],
     loading: true,
-    currentSort:'name',
-    currentSortDir:'asc'
   }),
   mounted() {
     this.getData()
-  },
-  computed:{
-    sorteditems:function() {
-      return this.items.sort((a,b) => {
-        let modifier = 1;
-        if(this.currentSortDir === 'desc') modifier = -1;
-        if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
-        if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
-        return 0;
-      });
-    }
   },
   methods: {
     async getData() {
@@ -132,13 +120,6 @@ export default {
         await this.$axios.delete(`/units/${id}`)
       this.getData()
     },
-    sort(s) {
-      //if s == current sort, reverse
-      if(s === this.currentSort) {
-        this.currentSortDir = this.currentSortDir==='asc'?'desc':'asc';
-      }
-      this.currentSort = s;
-    }
   },
 }
 </script>

@@ -8,10 +8,10 @@ export const state = () => ({
     time_zone: '',
     logo_path: ''
   },
-  mediaUrl: 'https://api.vishwjeet.aaibuzz.com/storage/',
-  baseUrl: 'https://api.vishwjeet.aaibuzz.com/api',
-  // mediaUrl: 'http://localhost:8080/storage/',
-  // baseUrl: 'http://localhost:8080/api',
+  // mediaUrl: 'https://api.vishwjeet.aaibuzz.com/storage/',
+  // baseUrl: 'https://api.vishwjeet.aaibuzz.com/api',
+  mediaUrl: 'http://localhost:8080/storage/',
+  baseUrl: 'http://localhost:8080/api',
 })
 
 export const getters = {

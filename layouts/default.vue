@@ -19,7 +19,7 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" data-toggle="dropdown" href="#">
-              <h3><b>VISHWJEET</b></h3>
+              <h3><b>LUSH FARMS</b></h3>
             </a>
           </li>
           <!-- <li class="nav-item">
@@ -103,9 +103,9 @@
         <div class="float-right d-none d-sm-block">
           <img :src="organization.logo_path ? (mediaUrl + organization.logo_path) : '/dist/img/AdminLTELogo.png'" alt="Logo" style="width: 50px; height: 50px;">
         </div>
-        <strong>Copyright &copy; <a href="https://www.aaibuzz.com">VISHWJEET</a></strong>
-        |
-        <strong>Developed By <a href="https://www.aaibuzz.com">AaiBuzz</a>.</strong> <b>Version</b> 1.0.0
+        <!-- <strong>Copyright &copy; <a href="https://www.aaibuzz.com">LUSH FARMS</a></strong>
+        | -->
+        <!-- <strong>Developed By <a href="https://www.aaibuzz.com">AaiBuzz</a>.</strong> --> <b>Version</b> 1.0.0
       </footer>
 
       <!-- Control Sidebar -->
@@ -186,11 +186,31 @@ export default {
         ]
       })
       categories.push({
-        title: 'Data',
+        title: 'Master',
         'items': [
           {
             name: 'Units', icon: 'fas fa-flag', link: `/organizations/${this.organizationId}/units`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          {
+            name: 'Categories', icon: 'fas fa-clipboard-list', link: `/organizations/${this.organizationId}/categories`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          {
+            name: 'Tags', icon: 'fas fa-tags', link: `/organizations/${this.organizationId}/tags`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          // {
+          //   name: 'Taxes', icon: 'fas fa-money-check', link: `/organizations/${this.organizationId}/taxes`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          // },
+          {
+            name: 'Inventories', icon: 'fas fa-warehouse', link: `/organizations/${this.organizationId}/inventories`, permission: this.permissions.indexOf(3) != -1 ? true : false
           }
+        ]
+      })
+      categories.push({
+        title: 'Products',
+        'items': [
+          {
+            name: 'Products', icon: 'fas fa-shopping-cart', link: `/organizations/${this.organizationId}/products`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
         ]
       })
       return categories;

@@ -58,7 +58,11 @@
                         :key="`org{i}`"
                       >
                         <td>{{ org.id }}</td>
-                        <td><img style="width: 100px; height: 100px;" :src="`${mediaUrl}${org.logo_path}`"></td>
+                        <td>
+                          <img :src="organization.logo_path ? (mediaUrl + organization.logo_path) : '/dist/img/AdminLTELogo.png'"
+                           style="width: 70px; height: 70px;opacity: .8;"
+                           class="brand-image img-circle elevation-3"
+                          >
                         <td>
                           {{ org.name }}<br>
                           {{ org.address }}

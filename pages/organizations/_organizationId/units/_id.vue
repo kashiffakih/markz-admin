@@ -21,7 +21,7 @@
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item">
-                  <nuxt-link :to="`/organizations/${this.organization.value}/users`">Users</nuxt-link>
+                  <nuxt-link :to="`/organizations/${this.organization.value}/categories`">Categories</nuxt-link>
                 </li>
                 <li class="breadcrumb-item active">Create</li>
               </ol>
@@ -34,263 +34,49 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12">
+          <div class="row justify-content-center">
+            <!-- left column -->
+            <div class="col-md-6">
+              <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Update Unit Details</h3>
+                  <h3 class="card-title">Create Unit</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
                 <div class="card-body">
-                  <h5>Customer/Farmer Details</h5>
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">First Name</label>
-                        <input type="text" class="form-control" placeholder="Enter first name"
-                          v-model="form.first_name"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.first_name"
-                        >{{ errors.first_name[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Middle Name</label>
-                        <input type="text" class="form-control" placeholder="Enter middle name"
-                          v-model="form.middle_name"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.middle_name"
-                        >{{ errors.middle_name[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Last Name</label>
-                        <input type="text" class="form-control" placeholder="Enter last name"
-                          v-model="form.last_name"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.last_name"
-                        >{{ errors.last_name[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Residence address</label>
-                        <input type="text" class="form-control" placeholder="Enter residence address"
-                          v-model="form.residence_address"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.residence_address"
-                        >{{ errors.residence_address[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Phone no</label>
-                        <input type="text" class="form-control" placeholder="Enter phone no"
-                          v-model="form.phone_no"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.phone_no"
-                        >{{ errors.phone_no[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Adhaar no</label>
-                        <input type="text" class="form-control" placeholder="Enter adhaar no"
-                          v-model="form.adhaar_no"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.adhaar_no"
-                        >{{ errors.adhaar_no[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" placeholder="Enter email"
-                          v-model="form.email"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.email"
-                        >{{ errors.email[0] }}</span>
-                      </div>
-                    </div>
+                  <div class="form-group">
+                    <label class="form-label">Unit</label>
+                    <input type="text" class="form-control" placeholder="Enter unit"
+                      v-model="form.name"
+                    >
+                    <span class="help-block" 
+                      v-if="errors.name"
+                    >{{ errors.name[0] }}</span>
                   </div>
-                  <hr>
-                  <h5>Controller Details</h5>
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Controller Serial No.</label>
-                        <input type="text" class="form-control" placeholder="Enter controller serial no"
-                          v-model="form.serial_no_controller"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.serial_no_controller"
-                        >{{ errors.serial_no_controller[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Controller Location</label>
-                        <input type="text" class="form-control" placeholder="Enter controller location"
-                          v-model="form.location_controller"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.location_controller"
-                        >{{ errors.location_controller[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">VFD Manufacturer</label>
-                        <input type="text" class="form-control" placeholder="Enter VFD MAnufacturer"
-                          v-model="form.manufacturer_vfd"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.manufacturer_vfd"
-                        >{{ errors.manufacturer_vfd[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">VFD Serial No</label>
-                        <input type="text" class="form-control" placeholder="Enter VFD Serial No"
-                          v-model="form.serial_no_vfd"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.serial_no_vfd"
-                        >{{ errors.serial_no_vfd[0] }}</span>
-                      </div>
-                    </div>
+                  <div class="form-group">
+                    <label class="form-label">Select Divide By</label>
+                    <select class="form-control" v-model="form.divide_by">
+                      <option value="">Select Divide By</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                    </select>
+                    <span class="help-block" 
+                      v-if="errors.divide_by"
+                    >{{ errors.divide_by[0] }}</span>
                   </div>
-                  <hr>
-                  <h5>Pump & Motor Details</h5>
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Motor Type</label>
-                        <input type="text" class="form-control" placeholder="Enter Motor Type"
-                          v-model="form.motor_type"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.motor_type"
-                        >{{ errors.motor_type[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Motor Category</label>
-                        <input type="text" class="form-control" placeholder="Enter Motor Category"
-                          v-model="form.motor_category"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.motor_category"
-                        >{{ errors.motor_category[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Motor Serial No</label>
-                        <input type="text" class="form-control" placeholder="Enter Motor Serial No"
-                          v-model="form.motor_serial_no"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.motor_serial_no"
-                        >{{ errors.motor_serial_no[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Pump Serial No</label>
-                        <input type="text" class="form-control" placeholder="Enter Pump Serial No"
-                          v-model="form.pump_serial_no"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.pump_serial_no"
-                        >{{ errors.pump_serial_no[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Motor HP</label>
-                        <input type="text" class="form-control" placeholder="Enter Motor HP"
-                          v-model="form.motor_hp"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.motor_hp"
-                        >{{ errors.motor_hp[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Motor Head Size</label>
-                        <input type="text" class="form-control" placeholder="Enter Motor Head Size"
-                          v-model="form.motor_head_size"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.motor_head_size"
-                        >{{ errors.motor_head_size[0] }}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <hr>
-                  <h5>RMS Details</h5>
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">IMEI No</label>
-                        <input type="text" class="form-control" placeholder="Enter IMEI No"
-                          v-model="form.imei_number"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.imei_number"
-                        >{{ errors.imei_number[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">RMS Phone no</label>
-                        <input type="text" class="form-control" placeholder="Enter RMS Phone no"
-                          v-model="form.rms_phone_no"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.rms_phone_no"
-                        >{{ errors.rms_phone_no[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Device ID</label>
-                        <input type="text" class="form-control" placeholder="Enter Device ID"
-                          v-model="form.device_id"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.device_id"
-                        >{{ errors.device_id[0] }}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- End row -->
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"
                       @click="store"
-                      :disabled="loading"
-                    >
-                      {{ loading ? 'Saving...': 'Update Unit' }}
-                    </button>
+                    >{{ loading ? 'Saving...' : 'Update Unit' }}</button>
                   </div>
                 </div>
-                <!-- end form start -->
               </div>
-            </div>
+              <!-- /.card -->
+              </div>
+            <!--/.col (left) -->
           </div>
           <!-- /.row -->
         </div>
@@ -303,8 +89,6 @@
 
 <script type="text/javascript">
 import BackButton from '@/components/back-button.vue'
-import 'vue-select/dist/vue-select.css';
-import moment from 'moment'
 
 export default {
   name: 'UpdateUnit',
