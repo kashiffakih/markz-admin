@@ -1,8 +1,8 @@
 #!/bin/bash
-cd ~/public_html/vishwjeet-client/
+cd ~/public_html/lushfarms-client/
 
 npm run build
 
-pm2 delete vishwjeet 
+pm2 delete lushfarms 
 
-pm2 start npm --name vishwjeet -- start
+pm2 start npm --name lushfarms -- start
