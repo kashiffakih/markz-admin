@@ -1,9 +1,9 @@
 RewriteEngine On
 RewriteCond %{SERVER_PORT} 80
-  RewriteRule "(.*\.(jpg|gif|png|svg|js|css))$" "http://localhost:3016/$1" [P,NC]
+  RewriteRule "(.*\.(jpg|gif|png|svg|js|css))$" "http://localhost:3017/$1" [P,NC]
 
 RewriteCond %{REQUEST_URI} ^/index [NC]
-  RewriteRule ^(.*) "http\:\/\/localhost:3016\/" [P,L]
+  RewriteRule ^(.*) "http\:\/\/localhost:3017\/" [P,L]
 
 RewriteCond %{REQUEST_URI} !^/index [NC]
-  RewriteRule ^(.*) "http\:\/\/localhost:3016\/$1" [P,L]
+  RewriteRule ^(.*) "http\:\/\/localhost:3017\/$1" [P,L]
