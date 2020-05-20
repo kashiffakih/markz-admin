@@ -37,9 +37,8 @@
         <nuxt-link to="/" class="brand-link">
           <img :src="organization.logo_path ? (mediaUrl + organization.logo_path) : '/dist/img/AdminLTELogo.png'"
                alt="Logo"
-               class="brand-image img-circle elevation-3"
-               style="opacity: .8">
-          <span class="brand-text font-weight-light">{{ organization.text ? organization.text : 'Not Selected' }}</span>
+               style="opacity: .8; width: 200px">
+          <!-- <span class="brand-text font-weight-light">{{ organization.text ? organization.text : 'Not Selected' }}</span> -->
         </nuxt-link>
 
         <!-- Sidebar -->
@@ -101,7 +100,7 @@
 
       <footer class="main-footer">
         <div class="float-right d-none d-sm-block">
-          <img :src="organization.logo_path ? (mediaUrl + organization.logo_path) : '/dist/img/AdminLTELogo.png'" alt="Logo" style="width: 50px; height: 50px;">
+          <img :src="organization.logo_path ? (mediaUrl + organization.logo_path) : '/dist/img/AdminLTELogo.png'" alt="Logo" style="width: 150px;">
         </div>
         <!-- <strong>Copyright &copy; <a href="https://www.aaibuzz.com">LUSH FARMS</a></strong>
         | -->
