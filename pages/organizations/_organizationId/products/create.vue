@@ -181,7 +181,8 @@ export default {
       this.loading = true
       try {
         let admin = await this.$axios.post(`/products`, this.form)
-        this.$router.push(`/organizations/${this.organization.value}/products/${this.form.id}/details`)
+        admin = admin.data.data
+        this.$router.push(`/organizations/${this.organization.value}/products/${admin.id}/details`)
         this.loading = false
       }
       catch(e) {

@@ -72,7 +72,7 @@
                       <div class="form-group">
                         <label class="form-label">Total</label>
                         <br>
-                        {{ form.purchase_cost }} AED
+                        {{ cost }} AED
                       </div>
                     </div>
                   </div>
@@ -213,11 +213,12 @@ export default {
     BackButton,
   },
   computed: {
-    total() {
-      let total = 0
+    cost() {
+      let cost = 0
       this.form.purchase_details.forEach(detail =>  {
-        total += parseInt(detail.purchase_detail_cost)
+        cost += parseInt(detail.purchase_detail_cost)
       })
+      return cost
     }
   },
   mounted() {
@@ -245,7 +246,11 @@ export default {
         this.form.purchase_details[position].unit = inventory.unit
       }
     },
+    assignCost() {
+      this.form.purchase_cost = this.cost
+    },
     async store() {
+      this.assignCost()
       this.loading = true
       try {
         await this.$axios.post(`/purchases`, this.form)

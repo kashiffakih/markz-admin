@@ -227,7 +227,7 @@ export default {
         title: 'Orders',
         'items': [
           {
-            name: 'Orders', icon: 'fas fa-shopping-basket', link: `/organizations/${this.organizationId}/orders`, permission: this.permissions.indexOf(3) != -1 ? true : false
+            name: 'Orders', icon: 'fas fa-credit-card', link: `/organizations/${this.organizationId}/orders`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
           // {
           //   name: 'Stocks', icon: 'fas fa-layer-group', link: `/organizations/${this.organizationId}/stocks`, permission: this.permissions.indexOf(3) != -1 ? true : false

@@ -204,7 +204,7 @@ export default {
     purchase.purchase_details.forEach((detail, d) => {
       detail.position = d
       detail.inventory_id = parseInt(detail.inventory_id)
-      detail.unit = detail.inventory.unit.name
+      detail.unit = detail.unit.name
     })
     return {
       vendors: users,
@@ -266,23 +266,6 @@ export default {
       catch(e) {
         this.loading = false
       }
-    },
-    async handleFileUpload() {
-      this.attachment = this.$refs.file.files[0]
-      let formData = new FormData();
-      formData.append('userid', this.userid);
-      formData.append('attachment', this.attachment);
-      await this.$axios.post('upload_user_photo', formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      ).then(response => {
-      })
-      .catch(function(){
-        console.log('FAILURE!!');
-      });
     },
   }
 }
