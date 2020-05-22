@@ -190,11 +190,15 @@ export default {
   },
   methods: {
     async getData() {
-      this.item = {}
-      this.loading = true
-      let item = await this.$axios.get(`/web_images/${this.organization.value}`)
-      this.item = item.data.data
-      this.loading = false
+      try {
+        this.item = {}
+        this.loading = true
+        let item = await this.$axios.get(`/web_images/${this.organization.value}`)
+        this.item = item.data.data
+        this.loading = false
+      } catch(ex) {
+        this.loading = false
+      }
     },
     async del(id) {
       let r = confirm('Are you sure you want to delete the data?')
