@@ -201,6 +201,9 @@ export default {
           // },
           {
             name: 'Inventories', icon: 'fas fa-warehouse', link: `/organizations/${this.organizationId}/inventories`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          {
+            name: 'Images', icon: 'fas fa-images', link: `/organizations/${this.organizationId}/images`, permission: this.permissions.indexOf(3) != -1 ? true : false
           }
         ]
       })
