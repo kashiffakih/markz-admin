@@ -54,7 +54,7 @@
                     <tbody>
                       <tr>
                         <td>1</td>
-                        <td>Home Banner 1</td>
+                        <td>Home Banner 1 (1600 X 400)</td>
                         <td>
                           <a target="_blank" :href="`${mediaUrl}${item.home_banner_path_1}`">
                             <img style="width: 150px; height: 150px;" :src="item.home_banner_path_1 ? (mediaUrl + item.home_banner_path_1) : '/dist/img/AdminLTELogo.png'">
@@ -66,7 +66,7 @@
                       </tr>
                       <tr>
                         <td>2</td>
-                        <td>Home Banner 2</td>
+                        <td>Home Banner 2 (1600 X 400)</td>
                         <td>
                           <a target="_blank" :href="`${mediaUrl}${item.home_banner_path_2}`">
                             <img style="width: 150px; height: 150px;" :src="item.home_banner_path_2 ? (mediaUrl + item.home_banner_path_2) : '/dist/img/AdminLTELogo.png'">
@@ -78,7 +78,7 @@
                       </tr>
                       <tr>
                         <td>3</td>
-                        <td>Home Banner 3</td>
+                        <td>Home Banner 3 (1600 X 400)</td>
                         <td>
                           <a target="_blank" :href="`${mediaUrl}${item.home_banner_path_3}`">
                             <img style="width: 150px; height: 150px;" :src="item.home_banner_path_3 ? (mediaUrl + item.home_banner_path_3) : '/dist/img/AdminLTELogo.png'">
@@ -90,7 +90,7 @@
                       </tr>
                       <tr>
                         <td>4</td>
-                        <td>Portrait Banner 1</td>
+                        <td>Portrait Banner 1 (800 X 180)</td>
                         <td>
                           <a target="_blank" :href="`${mediaUrl}${item.portrait_banner_path_1}`">
                             <img style="width: 150px; height: 150px;" :src="item.portrait_banner_path_1 ? (mediaUrl + item.portrait_banner_path_1) : '/dist/img/AdminLTELogo.png'">
@@ -102,7 +102,7 @@
                       </tr>
                       <tr>
                         <td>5</td>
-                        <td>Portrait Banner 2</td>
+                        <td>Portrait Banner 2 (800 X 180)</td>
                         <td>
                           <a target="_blank" :href="`${mediaUrl}${item.portrait_banner_path_2}`">
                             <img style="width: 150px; height: 150px;" :src="item.portrait_banner_path_2 ? (mediaUrl + item.portrait_banner_path_2) : '/dist/img/AdminLTELogo.png'">
@@ -114,7 +114,7 @@
                       </tr>
                       <tr>
                         <td>6</td>
-                        <td>Portrait Banner 3</td>
+                        <td>Portrait Banner 3 (800 X 180)</td>
                         <td>
                           <a target="_blank" :href="`${mediaUrl}${item.portrait_banner_path_3}`">
                             <img style="width: 150px; height: 150px;" :src="item.portrait_banner_path_3 ? (mediaUrl + item.portrait_banner_path_3) : '/dist/img/AdminLTELogo.png'">
@@ -126,7 +126,7 @@
                       </tr>
                       <tr>
                         <td>7</td>
-                        <td>Landscape Banner 1</td>
+                        <td>Landscape Banner 1 (300 X 500)</td>
                         <td>
                           <a target="_blank" :href="`${mediaUrl}${item.landscape_banner_path_1}`">
                             <img style="width: 150px; height: 150px;" :src="item.landscape_banner_path_1 ? (mediaUrl + item.landscape_banner_path_1) : '/dist/img/AdminLTELogo.png'">
@@ -138,7 +138,7 @@
                       </tr>
                       <tr>
                         <td>8</td>
-                        <td>Landscape Banner 2</td>
+                        <td>Landscape Banner 2 (300 X 500)</td>
                         <td>
                           <a target="_blank" :href="`${mediaUrl}${item.landscape_banner_path_2}`">
                             <img style="width: 150px; height: 150px;" :src="item.landscape_banner_path_2 ? (mediaUrl + item.landscape_banner_path_2) : '/dist/img/AdminLTELogo.png'">
@@ -150,7 +150,7 @@
                       </tr>
                       <tr>
                         <td>9</td>
-                        <td>Landscape Banner 3</td>
+                        <td>Landscape Banner 3 (300 X 500)</td>
                         <td>
                           <a target="_blank" :href="`${mediaUrl}${item.landscape_banner_path_3}`">
                             <img style="width: 150px; height: 150px;" :src="item.landscape_banner_path_3 ? (mediaUrl + item.landscape_banner_path_3) : '/dist/img/AdminLTELogo.png'">
@@ -162,7 +162,7 @@
                       </tr>
                       <tr>
                         <td>10</td>
-                        <td>Landscape Small Banner 1</td>
+                        <td>Landscape Small Banner 1 (400 X 200)</td>
                         <td>
                           <a target="_blank" :href="`${mediaUrl}${item.landscape_sm_banner_path_1}`">
                             <img style="width: 150px; height: 150px;" :src="item.landscape_sm_banner_path_1 ? (mediaUrl + item.landscape_sm_banner_path_1) : '/dist/img/AdminLTELogo.png'">
@@ -174,7 +174,7 @@
                       </tr>
                       <tr>
                         <td>11</td>
-                        <td>Landscape Small Banner 2</td>
+                        <td>Landscape Small Banner 2 (400 X 200)</td>
                         <td>
                           <a target="_blank" :href="`${mediaUrl}${item.landscape_sm_banner_path_2}`">
                             <img style="width: 150px; height: 150px;" :src="item.landscape_sm_banner_path_2 ? (mediaUrl + item.landscape_sm_banner_path_2) : '/dist/img/AdminLTELogo.png'">
@@ -186,7 +186,7 @@
                       </tr>
                       <tr>
                         <td>12</td>
-                        <td>Landscape Small Banner 3</td>
+                        <td>Landscape Small Banner 3 (400 X 200)</td>
                         <td>
                           <a target="_blank" :href="`${mediaUrl}${item.landscape_sm_banner_path_3}`">
                             <img style="width: 150px; height: 150px;" :src="item.landscape_sm_banner_path_3 ? (mediaUrl + item.landscape_sm_banner_path_3) : '/dist/img/AdminLTELogo.png'">

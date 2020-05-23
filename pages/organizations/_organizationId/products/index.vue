@@ -76,8 +76,8 @@
                            class="brand-image img-circle elevation-3"
                           >
                         </td>
-                        <td>{{ product.inventory.name }}</td>
-                        <td>{{ product.category.name }}</td>
+                        <td>{{ product.inventory ? product.inventory.name : '' }}</td>
+                        <td>{{ product.category ? product.category.name : '' }}</td>
                         <td>{{ product.name }}</td>
                         <td>{{ product.location }}</td>
                       </tr>
