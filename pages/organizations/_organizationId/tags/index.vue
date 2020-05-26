@@ -42,6 +42,7 @@
                       <tr>
                         <th>Sr. No.</th>
                         <th>Actions</th>
+                        <th>Image</th>
                         <th>Unit</th>
                       </tr>
                     </thead>
@@ -51,21 +52,24 @@
                       > 
                         <td colspan="13">Loading...</td>
                       </tr>
-                      <tr v-for="(unit, i) in items"
-                        :key="`unit${i}`"
+                      <tr v-for="(tag, i) in items"
+                        :key="`tag${i}`"
                       >
                         <td>{{ i + 1 }}</td>
                         <td class="w-1">
-                          <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/tags/${unit.id}`">
+                          <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/tags/${tag.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
                           <nuxt-link title="Delete Inspector" class="icon" to="">
-                            <span @click="del(unit.id)">
+                            <span @click="del(tag.id)">
                               <i class="fa fa-trash"></i>
                             </span>
                           </nuxt-link>
                         </td>
-                        <td>{{ unit.name }}</td>
+                        <td>
+                          <img style="width: 50px; height: 50px;" :src="tag.imagepath ? (mediaUrl + tag.imagepath) : '/product-vector.png'">
+                        </td>
+                        <td>{{ tag.name }}</td>
                       </tr>
                     </tbody>
                   </table>

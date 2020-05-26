@@ -54,6 +54,16 @@
                       v-if="errors.name"
                     >{{ errors.name[0] }}</span>
                   </div>
+                  <div class="form-group">
+                    <label class="form-label">Photo</label>
+                    <br>
+                    <a :href="mediaUrl + form.imagepath" target="_blank">{{ form.imagepath }}</a>
+                    <input type="text" class="form-control" placeholder="Enter attachment"
+                      v-model="form.imagepath"
+                    >
+                    <br>
+                    <input type="file" id="file" name="file" ref="file" accept="application/ms-excel" multiple>
+                  </div>
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"
                       @click="store"
@@ -100,12 +110,30 @@ export default {
       this.loading = true
       try {
         let admin = await this.$axios.patch(`/categories/${this.form.id}`, this.form)
+         await this.handleFileUpload()
         this.$router.push(`/organizations/${this.organization.value}/categories`)
         this.loading = false
       }
       catch(e) {
         this.loading = false
       }
+    },
+    async handleFileUpload() {
+      this.attachment = this.$refs.file.files[0]
+      let formData = new FormData();
+      formData.append('categoryid', this.form.id);
+      formData.append('attachment', this.attachment);
+      await this.$axios.post('upload_category_photo', formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      ).then(response => {
+      })
+      .catch(function(){
+        console.log('FAILURE!!');
+      });
     },
   }
 }
