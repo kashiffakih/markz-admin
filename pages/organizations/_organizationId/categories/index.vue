@@ -64,7 +64,8 @@
                             <span @click="del(category.id)">
                               <i class="fa fa-trash"></i>
                             </span>
-                          </nuxt-link>
+                          </nuxt-link>&nbsp;&nbsp;
+                          <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/categories/${category.id}/sub-categories`">Sub Categories</nuxt-link>
                         </td>
                         <td>
                           <img style="width: 50px; height: 50px;" :src="category.imagepath ? (mediaUrl + category.imagepath) : '/product-vector.png'">

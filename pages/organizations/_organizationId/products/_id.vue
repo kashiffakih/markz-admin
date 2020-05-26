@@ -67,6 +67,18 @@
                     >{{ errors.category_id[0] }}</span>
                   </div>
                   <div class="form-group">
+                    <label class="form-label">Sub Category</label>
+                    <v-select 
+                      v-model="form.sub_category_id" 
+                      :reduce="sub_category => sub_category.code" 
+                      :options="sub_categories"
+                      @input="getSubCategories(form.category_id)"
+                    ></v-select>
+                    <span class="help-block" 
+                      v-if="errors.sub_category_id"
+                    >{{ errors.sub_category_id[0] }}</span>
+                  </div>
+                  <div class="form-group">
                     <label class="form-label">Product Name</label>
                     <input type="text" class="form-control" placeholder="Enter Product name"
                       v-model="form.name"
@@ -148,11 +160,13 @@ export default {
     categories.push({
       label: 'Select Category',
       code: '',
+      sub_categories: [],
     })
     c.forEach((role) => {
       categories.push({
         label: role.name,
         code: role.id,
+        sub_categories: role.sub_categories,
       })
     })
     let product = await $axios.get(`/products/${params.id}`)
@@ -164,17 +178,40 @@ export default {
     }
   },
   data: () => ({
+    sub_categories: [
+      {
+        label: 'Select Sub Category',
+        code: '',
+      }
+    ],
     loading: false
   }),
   mounted() {
     this.form.inventory_id = parseInt(this.form.inventory_id)
     this.form.category_id = parseInt(this.form.category_id)
+    this.form.sub_category_id = parseInt(this.form.sub_category_id)
+
+    this.getSubCategories(this.form.category_id)
   },
   components: {
     BackButton,
     Countries
   },
   methods: {
+    getSubCategories(categoryId) {
+      this.sub_categories = []
+      this.sub_categories.push({
+        label: 'Select Sub Category',
+        code: '',
+      })
+      let category = this.categories.find(cat => cat.code == categoryId)
+      category.sub_categories.forEach(sub_category => {
+        this.sub_categories.push({
+          label: sub_category.name,
+          code: sub_category.id,
+        })
+      })
+    },
     async store() {
       this.loading = true
       try {
