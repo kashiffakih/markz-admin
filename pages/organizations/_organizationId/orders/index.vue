@@ -67,7 +67,7 @@
                             </span>
                           </nuxt-link>
                         </td>
-                        <td>{{ purchase.user.name }}</td>
+                        <td>{{ purchase.user ? purchase.user.name : '' }}</td>
                         <td>{{ purchase.details }}</td>
                         <td>{{ purchase.order_cost }} AED</td>
                       </tr>
