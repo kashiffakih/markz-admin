@@ -187,6 +187,9 @@ export default {
       categories.push({
         title: 'Master',
         'items': [
+        {
+            name: 'Statuses', icon: 'fas fa-thermometer-half', link: `/organizations/${this.organizationId}/statuses`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
           {
             name: 'Units', icon: 'fas fa-flag', link: `/organizations/${this.organizationId}/units`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },

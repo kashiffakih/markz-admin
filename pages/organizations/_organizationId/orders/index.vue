@@ -42,9 +42,13 @@
                       <tr>
                         <th>Sr. No.</th>
                         <th>Actions</th>
+                        <th>Order ID</th>
                         <th>User</th>
-                        <th>Details</th>
+                        <th>Order Details</th>
+                        <th>Message</th>
+                        <th>Order Date & Time</th>
                         <th>Order Cost</th>
+                        <th>Order Status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -53,23 +57,69 @@
                       > 
                         <td colspan="13">Loading...</td>
                       </tr>
-                      <tr v-for="(purchase, i) in items"
-                        :key="`purchase${i}`"
+                      <tr v-for="(order, i) in items"
+                        :key="`order${i}`"
                       >
                         <td>{{ i + 1 }}</td>
                         <td class="w-1">
-                          <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/orders/${purchase.id}`">
+                          <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/orders/${order.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
                           <nuxt-link title="Delete Inspector" class="icon" to="">
-                            <span @click="del(purchase.id)">
+                            <span @click="del(order.id)">
                               <i class="fa fa-trash"></i>
                             </span>
                           </nuxt-link>
                         </td>
-                        <td>{{ purchase.user ? purchase.user.name : '' }}</td>
-                        <td>{{ purchase.details }}</td>
-                        <td>{{ purchase.order_cost }} AED</td>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.user ? order.user.name : '' }}</td>
+                        <td>
+                          <table>
+                            <thead>
+                              <tr>
+                                <th>Sr No</th>
+                                <th>Name</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                v-for="(detail,d) in order.order_details"
+                                :key="`detail${d}`"
+                              >
+                                <td>{{ d + 1 }}</td>
+                                <td>{{ detail.product.name }}</td>
+                                <td>{{ detail.quantity }}</td>
+                                <td>{{ detail.order_detail_cost }} AED</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                        <td>{{ order.details }}</td>
+                        <td>{{ order.created_at }}</td>
+                        <td>{{ order.order_cost }} AED</td>
+                        <td>
+                          {{ order.order_statuses.length == 0 ? 'Order Received' : '' }}
+                          <table>
+                            <tbody>
+                              <tr
+                                v-for="(status,d) in order.order_statuses"
+                                :key="`status${d}`"
+                              >
+                                <td>
+                                  {{ status.status.name }}
+                                  <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/orders/${order.id}/order-statuses/${status.id}`">
+                                    <i class="fa fa-edit"></i>
+                                  </nuxt-link>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/orders/${order.id}/order-statuses/create`">
+                           Update Status
+                         </nuxt-link>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
