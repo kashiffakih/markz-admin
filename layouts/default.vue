@@ -241,6 +241,17 @@ export default {
         ],
       })
       categories.push({
+        title: 'Reports',
+        'items': [
+          {
+            name: 'Order Report', icon: 'far fa-window-restore', link: `/organizations/${this.organizationId}/reports/order-report`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          // {
+          //   name: 'Stocks', icon: 'fas fa-layer-group', link: `/organizations/${this.organizationId}/stocks`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          // },        
+        ],
+      })
+      categories.push({
         'items': [
           {
             name: '', icon: '', link: ``, permission: this.permissions.indexOf(3) != -1 ? true : false
