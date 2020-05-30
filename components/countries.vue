@@ -1067,7 +1067,7 @@ export default {
       "code": "HK"
       },
       {
-      "name": "Iran, Islamic Republic of",
+      "name": "Iran",
       "dial_code": "+98",
       "code": "IR"
       },
@@ -1222,7 +1222,7 @@ export default {
       "code": "VE"
       },
       {
-      "name": "Viet Nam",
+      "name": "Vietnam",
       "dial_code": "+84",
       "code": "VN"
       },
