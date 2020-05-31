@@ -50,13 +50,13 @@
               <!-- small box -->
               <div class="small-box bg-info">
                 <div class="inner">
-                  <h3>{{ loading ? 'Loading...' : count.orders }}</h3>
+                  <h3>{{ loading ? 'Loading...' : count.new_order }}</h3>
                   <p>New Orders</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-bag"></i>
                 </div>
-                <nuxt-link :to="`/organizations/${organization.value}/orders`" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></nuxt-link>
+                <nuxt-link :to="`/organizations/${organization.value}/reports/order-report?date=${date}`" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></nuxt-link>
               </div>
             </div>
             <!-- ./col -->
@@ -71,7 +71,7 @@
                 <div class="icon">
                   <i class="ion ion-person-add"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <nuxt-link :to="`/organizations/${organization.value}/reports/order-report?date=${date}`" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></nuxt-link>
               </div>
             </div>
             <!-- ./col -->
@@ -79,28 +79,13 @@
               <!-- small box -->
               <div class="small-box bg-success">
                 <div class="inner">
-                  <h3>{{ loading ? 'Loading...' : count.orders }}</h3>
+                  <h3>{{ loading ? 'Loading...' : count.order_completed }}</h3>
                   <p>Order Processed</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-stats-bars"></i>
                 </div>
-                <nuxt-link :to="`/organizations/${organization.value}/orders`" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></nuxt-link>
-              </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-              <!-- small box -->
-              <div class="small-box bg-danger">
-                <div class="inner">
-                  <h3>2</h3>
-
-                  <p>Unique Visitors</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-pie-graph"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <nuxt-link :to="`/organizations/${organization.value}/reports/order-report?date=${date}`" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></nuxt-link>
               </div>
             </div>
             <!-- ./col -->

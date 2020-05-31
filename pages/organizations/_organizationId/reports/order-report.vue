@@ -7,7 +7,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-dark">Order Report</h1>
+              <h1 class="m-0 text-dark">Order Report ({{ date }})</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -25,10 +25,10 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
-          <div class="row">
-            <div class="col-12">
+          <div class="row" >
+            <div class="col-12" >
               <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-2" style="background-color: white; border-radius: 5px; padding: 10px; margin:10px;">
                   <client-only>
                     <date-picker
                       placeholder="YYYY-MM-DD"
@@ -37,7 +37,14 @@
                     />
                   </client-only>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2" style="background-color: white; border-radius: 5px; padding: 10px; margin:10px;">
+                  <v-select 
+                    v-model="status_id" 
+                    :reduce="status => status.code" 
+                    :options="statuses"
+                  ></v-select>
+                </div>
+                <div class="col-md-2" style="background-color: white; border-radius: 5px; padding: 10px; margin:10px;">
                   <button class="btn btn-sm btn-info btn-block"
                     @click="search"
                   >
@@ -139,18 +146,40 @@
 
 <script type="text/javascript">
 import moment from 'moment'
+import 'vue-select/dist/vue-select.css';
 
 export default {
   name: 'ManageOrderReports',
+  async asyncData({$axios, params}) {
+    let s = await $axios.get(`/statuses`)
+    s = s.data.data
+    let statuses = []
+    statuses.push({
+      label: 'Select Status',
+      code: '',
+    })
+    s.forEach((status) => {
+      statuses.push({
+        label: status.name,
+        code: status.id,
+      })
+    })
+    return {
+      statuses: statuses,
+    }
+  },
   data:() =>  ({
     searchData: '',
     items: [],
     loading: true,
     date: '',
     totalEarnings: 0,
+    status_id: ''
   }),
   mounted() {
-    // this.getData()
+    this.date = this.$route.query.date
+    this.statusId = this.$route.query.statusId
+    this.search()
     this.loading = false
   },
   methods: {
@@ -169,7 +198,7 @@ export default {
       if(this.date != "")
       {
         this.loading = true
-        let items = await this.$axios.get(`/orders?date=${this.date}`);
+        let items = await this.$axios.get(`/orders?date=${this.date}&statusId=${this.status_id}`);
         this.items = items.data.data
         this.totalEarnings = 0
         this.items.forEach(item => {
