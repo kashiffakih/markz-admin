@@ -302,5 +302,13 @@ export default {
     overflow: scroll;
     white-space: nowrap;
   }
+
+  .main-sidebar {
+    background-color: #F1911F !important;
+  }
+
+  .nav-link, .brand-text, .d-block {
+    color: white !important;
+  }
 </style>
 </style>

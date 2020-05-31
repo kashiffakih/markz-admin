@@ -62,30 +62,30 @@
             <!-- ./col -->
             <div class="col-lg-3 col-6">
               <!-- small box -->
-              <div class="small-box bg-success">
-                <div class="inner">
-                  <h3>{{ loading ? 'Loading...' : count.orders }}</h3>
-                  <p>Order Processing</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-stats-bars"></i>
-                </div>
-                <nuxt-link :to="`/organizations/${organization.value}/orders`" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></nuxt-link>
-              </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-              <!-- small box -->
               <div class="small-box bg-warning">
                 <div class="inner">
-                  <h3>0</h3>
+                  <h3>{{ loading ? 'Loading...' : count.order_processing }}</h3>
 
-                  <p>Stock Purchases</p>
+                  <p>Order Processing</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-person-add"></i>
                 </div>
                 <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <h3>{{ loading ? 'Loading...' : count.orders }}</h3>
+                  <p>Order Processed</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-stats-bars"></i>
+                </div>
+                <nuxt-link :to="`/organizations/${organization.value}/orders`" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></nuxt-link>
               </div>
             </div>
             <!-- ./col -->

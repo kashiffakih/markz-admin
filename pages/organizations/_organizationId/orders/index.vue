@@ -139,12 +139,17 @@
 </template>
 
 <script type="text/javascript">
+import moment from 'moment'
+import moment_timezone from 'moment-timezone'
+
 export default {
   name: 'ManageOrders',
   data:() =>  ({
     searchData: '',
     items: [],
     loading: true,
+    fmt: "YYYY-MM-DD hh:mm:ss A",
+    time_zone: 'Asia/Kolkata'
   }),
   mounted() {
     this.getData()
@@ -155,6 +160,9 @@ export default {
       this.loading = true
       let items = await this.$axios.get(`/orders`)
       this.items = items.data.data
+      this.items.forEach(item => {
+        item.created_at = this.convertToDubaiTime(item.created_at)
+      })
       this.loading = false
     },
     async search() {
@@ -172,6 +180,18 @@ export default {
         await this.$axios.delete(`/orders/${id}`)
       this.getData()
     },
+    convertToDubaiTime(time) {
+      // construct a moment object
+      var m = moment.tz(time, this.fmt, this.time_zone);
+
+      // convert it to utc
+      m.tz('Asia/Dubai');
+
+      // format it for output
+      var s = m.format(this.fmt)
+
+      return s
+    }
   },
 }
 </script>
