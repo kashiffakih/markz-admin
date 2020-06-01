@@ -34,10 +34,10 @@
       <!-- Main Sidebar Container -->
       <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <nuxt-link to="/" class="brand-link">
+        <nuxt-link to="/" class="brand-link" style="background-color: white;">
           <img :src="organization.logo_path ? (mediaUrl + organization.logo_path) : '/dist/img/AdminLTELogo.png'"
                alt="Logo"
-               style="opacity: .8; width: 200px">
+               style="opacity: .8; width: 200px; ">
           <!-- <span class="brand-text font-weight-light">{{ organization.text ? organization.text : 'Not Selected' }}</span> -->
         </nuxt-link>
 
