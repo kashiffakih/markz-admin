@@ -8,6 +8,18 @@
           <div class="row mb-2">
             <div class="col-sm-6">
               <h1 class="m-0 text-dark">Order Report ({{ date }})</h1>
+              <br>
+              <client-only>
+                <download-excel
+                  class   = "btn btn-default"
+                  :data   = "excel_items"
+                  :fields = "excel_fields"
+                  worksheet = "Order Repoort"
+                  name    = "OrderReport.xls"
+                >
+                  <a href="#" class="download">export to excel</a>
+                </download-excel>
+              </client-only>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -147,6 +159,7 @@
 <script type="text/javascript">
 import moment from 'moment'
 import 'vue-select/dist/vue-select.css';
+import moment_timezone from 'moment-timezone'
 
 export default {
   name: 'ManageOrderReports',
@@ -174,7 +187,18 @@ export default {
     loading: true,
     date: '',
     totalEarnings: 0,
-    status_id: ''
+    status_id: '',
+    excel_fields: {
+      'Sr No': 'sr_no',
+      'User': 'user',
+      'Order ID': 'order_id',
+      'Order Details': 'order_details',
+      'Message': 'message',
+      'Order Data & Time': 'order_date',
+      'Order Cost': 'order_cost',
+      'Order Status': 'order_status'
+    },
+    excel_items: [],
   }),
   mounted() {
     this.date = this.$route.query.date
@@ -202,11 +226,47 @@ export default {
         this.items = items.data.data
         this.totalEarnings = 0
         this.items.forEach(item => {
+          item.created_at = this.convertToDubaiTime(item.created_at)
           this.totalEarnings += parseFloat(item.order_cost)
         })
         this.loading = false
       }
+      this.getExcelItems()
     },
+    getExcelItems() {
+      this.items.forEach((order, i) => {
+        this.excel_items.push({
+          'sr_no': i + 1,
+          'user': order.user ? order.user.name : '',
+          'order_id': order.id,
+          'order_details': `
+            ${order.order_details.map((detail) => {
+              return detail.product.name + '( ' + detail.quantity + ' ' + detail.unit.name + ')<br>' 
+            })}
+          `,
+          'message': order.details,
+          'order_date': order.created_at,
+          'order_cost': order.order_cost,
+          'order_status': `
+            ${order.order_statuses.map((status) => {
+              return status.status.name + '<br>' 
+            })}
+          `,
+        })
+      })
+    },
+    convertToDubaiTime(time) {
+      // construct a moment object
+      var m = moment.tz(time, this.fmt, this.time_zone);
+
+      // convert it to utc
+      m.tz('Asia/Dubai');
+
+      // format it for output
+      var s = m.format(this.fmt)
+
+      return s
+    }
   },
 }
 </script>
