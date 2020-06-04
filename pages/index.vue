@@ -98,7 +98,7 @@
                 <div class="icon">
                   <i class="ion ion-stats-bars"></i>
                 </div>
-                <a href="http://localhost:3018/organizations/1/shipping-details-1" target="_blank" class="small-box-footer">Click Here <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="http://web.lushfarms.aaibuzz.com/organizations/1/shipping-details-1" target="_blank" class="small-box-footer">Click Here <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             <!-- ./col -->
