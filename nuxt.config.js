@@ -102,8 +102,8 @@ module.exports = {
   ],
 
   axios: {
-    // baseURL: 'http://api.lushfarms.aaibuzz.com/api'
-    baseURL: 'http://localhost:8080/api'
+    baseURL: 'http://api.lushfarms.aaibuzz.com/api'
+    // baseURL: 'http://localhost:8080/api'
     // baseURL: 'http://192.168.29.9:8080/api'
   },
   
