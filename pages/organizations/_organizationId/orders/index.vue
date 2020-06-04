@@ -74,7 +74,7 @@
                         <td>
                           {{ order.id }}
                           <br>
-                          {{ order.source }}
+                          {{ order.source ? order.source : 'Website' }}
                         </td>
                         <td>{{ order.user ? order.user.name : '' }}</td>
                         <td>
@@ -169,7 +169,7 @@ export default {
       let items = await this.$axios.get(`/orders`)
       this.items = items.data.data
       this.items.forEach(item => {
-        item.created_at = this.convertToDubaiTime(item.created_at)
+        item.created_at = moment(this.convertToDubaiTime(item.created_at)).format('DD-MM-YYYY hh:mm:ss')
       })
       this.loading = false
     },
