@@ -96,7 +96,11 @@
                             </tbody>
                           </table>
                         </td>
-                        <td>{{ order.details }}</td>
+                        <td>
+                          {{ order.details }}
+                          <br>
+                          Preferred Delivery: {{ order.delivery_date }}
+                        </td>
                         <td>{{ order.created_at }}</td>
                         <td>{{ order.order_cost }} AED</td>
                         <td>
