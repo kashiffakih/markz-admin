@@ -32,7 +32,7 @@
               <br>
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Manage Orders</h3> &nbsp;
+                  <h3 class="card-title">Manage Orders</h3> &nbsp;&nbsp;
                   <nuxt-link class="btn btn-sm btn-info float-sm-right" :to="`/organizations/${organization.value}/orders/create`">Add New</nuxt-link>
                 </div>
                 <!-- /.card-header -->
@@ -71,7 +71,11 @@
                             </span>
                           </nuxt-link>
                         </td>
-                        <td>{{ order.id }}</td>
+                        <td>
+                          {{ order.id }}
+                          <br>
+                          {{ order.source }}
+                        </td>
                         <td>{{ order.user ? order.user.name : '' }}</td>
                         <td>
                           <table>
