@@ -57,6 +57,80 @@
                         >{{ errors.user_id[0] }}</span>
                       </div>
                     </div>
+                  </div>
+                  <b>or Create a new User</b>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-control" placeholder="Enter first name"
+                          v-model="user.first_name"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.first_name"
+                        >{{ errors.first_name[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-control" placeholder="Enter last name"
+                          v-model="user.last_name"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.last_name"
+                        >{{ errors.last_name[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="text" class="form-control" placeholder="Enter email"
+                          v-model="user.email"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.email"
+                        >{{ errors.email[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Phone</label>
+                        <input type="text" class="form-control" placeholder="Enter phone"
+                          v-model="user.phone"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.phone"
+                        >{{ errors.phone[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="form-group">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" placeholder="Enter address"
+                          v-model="user.address"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.address"
+                        >{{ errors.address[0] }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Source</label>
+                        <select class="form-control" v-model="form.source">
+                          <option value="">Select Source</option>
+                          <option value="Website">Website</option>
+                          <option value="WhatsApp">WhatsApp</option>
+                          <option value="WalkIn">WalkIn</option>
+                        </select>
+                        <span class="help-block" 
+                          v-if="errors.user_id"
+                        >{{ errors.user_id[0] }}</span>
+                      </div>
+                    </div>
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">Order Details</label>
@@ -208,7 +282,11 @@ export default {
       user_id: '',
       details: '',
       order_cost: 0,
+      source: '',
       order_details: []
+    },
+    user: {
+
     },
     userid: '',
     loading: false
@@ -263,7 +341,28 @@ export default {
       this.assignCost()
       this.loading = true
       try {
-        await this.$axios.post(`/orders`, this.form)
+        this.user.is_billing_same = true
+        this.user.password = 123456
+        let user = await this.$axios.post('register-user', this.user)
+        user = user.data.data
+        // Assign Role
+        let role_payload = {
+          user_id: user.id,
+          role_id: 6
+        }
+        await this.$axios.post('/role_user', role_payload)
+        // Assign Organization
+        let organization_payload = {
+          user_id: user.id,
+          company_id: 1
+        }
+        await this.$axios.post('/company_user', organization_payload)
+        await this.$axios.get(`/emails/register/users/${user.id}/${123456}`)
+
+        this.form.user_id = user.id
+        let o = await this.$axios.post(`/orders`, this.form)
+        o = o.data.data
+        await this.$axios.get(`emails/invoice/orders/${o.id}`)
         this.$router.push(`/organizations/${this.organization.value}/orders`)
         this.loading = false
       }

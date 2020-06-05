@@ -11,6 +11,7 @@
           <li class="nav-item d-none d-sm-inline-block">
             <button class="btn btn-link nav-link"
               @click="logout"
+              style="color: black !important; " 
             >Logout</button>
           </li>
         </ul>

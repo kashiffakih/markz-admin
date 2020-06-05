@@ -199,6 +199,8 @@ export default {
       'Order Status': 'order_status'
     },
     excel_items: [],
+    fmt: "YYYY-MM-DD hh:mm:ss A",
+    time_zone: 'Asia/Kolkata'
   }),
   mounted() {
     this.date = this.$route.query.date
@@ -226,7 +228,7 @@ export default {
         this.items = items.data.data
         this.totalEarnings = 0
         this.items.forEach(item => {
-          item.created_at = this.convertToDubaiTime(item.created_at)
+          item.created_at = moment(this.convertToDubaiTime(item.created_at)).format('DD-MM-YYYY hh:mm:ss')
           this.totalEarnings += parseFloat(item.order_cost)
         })
         this.loading = false
