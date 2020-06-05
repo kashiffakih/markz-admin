@@ -113,7 +113,7 @@
                                 :key="`detail${d}`"
                               >
                                 <td>{{ d + 1 }}</td>
-                                <td>{{ detail.product.name }}</td>
+                                <td>{{ detail.product ? detail.product.name : '' }}</td>
                                 <td>{{ detail.quantity }}</td>
                                 <td>{{ detail.order_detail_cost }} AED</td>
                               </tr>
