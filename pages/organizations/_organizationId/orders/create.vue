@@ -133,8 +133,8 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
-                        <label class="form-label">Order Details</label>
-                        <input type="text" class="form-control" placeholder="Enter order details"
+                        <label class="form-label">Delivery message</label>
+                        <input type="text" class="form-control" placeholder="Enter delivery message"
                           v-model="form.details"
                         >
                         <span class="help-block" 
