@@ -1,8 +1,8 @@
 #!/bin/bash
-cd /var/www/html/hyperx/client 
+export PATH="$PATH:"/usr/local/bin/
+cd /var/www/vhosts/lushfarms/lushfarms-client
 
-#npm install.
+npm run build
 
-#npm run build
-#pm2 restart npm -- start
- 
+pm2 delete lushfarms-client 
+pm2 start npm --name lushfarms-client -- start

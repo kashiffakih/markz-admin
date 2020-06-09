@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /var/www/html/hyperx/client
+    destination: /var/www/vhosts/lushfarms/lushfarms-client
 hooks:
   BeforeInstall:
     - location: scripts/install_dependencies
