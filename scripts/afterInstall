@@ -4,5 +4,6 @@ cd /var/www/vhosts/lushfarms/lushfarms-client
 
 npm run build
 
+
 pm2 delete lushfarms-client 
 pm2 start npm --name lushfarms-client -- start
