@@ -62,6 +62,9 @@
                       >
                         <td>{{ i + 1 }}</td>
                         <td class="w-1">
+                          <a target="_blank" :href="`${baseUrl}/orders/${order.id}/invoice`">
+                            <i class="fa fa-file-pdf"></i>
+                          </a>&nbsp;&nbsp;
                           <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/orders/${order.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
