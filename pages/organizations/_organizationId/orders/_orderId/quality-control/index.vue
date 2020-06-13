@@ -59,7 +59,7 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
-                        <label class="form-label">Update Quality</label>
+                        <label class="form-label">Reason</label>
                         <input class="form-control" type="text" placeholder="Enter reason" v-model="form.quality_details">
                         <span class="help-block" 
                           v-if="errors.quality"

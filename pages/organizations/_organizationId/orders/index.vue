@@ -141,6 +141,10 @@
                             </tbody>
                           </table>
                           <br>
+                          QC: {{ order.quality }}
+                          <br>
+                          Reason: {{ order.quality_details }}
+                          <br>
                           <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/orders/${order.id}/order-statuses/create`">
                            Update Status
                          </nuxt-link>
