@@ -63,7 +63,10 @@
                         <td>{{ i + 1 }}</td>
                         <td class="w-1">
                           <a target="_blank" :href="`${baseUrl}/orders/${order.id}/invoice`">
-                            <i class="fa fa-file-pdf"></i>
+                            Invoice
+                          </a>&nbsp;&nbsp;
+                           <a target="_blank" :href="`${baseUrl}/orders/${order.id}/order`">
+                            Order
                           </a>&nbsp;&nbsp;
                           <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/orders/${order.id}`">
                             <i class="fa fa-edit"></i>
@@ -75,7 +78,7 @@
                           </nuxt-link>
                         </td>
                         <td>
-                          {{ order.id }}
+                          1001{{ order.id }}
                           <br>
                           {{ order.source ? order.source : 'Website' }}
                         </td>
@@ -111,9 +114,16 @@
                         <td>{{ order.created_at }}</td>
                         <td>{{ order.order_cost }} AED</td>
                         <td>
-                          {{ order.order_statuses.length == 0 ? 'Order Received' : '' }}
                           <table>
                             <tbody>
+                              <tr>
+                                <td>
+                                  Order Received
+                                </td>
+                                <td>
+                                  {{ order.created_at }}
+                                </td>
+                              </tr>
                               <tr
                                 v-for="(status,d) in order.order_statuses"
                                 :key="`status${d}`"
@@ -124,11 +134,18 @@
                                     <i class="fa fa-edit"></i>
                                   </nuxt-link>
                                 </td>
+                                <td>
+                                  {{ status.created_at }}
+                                </td>
                               </tr>
                             </tbody>
                           </table>
+                          <br>
                           <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/orders/${order.id}/order-statuses/create`">
                            Update Status
+                         </nuxt-link>
+                         <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/orders/${order.id}/quality-control`">
+                           Quality Control
                          </nuxt-link>
                         </td>
                       </tr>
@@ -173,6 +190,9 @@ export default {
       this.items = items.data.data
       this.items.forEach(item => {
         item.created_at = moment(this.convertToDubaiTime(item.created_at)).format('DD-MM-YYYY hh:mm:ss')
+        item.order_statuses.forEach(status => {
+          status.created_at = moment(this.convertToDubaiTime(status.created_at)).format('DD-MM-YYYY hh:mm:ss')
+        })
       })
       this.loading = false
     },
