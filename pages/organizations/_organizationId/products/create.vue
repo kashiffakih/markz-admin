@@ -105,7 +105,7 @@
                     >{{ errors.description[0] }}</span>
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Location</label>
+                    <label class="form-label">Origin</label>
                     <countries
                       :option.sync="form.location"
                     ></countries>
