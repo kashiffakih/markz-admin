@@ -107,12 +107,47 @@
                           </table>
                         </td>
                         <td>
+                          Payment Type: {{ order.payment_mode }}
+                          <br>
+                          Express Delivery: {{ order.is_express_delivery == 1 ? 'Yes' : 'No' }}
+                          <br>
                           {{ order.details }}
                           <br>
                           Preferred Delivery: {{ order.delivery_date }}
+                          <br>
+                          Delivery Address: 
+                          <br>
+                          <div
+                            v-if="order.user.is_billing_same == '0'"
+                          >
+                            {{ order.user.bill_prefix + ' ' + order.user.bill_first_name + ' ' + order.user.bill_last_name + ', ' + order.user.bill_flat_no + ', ' + order.user.bill_building_name + ', ' }}
+                            <br>
+                            {{ order.user.bill_email + ', ' + order.user.bill_phone }}
+                            <br>
+                            {{ order.user.bill_street_name + ', ' + order.user.bill_address }}
+                            <br>
+                            {{ order.user.bill_other_details + ', ' + order.user.bill_nationality }}
+                          </div>
+                          <div
+                            v-else
+                          >
+                            {{ order.user.prefix + ' ' + order.user.first_name + ' ' + order.user.last_name + ', ' + order.user.flat_no + ', ' + order.user.building_name + ', ' }}
+                            <br>
+                            {{ order.user.email + ', ' + order.user.phone }}
+                            <br>
+                            {{ order.user.street_name + ', ' + order.user.address }}
+                            <br>
+                            {{ order.user.other_details + ', ' + order.user.nationality }}
+                          </div>
                         </td>
                         <td>{{ order.created_at }}</td>
-                        <td>{{ order.order_cost }} AED</td>
+                        <td>
+                          {{ order.order_cost }} AED
+                          <br>
+                          Discount: {{ order.discount }} AED
+                          <br>
+                          Total: {{ order.order_cost - order.discount }} AED
+                        </td>
                         <td>
                           <table>
                             <tbody>
