@@ -229,7 +229,7 @@ export default {
       items = items.data.data
       items.forEach(item => {
         if(item.user == null)
-          user = {}
+          item.user = {}
         item.created_at = moment(this.convertToDubaiTime(item.created_at)).format('DD-MM-YYYY hh:mm:ss')
         item.order_statuses.forEach(status => {
           status.created_at = moment(this.convertToDubaiTime(status.created_at)).format('DD-MM-YYYY hh:mm:ss')
