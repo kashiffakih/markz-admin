@@ -226,8 +226,8 @@ export default {
       this.items = []
       this.loading = true
       let items = await this.$axios.get(`/orders`)
-      this.items = items.data.data
-      this.items.forEach(item => {
+      items = items.data.data
+      items.forEach(item => {
         if(item.user == null)
           user = {}
         item.created_at = moment(this.convertToDubaiTime(item.created_at)).format('DD-MM-YYYY hh:mm:ss')
@@ -235,6 +235,8 @@ export default {
           status.created_at = moment(this.convertToDubaiTime(status.created_at)).format('DD-MM-YYYY hh:mm:ss')
         })
       })
+      this.items = items
+
       this.loading = false
     },
     async search() {
