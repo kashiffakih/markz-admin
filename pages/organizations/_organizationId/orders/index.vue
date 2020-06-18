@@ -78,7 +78,7 @@
                           </nuxt-link>
                         </td>
                         <td>
-                          1001{{ order.id }}
+                          000 {{ order.id }}
                           <br>
                           {{ order.source ? order.source : 'Website' }}
                         </td>
@@ -111,7 +111,7 @@
                           <br>
                           Express Delivery: {{ order.is_express_delivery == 1 ? 'Yes' : 'No' }}
                           <br>
-                          {{ order.details }}
+                          Message: {{ order.details }}
                           <br>
                           Preferred Delivery: {{ order.delivery_date }}
                           <br>
@@ -120,33 +120,33 @@
                           <div
                             v-if="order.user.is_billing_same == '0'"
                           >
-                            {{ order.user.bill_prefix + ' ' + order.user.bill_first_name + ' ' + order.user.bill_last_name + ', ' + order.user.bill_flat_no + ', ' + order.user.bill_building_name + ', ' }}
+                            {{ order.user.bill_prefix + order.user.bill_first_name + order.user.bill_last_name + order.user.bill_flat_no + order.user.bill_building_name }}
                             <br>
-                            {{ order.user.bill_email + ', ' + order.user.bill_phone }}
+                            {{ order.user.bill_email + order.user.bill_phone }}
                             <br>
-                            {{ order.user.bill_street_name + ', ' + order.user.bill_address }}
+                            {{ order.user.bill_street_name + order.user.bill_address }}
                             <br>
-                            {{ order.user.bill_other_details + ', ' + order.user.bill_nationality }}
+                            {{ order.user.bill_other_details + order.user.bill_nationality }}
                           </div>
                           <div
                             v-else
                           >
-                            {{ order.user.prefix + ' ' + order.user.first_name + ' ' + order.user.last_name + ', ' + order.user.flat_no + ', ' + order.user.building_name + ', ' }}
+                            {{ order.user.prefix + order.user.first_name + order.user.last_name + order.user.flat_no + order.user.building_name }}
                             <br>
-                            {{ order.user.email + ', ' + order.user.phone }}
+                            {{ order.user.email + order.user.phone }}
                             <br>
-                            {{ order.user.street_name + ', ' + order.user.address }}
+                            {{ order.user.street_name + order.user.address }}
                             <br>
-                            {{ order.user.other_details + ', ' + order.user.nationality }}
+                            {{ order.user.other_details + order.user.nationality }}
                           </div>
                         </td>
                         <td>{{ order.created_at }}</td>
                         <td>
-                          {{ order.order_cost }} AED
+                          {{ order.order_cost ? parseInt(order.order_cost).toFixed(2) : '-' }} AED
                           <br>
-                          Discount: {{ order.discount }} AED
+                          Discount: {{ order.discount ? parseInt(order.discount).toFixed(2) : '-' }} AED
                           <br>
-                          Total: {{ order.order_cost - order.discount }} AED
+                          Total: {{ (order.order_cost - order.discount).toFixed(2) }} AED
                         </td>
                         <td>
                           <table>
@@ -230,6 +230,31 @@ export default {
       items.forEach(item => {
         if(item.user == null)
           item.user = {}
+        else {
+          item.user.bill_prefix = item.user.bill_prefix  ? item.user.bill_prefix + ', ' : ''
+          item.user.bill_first_name = item.user.bill_first_name  ? item.user.bill_first_name + ', ' : ''
+          item.user.bill_last_name = item.user.bill_last_name  ? item.user.bill_last_name + ', ' : ''
+          item.user.bill_flat_no = item.user.bill_flat_no  ? item.user.bill_flat_no + ', ' : ''
+          item.user.bill_building_name = item.user.bill_building_name  ? item.user.bill_building_name + ', ' : ''
+          item.user.bill_email = item.user.bill_email  ? item.user.bill_email + ', ' : ''
+          item.user.bill_phone = item.user.bill_phone  ? item.user.bill_phone + ', ' : ''
+          item.user.bill_street_name = item.user.bill_street_name  ? item.user.bill_street_name + ', ' : ''
+          item.user.bill_address = item.user.bill_address  ? item.user.bill_address + ', ' : ''
+          item.user.bill_other_details = item.user.bill_other_details  ? item.user.bill_other_details + ', ' : ''
+          item.user.bill_nationality = item.user.bill_nationality  ? item.user.bill_nationality + ', ' : ''
+
+          item.user.prefix = item.user.prefix  ? item.user.prefix + ', ' : ''
+          item.user.first_name = item.user.first_name  ? item.user.first_name + ', ' : ''
+          item.user.last_name = item.user.last_name  ? item.user.last_name + ', ' : ''
+          item.user.flat_no = item.user.flat_no  ? item.user.flat_no + ', ' : ''
+          item.user.building_name = item.user.building_name  ? item.user.building_name + ', ' : ''
+          item.user.email = item.user.email  ? item.user.email + ', ' : ''
+          item.user.phone = item.user.phone  ? item.user.phone + ', ' : ''
+          item.user.street_name = item.user.street_name  ? item.user.street_name + ', ' : ''
+          item.user.address = item.user.address  ? item.user.address + ', ' : ''
+          item.user.other_details = item.user.other_details  ? item.user.other_details + ', ' : ''
+          item.user.nationality = item.user.nationality  ? item.user.nationality + ', ' : ''
+        }
         item.created_at = moment(this.convertToDubaiTime(item.created_at)).format('DD-MM-YYYY hh:mm:ss')
         item.order_statuses.forEach(status => {
           status.created_at = moment(this.convertToDubaiTime(status.created_at)).format('DD-MM-YYYY hh:mm:ss')

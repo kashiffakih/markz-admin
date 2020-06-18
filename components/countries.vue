@@ -8,7 +8,7 @@
   <select class="form-control" v-model="op"
     @change="$emit('update:option', op)"
   >
-    <option value="">Select Country</option>
+    <option value="">Select Nationality</option>
     <option 
       v-for="(option,o) in options"
       :key="`option${o}`"

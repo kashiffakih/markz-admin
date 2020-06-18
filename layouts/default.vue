@@ -186,6 +186,17 @@ export default {
         ]
       })
       categories.push({
+        title: 'Orders',
+        'items': [
+          {
+            name: 'Orders', icon: 'fas fa-credit-card', link: `/organizations/${this.organizationId}/orders`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          // {
+          //   name: 'Stocks', icon: 'fas fa-layer-group', link: `/organizations/${this.organizationId}/stocks`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          // },        
+        ],
+      })
+      categories.push({
         title: 'Master',
         'items': [
         {
@@ -224,17 +235,6 @@ export default {
         'items': [
           {
             name: 'Purchases', icon: 'fas fa-shopping-basket', link: `/organizations/${this.organizationId}/purchases`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          },
-          // {
-          //   name: 'Stocks', icon: 'fas fa-layer-group', link: `/organizations/${this.organizationId}/stocks`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          // },        
-        ],
-      })
-      categories.push({
-        title: 'Orders',
-        'items': [
-          {
-            name: 'Orders', icon: 'fas fa-credit-card', link: `/organizations/${this.organizationId}/orders`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
           // {
           //   name: 'Stocks', icon: 'fas fa-layer-group', link: `/organizations/${this.organizationId}/stocks`, permission: this.permissions.indexOf(3) != -1 ? true : false
