@@ -42,6 +42,7 @@
                       <tr>
                         <th>Sr. No.</th>
                         <th>Actions</th>
+                        <th>Position</th>
                         <th>Photo</th>
                         <th>Inventory</th>
                         <th>Category</th>
@@ -70,6 +71,7 @@
                           </nuxt-link>&nbsp;&nbsp;
                           <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/products/${product.id}/details`">Add More Details</nuxt-link>
                         </td>
+                        <td>{{ product.position }}</td>
                         <td>
                           <img :src="product.imagepath1 ? (mediaUrl + product.imagepath1) : '/product-vector.png'"
                            style="width: 50px; height: 50px;opacity: .8;"

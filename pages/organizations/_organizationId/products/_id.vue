@@ -112,6 +112,15 @@
                       v-if="errors.location"
                     >{{ errors.location[0] }}</span>
                   </div>
+                  <div class="form-group">
+                    <label class="form-label">Position</label>
+                    <input type="number" class="form-control" placeholder="Enter postion"
+                      v-model="form.position"
+                    >
+                    <span class="help-block" 
+                      v-if="errors.position"
+                    >{{ errors.position[0] }}</span>
+                  </div>
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"
                       @click="store"
