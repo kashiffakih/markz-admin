@@ -232,7 +232,7 @@ export default {
           item.user = {}
         else {
           item.user.bill_prefix = item.user.bill_prefix  ? item.user.bill_prefix + ', ' : ''
-          item.user.bill_first_name = item.user.bill_first_name  ? item.user.bill_first_name + ', ' : ''
+          item.user.bill_first_name = item.user.bill_first_name  ? item.user.bill_first_name + ' ' : ''
           item.user.bill_last_name = item.user.bill_last_name  ? item.user.bill_last_name + ', ' : ''
           item.user.bill_flat_no = item.user.bill_flat_no  ? item.user.bill_flat_no + ', ' : ''
           item.user.bill_building_name = item.user.bill_building_name  ? item.user.bill_building_name + ', ' : ''
@@ -244,7 +244,7 @@ export default {
           item.user.bill_nationality = item.user.bill_nationality  ? item.user.bill_nationality + ', ' : ''
 
           item.user.prefix = item.user.prefix  ? item.user.prefix + ', ' : ''
-          item.user.first_name = item.user.first_name  ? item.user.first_name + ', ' : ''
+          item.user.first_name = item.user.first_name  ? item.user.first_name + ' ' : ''
           item.user.last_name = item.user.last_name  ? item.user.last_name + ', ' : ''
           item.user.flat_no = item.user.flat_no  ? item.user.flat_no + ', ' : ''
           item.user.building_name = item.user.building_name  ? item.user.building_name + ', ' : ''
