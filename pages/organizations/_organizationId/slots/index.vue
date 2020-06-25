@@ -69,7 +69,7 @@
                         </td>
                         <td>{{ slot.time_slot }}</td>
                         <td>{{ slot.no_of_orders }}</td>
-                        <td>{{ slot.status == 0 ? 'In Active' : 'Active' }}</td>
+                        <td>{{ slot.status == 0 ? 'Busy' : 'Active' }}</td>
                       </tr>
                     </tbody>
                   </table>

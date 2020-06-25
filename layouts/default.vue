@@ -250,6 +250,9 @@ export default {
           {
             name: 'Order Report', icon: 'far fa-window-restore', link: `/organizations/${this.organizationId}/reports/order-report`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
+          {
+            name: 'Daily MIS Report', icon: 'far fa-window-restore', link: `/organizations/${this.organizationId}/reports/daily-mis-report`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
           // {
           //   name: 'Stocks', icon: 'fas fa-layer-group', link: `/organizations/${this.organizationId}/stocks`, permission: this.permissions.indexOf(3) != -1 ? true : false
           // },        
