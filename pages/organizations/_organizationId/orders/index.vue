@@ -46,6 +46,7 @@
                         <th>User</th>
                         <th>Order Details</th>
                         <th>Message</th>
+                        <th>Time Slot</th>
                         <th>Order Date & Time</th>
                         <th>Order Cost</th>
                         <th>Order Status</th>
@@ -140,6 +141,7 @@
                             {{ order.user.other_details + order.user.nationality }}
                           </div>
                         </td>
+                        <td>{{ order.delivery_time }}</td>
                         <td>{{ order.created_at }}</td>
                         <td>
                           {{ order.order_cost ? parseInt(order.order_cost).toFixed(2) : '-' }} AED
