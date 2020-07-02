@@ -203,6 +203,9 @@ export default {
             name: 'Delivery Time Slots', icon: 'fas fa-warehouse', link: `/organizations/${this.organizationId}/slots`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
           {
+            name: 'Slots Dates', icon: 'fas fa-warehouse', link: `/organizations/${this.organizationId}/slot-dates`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          {
             name: 'Statuses', icon: 'fas fa-thermometer-half', link: `/organizations/${this.organizationId}/statuses`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
           {

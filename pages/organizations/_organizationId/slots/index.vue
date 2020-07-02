@@ -27,7 +27,6 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
-              <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by tag name">
               <a class="refresh" href="#" @click="getData">Refresh</a>
               <br>
               <div class="card">
