@@ -27,7 +27,7 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
-              <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by tag name">
+              <!-- <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by tag name"> -->
               <a class="refresh" href="#" @click="getData">Refresh</a>
               <br>
               <div class="card">
@@ -62,7 +62,7 @@
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
                           <nuxt-link title="Delete Inspector" class="icon" to="">
-                            <span @click="del(date.id)">
+                            <span @click="del(date.delivery_time_slot_id, date.id)">
                               <i class="fa fa-trash"></i>
                             </span>
                           </nuxt-link>
@@ -116,10 +116,10 @@ export default {
         this.loading = false
       }
     },
-    async del(id) {
+    async del(slotId, id) {
       let r = confirm('Are you sure you want to delete the data?')
       if(r == true)
-        await this.$axios.delete(`/delivery_time_slots/${id}`)
+        await this.$axios.delete(`/delivery_time_slots/${slotId}/delivery_time_slot_dates/${id}`)
       this.getData()
     },
   },
