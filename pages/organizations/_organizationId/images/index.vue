@@ -196,6 +196,42 @@
                           <input type="file" id="file" name="file" ref="landscape_sm_banner_path_3" accept="application/ms-excel" multiple>
                         </td>
                       </tr>
+                      <tr>
+                        <td>13</td>
+                        <td>Mobile Banner 1 (1600 X 400)</td>
+                        <td>
+                          <a target="_blank" :href="`${mediaUrl}${item.mobile_banner_path_1}`">
+                            <img style="width: 150px; height: 150px;" :src="item.mobile_banner_path_1 ? (mediaUrl + item.mobile_banner_path_1) : '/dist/img/AdminLTELogo.png'">
+                          </a>
+                        </td>
+                        <td>
+                          <input type="file" id="file" name="file" ref="mobile_banner_path_1" accept="application/ms-excel" multiple>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>14</td>
+                        <td>Mobile Banner 2 (1600 X 400)</td>
+                        <td>
+                          <a target="_blank" :href="`${mediaUrl}${item.mobile_banner_path_2}`">
+                            <img style="width: 150px; height: 150px;" :src="item.mobile_banner_path_2 ? (mediaUrl + item.mobile_banner_path_2) : '/dist/img/AdminLTELogo.png'">
+                          </a>
+                        </td>
+                        <td>
+                          <input type="file" id="file" name="file" ref="mobile_banner_path_2" accept="application/ms-excel" multiple>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>15</td>
+                        <td>Mobile Banner 3 (1600 X 400)</td>
+                        <td>
+                          <a target="_blank" :href="`${mediaUrl}${item.mobile_banner_path_3}`">
+                            <img style="width: 150px; height: 150px;" :src="item.mobile_banner_path_3 ? (mediaUrl + item.mobile_banner_path_3) : '/dist/img/AdminLTELogo.png'">
+                          </a>
+                        </td>
+                        <td>
+                          <input type="file" id="file" name="file" ref="mobile_banner_path_3" accept="application/ms-excel" multiple>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -260,6 +296,10 @@ export default {
       this.landscape_sm_banner_path_2 = this.$refs.landscape_sm_banner_path_2.files[0]
       this.landscape_sm_banner_path_3 = this.$refs.landscape_sm_banner_path_3.files[0]
 
+      this.mobile_banner_path_1 = this.$refs.mobile_banner_path_1.files[0]
+      this.mobile_banner_path_2 = this.$refs.mobile_banner_path_2.files[0]
+      this.mobile_banner_path_3 = this.$refs.mobile_banner_path_3.files[0]
+
       let formData = new FormData();
       formData.append('home_banner_path_1', this.home_banner_path_1);
       formData.append('home_banner_path_2', this.home_banner_path_2);
@@ -276,6 +316,10 @@ export default {
       formData.append('landscape_sm_banner_path_1', this.landscape_sm_banner_path_1);
       formData.append('landscape_sm_banner_path_2', this.landscape_sm_banner_path_2);
       formData.append('landscape_sm_banner_path_3', this.landscape_sm_banner_path_3);
+
+      formData.append('mobile_banner_path_1', this.mobile_banner_path_1);
+      formData.append('mobile_banner_path_2', this.mobile_banner_path_2);
+      formData.append('mobile_banner_path_3', this.mobile_banner_path_3);
       await this.$axios.post('upload_web_images_photo', formData,
         {
           headers: {
