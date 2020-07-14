@@ -38,7 +38,7 @@
         <nuxt-link to="/" class="brand-link" style="background-color: white;">
           <img :src="organization.logo_path ? (mediaUrl + organization.logo_path) : '/dist/img/AdminLTELogo.png'"
                alt="Logo"
-               style="opacity: .8; width: 200px; ">
+               style="opacity: .8; height: 50px; ">
           <!-- <span class="brand-text font-weight-light">{{ organization.text ? organization.text : 'Not Selected' }}</span> -->
         </nuxt-link>
 
@@ -291,7 +291,7 @@ export default {
   }
 
   .content-wrapper, .login-page {
-    background: url('/background123.png') !important;
+    background: url('/background.jpg') !important;
     background-repeat: no-repeat !important; 
     background-size: cover !important;
   }
