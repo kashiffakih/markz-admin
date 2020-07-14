@@ -4,5 +4,6 @@ cd /var/www/vhosts/foodor/foodor-client
 
 npm run build
 
+
 pm2 delete foodor-client 
 pm2 start npm --name foodor-client -- start
