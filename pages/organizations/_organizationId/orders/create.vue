@@ -225,7 +225,7 @@
                       <div class="form-group">
                         <label class="form-label">Total</label>
                         <br>
-                        {{ cost }} AED
+                        {{ cost }} INR
                       </div>
                     </div>
                   </div>
@@ -273,7 +273,7 @@
                             v-model="detail.order_detail_cost"
                           >
                           <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">AED</span>
+                            <span class="input-group-text" id="basic-addon1">INR</span>
                           </div>
                         </div>
                         <span class="help-block" 

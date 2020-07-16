@@ -169,7 +169,7 @@
                       <div class="card-header">
                         1 {{ conversion.unit.name }} of {{ product.name }} = 
                         <input type="number" v-model="prices[u]" placeholder="Enter amount" @blur="updatePrice(u, prices[u], conversion.unit_id)" 
-                        > AED
+                        > INR
                         <br>
                         <input type="checkbox"
                           v-if="prices[u]"

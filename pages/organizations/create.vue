@@ -73,6 +73,21 @@
                     >{{ errors.address[0] }}</span>
                   </div>
                   <div class="form-group">
+                    <input type="checkbox"
+                      v-model="form.is_cashback_applicable"
+                    >&nbsp;&nbsp;Is Cashback Applicable
+                  </div>
+                  <div class="form-group">
+                    <input type="checkbox"
+                      v-model="form.is_dine_in_and_delivery"
+                    >&nbsp;&nbsp;Is Dine In and Delivery Both
+                  </div>
+                  <div class="form-group">
+                    <input type="checkbox"
+                      v-model="form.is_referral_amount_usability"
+                    >&nbsp;&nbsp;Is Referral Applicable
+                  </div>
+                  <div class="form-group">
                     <label class="form-label">Time Zone</label>
                     <select class="form-control custom-select"
                       v-model="form.time_zone"
