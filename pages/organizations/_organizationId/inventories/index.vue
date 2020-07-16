@@ -68,7 +68,7 @@
                           <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/inventories/${inventory.id}/conversions`">Conversions</nuxt-link>
                         </td>
                         <td>{{ inventory.name }}</td>
-                        <td>{{ inventory.unit.name }}</td>
+                        <td>{{ inventory.unit ? inventory.unit.name : '' }}</td>
                       </tr>
                     </tbody>
                   </table>
