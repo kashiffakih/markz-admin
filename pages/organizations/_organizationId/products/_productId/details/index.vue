@@ -150,6 +150,13 @@
       </section>
       <!-- /.content -->
 
+      <!-- Packs -->
+      <product-pack
+        :product="product"
+        :units="units"
+        @updatePacks="updatePacks"
+      ></product-pack>
+
       <!-- Prices -->
       <section class="content">
         <div class="container-fluid">
@@ -164,17 +171,17 @@
                   <div class="container">
                     <br>
                     <div class="card"
-                      v-for="(conversion, u) in product.inventory.inventory_unit_conversions"
+                      v-for="(pack, u) in product.product_packs"
                     >
                       <div class="card-header">
-                        1 {{ conversion.unit.name }} of {{ product.name }} = 
-                        <input type="number" v-model="prices[u]" placeholder="Enter amount" @blur="updatePrice(u, prices[u], conversion.unit_id)" 
+                        {{ pack.value }} {{ pack.unit.name }} of {{ product.name }} = 
+                        <input type="number" v-model="prices[u]" placeholder="Enter amount" @blur="updatePrice(u, prices[u], pack.id)" 
                         > INR
                         <br>
                         <input type="checkbox"
                           v-if="prices[u]"
                           v-model="defaults[u]"
-                          @change="updatePrice(u, prices[u], conversion.unit_id)"
+                          @change="updatePrice(u, prices[u], pack.id)"
                         > &nbsp; Is this default unit and price to be displayed on the website
                       </div>
                     </div>
@@ -206,9 +213,28 @@
 </template>
 
 <script type="text/javascript">
+import ProductPack from './pack.vue'
 
 export default {
   name: 'ManageDetails',
+  async asyncData({$axios, params}) {
+    let u = await $axios.get(`/units`)
+    u = u.data.data
+    let units = []
+    units.push({
+      label: 'Select Unit',
+      code: '',
+    })
+    u.forEach((role) => {
+      units.push({
+        label: role.name,
+        code: role.id,
+      })
+    })
+    return {
+      units: units,
+    }
+  },
   data:() =>  ({
     searchData: '',
     loading: false,
@@ -217,13 +243,15 @@ export default {
     tags: [],
     product: {
       inventory: {
-
       }
     },
     tagIds: [],
     prices: [],
     defaults: [],
   }),
+  components: {
+    ProductPack
+  },
   mounted() {
     this.getData()
   },
@@ -246,8 +274,8 @@ export default {
       this.prices = []
       this.defaults = []
       // This is to get the prices already saved and display them
-      this.product.inventory.inventory_unit_conversions.forEach((conversion, c) => {
-        let price = this.product.product_prices.find(price => price.unit_id == conversion.unit_id)
+      this.product.product_packs.forEach((pack, c) => {
+        let price = this.product.product_prices.find(price => price.product_pack_id == pack.id)
         if(price) {
           this.prices[c] = price.price
           this.defaults[c] = parseInt(price.is_default)
@@ -287,11 +315,11 @@ export default {
       }
       await this.$axios.post(`/product_tag`, payload)
     },
-    async updatePrice(u, price, unitId) {
+    async updatePrice(u, price, productPackId) {
       let payload = {
         product_id: this.product.id,
         price: price,
-        unit_id: unitId,
+        product_pack_id: productPackId,
         is_default: this.defaults[u],
         date: new Date()
       }
@@ -299,6 +327,9 @@ export default {
         await this.$axios.post(`/products/${this.product.id}/product_prices`, payload)
         this.getData()
       } catch(ex) {}
+    },
+    updatePacks(packs) {
+      this.product.product_packs = packs
     },
     async handleFileUpload() {
       this.imagepath1 = this.$refs.imagepath1.files[0]
