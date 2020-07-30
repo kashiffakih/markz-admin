@@ -46,6 +46,69 @@
                     >{{ errors.name[0] }}</span>
                   </div>
                   <div class="form-group">
+                    <label class="form-label">Owner name</label>
+                    <input type="text" class="form-control" placeholder="Enter owner name"
+                      v-model="form.owner_name"
+                    >
+                    <span class="help-block" 
+                      v-if="errors.owner_name"
+                    >{{ errors.owner_name[0] }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Address line 1</label>
+                    <input type="text" class="form-control" placeholder="Enter address line 1"
+                      v-model="form.add_1"
+                    >
+                    <span class="help-block" 
+                      v-if="errors.add_1"
+                    >{{ errors.add_1[0] }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Address line 2</label>
+                    <input type="text" class="form-control" placeholder="Enter address line 2"
+                      v-model="form.add_2"
+                    >
+                    <span class="help-block" 
+                      v-if="errors.add_2"
+                    >{{ errors.add_2[0] }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Address line 3</label>
+                    <input type="text" class="form-control" placeholder="Enter address line 3"
+                      v-model="form.add_3"
+                    >
+                    <span class="help-block" 
+                      v-if="errors.add_3"
+                    >{{ errors.add_3[0] }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">State</label>
+                    <input type="text" class="form-control" placeholder="Enter state"
+                      v-model="form.state"
+                    >
+                    <span class="help-block" 
+                      v-if="errors.state"
+                    >{{ errors.state[0] }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">City</label>
+                    <input type="text" class="form-control" placeholder="Enter city"
+                      v-model="form.city"
+                    >
+                    <span class="help-block" 
+                      v-if="errors.city"
+                    >{{ errors.city[0] }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Pincode</label>
+                    <input type="number" class="form-control" placeholder="Enter pincode"
+                      v-model="form.pincode"
+                    >
+                    <span class="help-block" 
+                      v-if="errors.pincode"
+                    >{{ errors.pincode[0] }}</span>
+                  </div>
+                  <div class="form-group">
                     <label class="form-label">Email</label>
                     <input type="email" class="form-control" placeholder="Enter email"
                       v-model="form.email"
@@ -91,7 +154,7 @@
                     <label class="form-label">Logo</label>
                     <br>
                     <input type="file" id="file" name="file" ref="file" accept="application/ms-excel" multiple>
-                    <img style="width: 100px; height: 100px;" :src="`${mediaUrl}${form.logo_path}`">
+                    <img style="width: 100px; height: 100px;" :src="`${mediaUrl}${form.logo_path ? form.logo_path : 'company.png'}`">
                   </div>
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"

@@ -53,19 +53,6 @@
                       v-if="errors.name"
                     >{{ errors.name[0] }}</span>
                   </div>
-                  <div class="form-group">
-                    <label class="form-label">Select Divide By</label>
-                    <select class="form-control" v-model="form.divide_by">
-                      <option value="">Select Divide By</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                    </select>
-                    <span class="help-block" 
-                      v-if="errors.divide_by"
-                    >{{ errors.divide_by[0] }}</span>
-                  </div>
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"
                       @click="store"

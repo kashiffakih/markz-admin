@@ -175,8 +175,9 @@
                     >
                       <div class="card-header">
                         {{ pack.value }} {{ pack.unit.name }} of {{ product.name }} = 
-                        <input type="number" v-model="prices[u]" placeholder="Enter amount" @blur="updatePrice(u, prices[u], pack.id)" 
-                        > INR
+                        <input type="number" v-model="prices[u]" placeholder="Enter amount" @blur="updatePrice(u, prices[u], pack.id, offers[u])"> INR | 
+                        Offer Price : &nbsp;
+                        <input type="number" v-model="offers[u]" placeholder="Enter offer amount" @blur="updatePrice(u, prices[u], pack.id, offers[u])"> INR
                         <br>
                         <input type="checkbox"
                           v-if="prices[u]"
@@ -247,6 +248,7 @@ export default {
     },
     tagIds: [],
     prices: [],
+    offers: [],
     defaults: [],
   }),
   components: {
@@ -278,6 +280,7 @@ export default {
         let price = this.product.product_prices.find(price => price.product_pack_id == pack.id)
         if(price) {
           this.prices[c] = price.price
+          this.offers[c] = price.offer_price
           this.defaults[c] = parseInt(price.is_default)
         }
       })
@@ -315,10 +318,11 @@ export default {
       }
       await this.$axios.post(`/product_tag`, payload)
     },
-    async updatePrice(u, price, productPackId) {
+    async updatePrice(u, price, productPackId, offerPrice) {
       let payload = {
         product_id: this.product.id,
         price: price,
+        offer_price: offerPrice,
         product_pack_id: productPackId,
         is_default: this.defaults[u],
         date: new Date()

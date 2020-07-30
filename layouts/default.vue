@@ -36,7 +36,7 @@
       <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
         <nuxt-link to="/" class="brand-link" style="background-color: white;">
-          <img :src="organization.logo_path ? (mediaUrl + organization.logo_path) : '/dist/img/AdminLTELogo.png'"
+          <img :src="organization.logo_path ? (mediaUrl + organization.logo_path) : mediaUrl + 'company.png'"
                alt="Logo"
                style="opacity: .8; height: 50px; ">
           <!-- <span class="brand-text font-weight-light">{{ organization.text ? organization.text : 'Not Selected' }}</span> -->
@@ -100,9 +100,9 @@
       <nuxt></nuxt>
 
       <footer class="main-footer">
-        <div class="float-right d-none d-sm-block">
-          <img :src="organization.logo_path ? (mediaUrl + organization.logo_path) : '/dist/img/AdminLTELogo.png'" alt="Logo" style="width: 150px;">
-        </div>
+        <!-- <div class="float-right d-none d-sm-block">
+          <img :src="organization.logo_path ? (mediaUrl + organization.logo_path) : mediaUrl + 'company.png'" alt="Logo" style="width: 150px;">
+        </div> -->
         <!-- <strong>Copyright &copy; <a href="https://www.aaibuzz.com">LUSH FARMS</a></strong>
         | -->
         <!-- <strong>Developed By <a href="https://www.aaibuzz.com">AaiBuzz</a>.</strong> --> <b>Version</b> 1.0.0
@@ -162,6 +162,18 @@ export default {
         // title: 'Dashboard',
         'items': [
           {
+            name: 'Settings', icon: 'fas fa-wrench', link: '/settings', permission: this.permissions.indexOf(1) != -1 ? true : false
+          },
+          {
+            name: 'Organizations', icon: 'fa-building', link: '/organizations', permission: this.permissions.indexOf(5) != -1 ? true : false
+          },
+          {
+            name: 'Permissions', icon: 'fas fa-shield-alt', link: `/permissions`, permission: this.permissions.indexOf(2) != -1 ? true : false
+          },
+          {
+            name: 'Details', icon: 'fas fa-wrench', link: `/details`, permission: this.permissions.indexOf(2) != -1 ? true : false
+          },
+          {
             name: 'Home', icon: 'fa-envelope', link: '/', permission: this.permissions.indexOf(3) != -1 ? true : false,
             // sub1Items: [
             //   { name: 'D1', link: '/a' },
@@ -172,29 +184,9 @@ export default {
             name: 'Users', icon: 'fas fa-user-friends', link: `/organizations/${this.organizationId}/users`, permission: this.permissions.indexOf(4) != -1 ? true : false
           },
           {
-            name: 'Permissions', icon: 'fas fa-shield-alt', link: `/permissions`, permission: this.permissions.indexOf(2) != -1 ? true : false
-          },
-          {
             name: 'Reset Password', icon: 'fas fa-unlock-alt', link: `/auth/reset-password`, permission: this.permissions.indexOf(4) != -1 ? true : false
           },
-          {
-            name: 'Organizations', icon: 'fa-building', link: '/organizations', permission: this.permissions.indexOf(5) != -1 ? true : false
-          },
-          {
-            name: 'Settings', icon: 'fas fa-wrench', link: '/settings', permission: this.permissions.indexOf(1) != -1 ? true : false
-          },
         ]
-      })
-      categories.push({
-        title: 'Orders',
-        'items': [
-          {
-            name: 'Orders', icon: 'fas fa-credit-card', link: `/organizations/${this.organizationId}/orders`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          },
-          // {
-          //   name: 'Stocks', icon: 'fas fa-layer-group', link: `/organizations/${this.organizationId}/stocks`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          // },        
-        ],
       })
       categories.push({
         title: 'Master',
@@ -212,14 +204,8 @@ export default {
             name: 'Tags', icon: 'fas fa-tags', link: `/organizations/${this.organizationId}/tags`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
           // {
-          //   name: 'Taxes', icon: 'fas fa-money-check', link: `/organizations/${this.organizationId}/taxes`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          // },
-          {
-            name: 'Inventories', icon: 'fas fa-warehouse', link: `/organizations/${this.organizationId}/inventories`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          },
-          {
-            name: 'Images', icon: 'fas fa-images', link: `/organizations/${this.organizationId}/images`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          }
+          //   name: 'Images', icon: 'fas fa-images', link: `/organizations/${this.organizationId}/images`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          // }
         ]
       })
       categories.push({
@@ -231,14 +217,11 @@ export default {
         ]
       })
       categories.push({
-        title: 'Stocks',
+        title: 'Orders',
         'items': [
           {
-            name: 'Purchases', icon: 'fas fa-shopping-basket', link: `/organizations/${this.organizationId}/purchases`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          },
-          // {
-          //   name: 'Stocks', icon: 'fas fa-layer-group', link: `/organizations/${this.organizationId}/stocks`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          // },        
+            name: 'Orders', icon: 'fas fa-credit-card', link: `/organizations/${this.organizationId}/orders`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },      
         ],
       })
       categories.push({
@@ -247,12 +230,9 @@ export default {
           {
             name: 'Order Report', icon: 'far fa-window-restore', link: `/organizations/${this.organizationId}/reports/order-report`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
-          {
-            name: 'Daily MIS Report', icon: 'far fa-window-restore', link: `/organizations/${this.organizationId}/reports/daily-mis-report`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          },
           // {
-          //   name: 'Stocks', icon: 'fas fa-layer-group', link: `/organizations/${this.organizationId}/stocks`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          // },        
+          //   name: 'Daily MIS Report', icon: 'far fa-window-restore', link: `/organizations/${this.organizationId}/reports/daily-mis-report`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          // },       
         ],
       })
       categories.push({

@@ -16,7 +16,7 @@ export default {
       height: '800px',
       color: 'red',
       ckfinder: {
-        uploadUrl: 'http://13.126.249.88:8088/ckfinder/connector?command=QuickUpload&type=Images&responseType=json'
+        
       },
       
     },
@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     updateData() {
-      this.$emit('updateHtml', this.html)
+      this.$emit('update:data', this.html)
     },
     updateHtml() {
       this.html = this.data

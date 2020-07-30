@@ -44,7 +44,7 @@
                 <!-- /.card-header -->
                 <!-- form start -->
                 <div class="card-body">
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <label class="form-label">Inventory</label>
                     <v-select 
                       v-model="form.inventory_id" 
@@ -54,6 +54,14 @@
                     <span class="help-block" 
                       v-if="errors.inventory_id"
                     >{{ errors.inventory_id[0] }}</span>
+                  </div> -->
+                  <div class="form-group">
+                    <label class="form-label">Is Active</label>
+                    <select class="form-control" v-model="form.is_active">
+                      <option value="">Select status</option>
+                      <option value="1">Active</option>
+                      <option value="0">In Active</option>
+                    </select>
                   </div>
                   <div class="form-group">
                     <label class="form-label">Category</label>
@@ -191,6 +199,7 @@ export default {
       sub_category_id: '',
       user_id: '',
       location: '',
+      is_active: 1,
     },
     sub_categories: [
       {

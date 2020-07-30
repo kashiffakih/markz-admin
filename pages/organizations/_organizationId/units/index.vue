@@ -43,7 +43,6 @@
                         <th>Sr. No.</th>
                         <th>Actions</th>
                         <th>Unit</th>
-                        <th>Divide By</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -67,7 +66,6 @@
                           </nuxt-link>
                         </td>
                         <td>{{ unit.name }}</td>
-                        <td>{{ unit.divide_by }}</td>
                       </tr>
                     </tbody>
                   </table>
