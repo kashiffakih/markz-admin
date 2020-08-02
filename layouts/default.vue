@@ -14,13 +14,18 @@
               style="color: black !important; " 
             >Logout</button>
           </li>
+          <li
+            v-if="permissions.indexOf(1) != -1"
+          >
+            <select-organization></select-organization>
+          </li>
         </ul>
 
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" data-toggle="dropdown" href="#">
-              <h3><b>LUSH FARMS</b></h3>
+              <h3><b>FooDor</b></h3>
             </a>
           </li>
           <!-- <li class="nav-item">
@@ -122,6 +127,8 @@
 </template>
 
 <script>
+import SelectOrganization from '@/components/select-organization.vue'
+
 export default {
   name: 'Root',
   data() {
@@ -192,6 +199,12 @@ export default {
         title: 'Master',
         'items': [
           {
+            name: 'My CWallet', icon: 'fas fa-shield-alt', link: `/organizations/${this.organizationId}/company_wallets`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          {
+            name: 'Coupons', icon: 'fas fa-shield-alt', link: `/organizations/${this.organizationId}/coupons`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          {
             name: 'Statuses', icon: 'fas fa-thermometer-half', link: `/organizations/${this.organizationId}/statuses`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
           {
@@ -244,6 +257,9 @@ export default {
       })
       return categories;
     }
+  },
+  components: {
+    SelectOrganization
   },
   // mounted() {
   //   this.logout()

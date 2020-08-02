@@ -9,10 +9,10 @@
             <div class="col-sm-6">
               <h1 class="m-0 text-dark">
                 <back-button
-                  :link="`/organizations/${organization.value}/categories`"
+                  :link="`/organizations/${organization.value}/categories/${category.id}/sub-categories`"
                 >
                 </back-button>
-                Category</h1>
+                {{ category.name }} / Sub Categories</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -87,7 +87,7 @@ export default {
   async asyncData({$axios, params}) {
     let category = await $axios.get(`/categories/${params.categoryId}`)
     return {
-      category: category.data.data
+      category: category.data.data,
     }
   },
   data: () => ({

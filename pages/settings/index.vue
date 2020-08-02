@@ -27,25 +27,53 @@
         <div class="container-fluid">
           <div class="row justify-content-center">
             <!-- left column -->
-            <div class="col-md-6">
+            <div class="col-md-12">
               <!-- jquery validation -->
               <div class="card card-primary">
                 <!-- /.card-header -->
                 <!-- form start -->
                 <div class="card-body">
-                  <div class="form-group">
+                  <div class="col-md-12">
                     <label class="form-label">Select Organization</label>
-                    <select class="form-control custom-select"
-                      v-model="organizationId"
-                    >
-                      <option value="">Select Organization</option>
-                      <option v-for="org in organizations" :key="`'org'${org.id}`" :value="org.value">{{ org.text }}</option>
-                    </select>
-                  </div>
-                  <div class="form-footer">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <select class="form-control custom-select"
+                            v-model="organizationId"
+                          >
+                            <option value="">Select Organization</option>
+                            <option v-for="org in organizations" :key="`'org'${org.id}`" :value="org.value">{{ org.text }}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-footer">
+                          <button class="btn btn-primary btn-block"
+                            @click="updateDetails"
+                          >Update Organization</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Referral Amount (in Rs.)</label> 
+                          <input type="number" class="form-control" placeholder="Enter referral amount" v-model="form.referral_amount">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Reject Penalty on Rider (in Rs.)</label> 
+                          <input type="number" class="form-control" placeholder="Enter reject penalty amount" v-model="form.reject_penalty_on_rider">
+                        </div>
+                      </div>
+                    </div>
+
                     <button class="btn btn-primary btn-block"
-                    @click="updateDetails"
-                  >Update Details</button>
+                            @click="updateSettings"
+                          >Update Details</button>
+
                   </div>
                 </div>
               </div>
@@ -60,37 +88,6 @@
     </div>
     <!-- /.content-wrapper -->
   </section>
-
-  <!-- <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">Settings</h3>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-6 col-lg-4">
-                <div class="form-group">
-                  <select class="form-control custom-select"
-                    v-model="organizationId"
-                  >
-                    <option value="">Select Organization</option>
-                    <option v-for="org in organizations" :key="`'org'${org.id}`" :value="org.value">{{ org.text }}</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <button class="btn btn-primary btn-block"
-                    @click="updateDetails"
-                  >Update Details</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </template>
 
 <script type="text/javascript">
@@ -106,12 +103,20 @@ export default {
       'time_zone': organization.time_zone ? organization.time_zone : 'Asia/Calcutta',
       logo_path: organization.logo_path
     }));
+    let setting = await $axios.get(`/settings/1`)
+    let form = setting.data.data == null ? {} : setting.data.data
     return {
-      organizations: organizations
+      organizations: organizations,
+      form: form
     }
   },
   data: () => ({
-    organizationId: ''
+    organizationId: '',
+    form: {
+      referral_amount: 0,
+      reject_penalty_on_rider: 0
+    },
+    loading: false
   }),
   mounted() {
     this.organizationId = this.$store.getters['settings/organization'].value;
@@ -126,6 +131,17 @@ export default {
         }
       } else {
         alert("Please select the organization")
+      }
+    },
+    async updateSettings() {
+      this.loading = true
+      try {
+        let admin = await this.$axios.post(`/settings`, this.form)
+        alert('Details Updated')
+        this.loading = false
+      }
+      catch(e) {
+        this.loading = false
       }
     }
   }

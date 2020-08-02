@@ -7,7 +7,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-dark">Sub Categories of {{ category.name }}</h1>
+              <h1 class="m-0 text-dark">{{ category.name }} / Sub Categories</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -63,6 +63,7 @@
                               <i class="fa fa-trash"></i>
                             </span>
                           </nuxt-link>
+                          <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/categories/${category.id}/sub-categories/${sub_category.id}/sub-2-categories`">Sub 2 Categories</nuxt-link>
                         </td>
                         <td>
                           <img style="width: 50px; height: 50px;" :src="sub_category.imagepath ? (mediaUrl + sub_category.imagepath) : '/product-vector.png'">

@@ -9,10 +9,10 @@
             <div class="col-sm-6">
               <h1 class="m-0 text-dark">
                 <back-button
-                  :link="`/organizations/${organization.value}/categories`"
+                  :link="`/organizations/${organization.value}/categories/${category.id}/sub-categories`"
                 >
                 </back-button>
-                Category</h1>
+                {{ category.name }} / Sub Categories</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -94,13 +94,10 @@ export default {
     let sub_category = await $axios.get(`/categories/${params.categoryId}/sub_categories/${params.id}`)
     return {
       category: category.data.data,
-      form: sub_category.data.data,
+      form: sub_category.data.data
     }
   },
   data: () => ({
-    form: {
-      divide_by: 1
-    },
     subcategoryid: '',
     loading: false
   }),

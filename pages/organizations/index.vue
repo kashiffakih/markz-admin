@@ -84,6 +84,9 @@
                         <td class="w-1">
                           <nuxt-link class="icon" :to="`/organizations/${org.organizationId}`">
                             <i class="fa fa-edit"></i>
+                          </nuxt-link>&nbsp;&nbsp;
+                          <nuxt-link class="btn btn-primary btn-sm" :to="`/organizations/${org.organizationId}/documents`">
+                            Documents
                           </nuxt-link>
                         </td>
                       </tr>

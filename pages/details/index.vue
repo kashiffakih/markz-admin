@@ -92,7 +92,7 @@ export default {
   async asyncData({$axios, params}) {
     let setting = await $axios.get(`/settings/1`)
     return {
-      form: setting.data.data
+      form: setting.data.data || {}
     }
   },
   data: () => ({
