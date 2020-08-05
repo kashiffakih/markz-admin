@@ -192,6 +192,9 @@ export default {
           {
             name: 'Tags', icon: 'fas fa-tags', link: `/tags`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
+          {
+            name: 'Cities', icon: 'fas fa-tags', link: `/cities`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
         ]
       })
       categories.push({

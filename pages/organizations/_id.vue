@@ -62,14 +62,19 @@
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">Store Type</label>
-                        <select class="form-control" v-model="form.company_type">
+                        <select class="form-control" v-model="form.category_id">
                           <option value="">Select store type</option>
-                          <option value="Hotel">Hotel</option>
-                          <option value="Grocery">Grocery</option>
+                          <option
+                            v-for="(category, c) in categories"
+                            :key="`category${c}`"
+                            :value="category.id"
+                          >
+                            {{ category.name }}
+                          </option>
                         </select>
                         <span class="help-block" 
-                          v-if="errors.company_type"
-                        >{{ errors.company_type[0] }}</span>
+                          v-if="errors.category_id"
+                        >{{ errors.category_id[0] }}</span>
                       </div>
                     </div>
                     <div class="col-md-4">
@@ -290,8 +295,10 @@ export default {
   name: 'UpdateOrganization',
   async asyncData({$axios, params}) {
     let organization = await $axios.get(`/companies/${params.id}`)
+    let categories = await $axios.get(`/categories`)
     return {
-      form: organization.data.data
+      form: organization.data.data,
+      categories: categories.data.data
     }
   },
   data: () => ({
