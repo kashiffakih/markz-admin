@@ -9,10 +9,10 @@
             <div class="col-sm-6">
               <h1 class="m-0 text-dark">
                 <back-button
-                  :link="`/organizations/${organization.value}/categories/${category.id}/sub-categories/${sub_category.id}/sub-2-categories`"
+                  :link="`/tags`"
                 >
                 </back-button>
-                {{ category.name }} / {{ sub_category.name }} / Sub 2 Categories</h1>
+                Tag</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -20,7 +20,7 @@
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item">
-                  <nuxt-link :to="`/organizations/${this.organization.value}/categories`">Categories</nuxt-link>
+                  <nuxt-link :to="`/tags`">Tags</nuxt-link>
                 </li>
                 <li class="breadcrumb-item active">Create</li>
               </ol>
@@ -39,14 +39,14 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Create Sub Category of {{ category.name }}</h3>
+                  <h3 class="card-title">Create Tag</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
                 <div class="card-body">
                   <div class="form-group">
-                    <label class="form-label">Sub Category</label>
-                    <input type="text" class="form-control" placeholder="Enter sub category"
+                    <label class="form-label">Tag</label>
+                    <input type="text" class="form-control" placeholder="Enter tag name"
                       v-model="form.name"
                     >
                     <span class="help-block" 
@@ -61,7 +61,7 @@
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"
                       @click="store"
-                    >{{ loading ? 'Saving...' : 'Create Sub 2 Category' }}</button>
+                    >{{ loading ? 'Saving...' : 'Create Tag' }}</button>
                   </div>
                 </div>
               </div>
@@ -83,20 +83,12 @@
 import BackButton from '@/components/back-button.vue'
 
 export default {
-  name: 'CreateSub2Category',
-  async asyncData({$axios, params}) {
-    let category = await $axios.get(`/categories/${params.categoryId}`)
-    let sub_category = await $axios.get(`/categories/${params.categoryId}/sub_categories/${params.subCategoryId}`)
-    return {
-      category: category.data.data,
-      sub_category: sub_category.data.data
-    }
-  },
+  name: 'CreateTag',
   data: () => ({
     form: {
       divide_by: 1
     },
-    subcategoryid: '',
+    tagid: '',
     loading: false
   }),
   mounted() {
@@ -108,10 +100,10 @@ export default {
     async store() {
       this.loading = true
       try {
-        let admin = await this.$axios.post(`/sub_categories/${this.sub_category.id}/sub_2_categories`, this.form)
-        this.subcategoryid = admin.data.data.id
+        let admin = await this.$axios.post(`/tags`, this.form)
+        this.tagid = admin.data.data.id
         await this.handleFileUpload()
-        this.$router.push(`/organizations/${this.organization.value}/categories/${this.category.id}/sub-categories/${this.sub_category.id}/sub-2-categories`)
+        this.$router.push(`/tags`)
         this.loading = false
       }
       catch(e) {
@@ -121,9 +113,9 @@ export default {
     async handleFileUpload() {
       this.attachment = this.$refs.file.files[0]
       let formData = new FormData();
-      formData.append('subcategoryid', this.subcategoryid);
+      formData.append('tagid', this.tagid);
       formData.append('attachment', this.attachment);
-      await this.$axios.post('upload_sub_category_photo', formData,
+      await this.$axios.post('upload_tag_photo', formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data'

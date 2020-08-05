@@ -33,7 +33,7 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Manage Units</h3> &nbsp;
-                  <nuxt-link class="btn btn-sm btn-info float-sm-right" :to="`/organizations/${organization.value}/units/create`">Add New</nuxt-link>
+                  <nuxt-link class="btn btn-sm btn-info float-sm-right" :to="`/units/create`">Add New</nuxt-link>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
@@ -56,7 +56,7 @@
                       >
                         <td>{{ i + 1 }}</td>
                         <td class="w-1">
-                          <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/units/${unit.id}`">
+                          <nuxt-link title="Edit Details" class="icon" :to="`/units/${unit.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
                           <nuxt-link title="Delete Inspector" class="icon" to="">

@@ -9,10 +9,10 @@
             <div class="col-sm-6">
               <h1 class="m-0 text-dark">
                 <back-button
-                  :link="`/organizations/${organization.value}/categories/${category.id}/sub-categories`"
+                  :link="`/categories`"
                 >
                 </back-button>
-                {{ category.name }} / Sub Categories</h1>
+                Category</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -20,7 +20,7 @@
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item">
-                  <nuxt-link :to="`/organizations/${this.organization.value}/categories`">Categories</nuxt-link>
+                  <nuxt-link :to="`/categories`">Categories</nuxt-link>
                 </li>
                 <li class="breadcrumb-item active">Create</li>
               </ol>
@@ -39,14 +39,14 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Update Sub Category of {{ category.name }}</h3>
+                  <h3 class="card-title">Create Category</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
                 <div class="card-body">
                   <div class="form-group">
-                    <label class="form-label">Sub Category</label>
-                    <input type="text" class="form-control" placeholder="Enter sub category"
+                    <label class="form-label">Category</label>
+                    <input type="text" class="form-control" placeholder="Enter category"
                       v-model="form.name"
                     >
                     <span class="help-block" 
@@ -56,17 +56,12 @@
                   <div class="form-group">
                     <label class="form-label">Photo</label>
                     <br>
-                    <a :href="mediaUrl + form.imagepath" target="_blank">{{ form.imagepath }}</a>
-                    <input type="text" class="form-control" placeholder="Enter attachment"
-                      v-model="form.imagepath"
-                    >
-                    <br>
                     <input type="file" id="file" name="file" ref="file" accept="application/ms-excel" multiple>
                   </div>
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"
                       @click="store"
-                    >{{ loading ? 'Saving...' : 'Update Sub Category' }}</button>
+                    >{{ loading ? 'Saving...' : 'Create Category' }}</button>
                   </div>
                 </div>
               </div>
@@ -88,17 +83,12 @@
 import BackButton from '@/components/back-button.vue'
 
 export default {
-  name: 'UpdateSubCategory',
-  async asyncData({$axios, params}) {
-    let category = await $axios.get(`/categories/${params.categoryId}`)
-    let sub_category = await $axios.get(`/categories/${params.categoryId}/sub_categories/${params.id}`)
-    return {
-      category: category.data.data,
-      form: sub_category.data.data
-    }
-  },
+  name: 'CreateCategory',
   data: () => ({
-    subcategoryid: '',
+    form: {
+      divide_by: 1
+    },
+    categoryid: '',
     loading: false
   }),
   mounted() {
@@ -110,10 +100,10 @@ export default {
     async store() {
       this.loading = true
       try {
-        let admin = await this.$axios.patch(`/categories/${this.category.id}/sub_categories/${this.form.id}`, this.form)
-        this.subcategoryid = admin.data.data.id
+        let admin = await this.$axios.post(`/categories`, this.form)
+        this.categoryid = admin.data.data.id
         await this.handleFileUpload()
-        this.$router.push(`/organizations/${this.organization.value}/categories/${this.category.id}/sub-categories`)
+        this.$router.push(`/categories`)
         this.loading = false
       }
       catch(e) {
@@ -123,9 +113,9 @@ export default {
     async handleFileUpload() {
       this.attachment = this.$refs.file.files[0]
       let formData = new FormData();
-      formData.append('subcategoryid', this.subcategoryid);
+      formData.append('categoryid', this.categoryid);
       formData.append('attachment', this.attachment);
-      await this.$axios.post('upload_sub_category_photo', formData,
+      await this.$axios.post('upload_category_photo', formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data'

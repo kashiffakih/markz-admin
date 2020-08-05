@@ -9,11 +9,11 @@
             <div class="col-sm-6">
               <h1 class="m-0 text-dark">
                 <back-button
-                  :link="`/organizations/${organization.value}/statuses`"
+                  :link="`/categories`"
                   title="Hi"
                 >
                 </back-button>
-                Status Details</h1>
+                Category</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -21,7 +21,7 @@
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item">
-                  <nuxt-link :to="`/organizations/${this.organization.value}/statuses`">Statuses</nuxt-link>
+                  <nuxt-link :to="`/categories`">Categories</nuxt-link>
                 </li>
                 <li class="breadcrumb-item active">Create</li>
               </ol>
@@ -40,24 +40,34 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Create Status</h3>
+                  <h3 class="card-title">Create Category</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
                 <div class="card-body">
                   <div class="form-group">
-                    <label class="form-label">Status</label>
-                    <input type="text" class="form-control" placeholder="Enter status"
+                    <label class="form-label">Category</label>
+                    <input type="text" class="form-control" placeholder="Enter unit"
                       v-model="form.name"
                     >
                     <span class="help-block" 
                       v-if="errors.name"
                     >{{ errors.name[0] }}</span>
                   </div>
+                  <div class="form-group">
+                    <label class="form-label">Photo</label>
+                    <br>
+                    <a :href="mediaUrl + form.imagepath" target="_blank">{{ form.imagepath }}</a>
+                    <input type="text" class="form-control" placeholder="Enter attachment"
+                      v-model="form.imagepath"
+                    >
+                    <br>
+                    <input type="file" id="file" name="file" ref="file" accept="application/ms-excel" multiple>
+                  </div>
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"
                       @click="store"
-                    >{{ loading ? 'Saving...' : 'Update Status' }}</button>
+                    >{{ loading ? 'Saving...' : 'Update Category' }}</button>
                   </div>
                 </div>
               </div>
@@ -78,11 +88,11 @@
 import BackButton from '@/components/back-button.vue'
 
 export default {
-  name: 'UpdateStatus',
+  name: 'UpdateCategory',
   async asyncData({$axios, params}) {
-    let status = await $axios.get(`/statuses/${params.id}`)
+    let user = await $axios.get(`/categories/${params.id}`)
     return {
-      form: status.data.data
+      form: user.data.data
     }
   },
   data: () => ({
@@ -99,13 +109,31 @@ export default {
     async store() {
       this.loading = true
       try {
-        let admin = await this.$axios.patch(`/statuses/${this.form.id}`, this.form)
-        this.$router.push(`/organizations/${this.organization.value}/statuses`)
+        let admin = await this.$axios.patch(`/categories/${this.form.id}`, this.form)
+         await this.handleFileUpload()
+        this.$router.push(`/categories`)
         this.loading = false
       }
       catch(e) {
         this.loading = false
       }
+    },
+    async handleFileUpload() {
+      this.attachment = this.$refs.file.files[0]
+      let formData = new FormData();
+      formData.append('categoryid', this.form.id);
+      formData.append('attachment', this.attachment);
+      await this.$axios.post('upload_category_photo', formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      ).then(response => {
+      })
+      .catch(function(){
+        console.log('FAILURE!!');
+      });
     },
   }
 }

@@ -9,10 +9,10 @@
             <div class="col-sm-6">
               <h1 class="m-0 text-dark">
                 <back-button
-                  :link="`/organizations/${organization.value}/statuses`"
+                  :link="`/statuses`"
                 >
                 </back-button>
-                Unit</h1>
+                Status</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -20,7 +20,7 @@
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item">
-                  <nuxt-link :to="`/organizations/${this.organization.value}/statuses`">Statuses</nuxt-link>
+                  <nuxt-link :to="`/statuses`">Statuses</nuxt-link>
                 </li>
                 <li class="breadcrumb-item active">Create</li>
               </ol>
@@ -95,7 +95,7 @@ export default {
       this.loading = true
       try {
         let admin = await this.$axios.post(`/statuses`, this.form)
-        this.$router.push(`/organizations/${this.organization.value}/statuses`)
+        this.$router.push(`/statuses`)
         this.loading = false
       }
       catch(e) {

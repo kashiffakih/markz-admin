@@ -7,14 +7,14 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-dark">{{ category.name }} / {{ sub_category.name }} / Sub 3 Categories</h1>
+              <h1 class="m-0 text-dark">Status</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item">
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
-                <li class="breadcrumb-item active">Categories</li>
+                <li class="breadcrumb-item active">Status</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -27,11 +27,13 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
+              <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by status">
+              <a class="refresh" href="#" @click="getData">Refresh</a>
               <br>
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Manage Sub 2 Categories</h3> &nbsp;
-                  <nuxt-link class="btn btn-sm btn-info float-sm-right" :to="`/organizations/${organization.value}/categories/${category.id}/sub-categories/${sub_category.id}/sub-2-categories/${sub_2_category.id}/sub-3-categories/create`">Add New</nuxt-link>
+                  <h3 class="card-title">Manage Statuses</h3> &nbsp;
+                  <nuxt-link class="btn btn-sm btn-info float-sm-right" :to="`/statuses/create`">Add New</nuxt-link>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
@@ -40,8 +42,7 @@
                       <tr>
                         <th>Sr. No.</th>
                         <th>Actions</th>
-                        <th>Image</th>
-                        <th>Category</th>
+                        <th>Status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -50,24 +51,21 @@
                       > 
                         <td colspan="13">Loading...</td>
                       </tr>
-                      <tr v-for="(sub_3_category, i) in sub_2_category.sub_3_categories"
-                        :key="`sub_3_category${i}`"
+                      <tr v-for="(status, i) in items"
+                        :key="`status${i}`"
                       >
                         <td>{{ i + 1 }}</td>
                         <td class="w-1">
-                          <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/categories/${category.id}/sub-categories/${sub_category.id}/sub-2-categories/${sub_2_category.id}/sub-3-categories/${sub_3_category.id}`">
+                          <nuxt-link title="Edit Details" class="icon" :to="`/statuses/${status.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
                           <nuxt-link title="Delete Inspector" class="icon" to="">
-                            <span @click="del(sub_3_category.id)">
+                            <span @click="del(status.id)">
                               <i class="fa fa-trash"></i>
                             </span>
                           </nuxt-link>
                         </td>
-                        <td>
-                          <img style="width: 50px; height: 50px;" :src="sub_3_category.imagepath ? (mediaUrl + sub_3_category.imagepath) : '/product-vector.png'">
-                        </td>
-                        <td>{{ sub_3_category.name }}</td>
+                        <td>{{ status.name }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -88,12 +86,10 @@
 
 <script type="text/javascript">
 export default {
-  name: 'ManageSub3Categories',
+  name: 'ManageStatuses',
   data:() =>  ({
     searchData: '',
-    category: {},
-    sub_category: {},
-    sub_2_category: {},
+    items: [],
     loading: true,
   }),
   mounted() {
@@ -101,21 +97,17 @@ export default {
   },
   methods: {
     async getData() {
-      this.category = {}
+      this.items = []
       this.loading = true
-      let category = await this.$axios.get(`/categories/${this.$route.params.categoryId}`)
-      this.category = category.data.data
-      let sub_category = await this.$axios.get(`/categories/${this.$route.params.categoryId}/sub_categories/${this.$route.params.subCategoryId}`)
-      this.sub_category = sub_category.data.data
-      let sub_2_category = await this.$axios.get(`/sub_categories/${this.$route.params.subCategoryId}/sub_2_categories/${this.$route.params.sub2CategoryId}`)
-      this.sub_2_category = sub_2_category.data.data
+      let items = await this.$axios.get(`/statuses`)
+      this.items = items.data.data
       this.loading = false
     },
     async search() {
       if(this.searchData != "")
       {
         this.loading = true
-        let items = await this.$axios.get(`/categories?search=${this.searchData}`);
+        let items = await this.$axios.get(`/statuses?search=${this.searchData}`);
         this.items = items.data.data
         this.loading = false
       }
@@ -123,7 +115,7 @@ export default {
     async del(id) {
       let r = confirm('Are you sure you want to delete the data?')
       if(r == true)
-        await this.$axios.delete(`/categories/${this.category.id}/sub_categories/${id}`)
+        await this.$axios.delete(`/statuses/${id}`)
       this.getData()
     },
   },

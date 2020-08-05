@@ -7,14 +7,14 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-dark">Categories</h1>
+              <h1 class="m-0 text-dark">Tags</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item">
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
-                <li class="breadcrumb-item active">Categories</li>
+                <li class="breadcrumb-item active">Tags</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -27,13 +27,13 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
-              <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by category">
+              <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by tag name">
               <a class="refresh" href="#" @click="getData">Refresh</a>
               <br>
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Manage Categories</h3> &nbsp;
-                  <nuxt-link class="btn btn-sm btn-info float-sm-right" :to="`/organizations/${organization.value}/categories/create`">Add New</nuxt-link>
+                  <h3 class="card-title">Manage Tags</h3> &nbsp;
+                  <nuxt-link class="btn btn-sm btn-info float-sm-right" :to="`/tags/create`">Add New</nuxt-link>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
@@ -43,7 +43,7 @@
                         <th>Sr. No.</th>
                         <th>Actions</th>
                         <th>Image</th>
-                        <th>Category</th>
+                        <th>Unit</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -52,27 +52,24 @@
                       > 
                         <td colspan="13">Loading...</td>
                       </tr>
-                      <tr v-for="(category, i) in items"
-                        :key="`category${i}`"
+                      <tr v-for="(tag, i) in items"
+                        :key="`tag${i}`"
                       >
                         <td>{{ i + 1 }}</td>
                         <td class="w-1">
-                          <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/categories/${category.id}`">
+                          <nuxt-link title="Edit Details" class="icon" :to="`/tags/${tag.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
                           <nuxt-link title="Delete Inspector" class="icon" to="">
-                            <span @click="del(category.id)">
+                            <span @click="del(tag.id)">
                               <i class="fa fa-trash"></i>
                             </span>
-                          </nuxt-link>&nbsp;&nbsp;
-                          <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/categories/${category.id}/sub-categories`">Sub Categories</nuxt-link>
+                          </nuxt-link>
                         </td>
                         <td>
-                          <img style="width: 50px; height: 50px;" :src="category.imagepath ? (mediaUrl + category.imagepath) : '/product-vector.png'">
-                          <br>
-                          {{ category.emp_code }}
+                          <img style="width: 50px; height: 50px;" :src="tag.imagepath ? (mediaUrl + tag.imagepath) : '/product-vector.png'">
                         </td>
-                        <td>{{ category.name }}</td>
+                        <td>{{ tag.name }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -93,7 +90,7 @@
 
 <script type="text/javascript">
 export default {
-  name: 'Managecategories',
+  name: 'Managetags',
   data:() =>  ({
     searchData: '',
     items: [],
@@ -106,7 +103,7 @@ export default {
     async getData() {
       this.items = []
       this.loading = true
-      let items = await this.$axios.get(`/categories`)
+      let items = await this.$axios.get(`/tags`)
       this.items = items.data.data
       this.loading = false
     },
@@ -114,7 +111,7 @@ export default {
       if(this.searchData != "")
       {
         this.loading = true
-        let items = await this.$axios.get(`/categories?search=${this.searchData}`);
+        let items = await this.$axios.get(`/tags?search=${this.searchData}`);
         this.items = items.data.data
         this.loading = false
       }
@@ -122,7 +119,7 @@ export default {
     async del(id) {
       let r = confirm('Are you sure you want to delete the data?')
       if(r == true)
-        await this.$axios.delete(`/categories/${id}`)
+        await this.$axios.delete(`/tags/${id}`)
       this.getData()
     },
   },

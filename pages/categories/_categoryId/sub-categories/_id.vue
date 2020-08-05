@@ -9,11 +9,10 @@
             <div class="col-sm-6">
               <h1 class="m-0 text-dark">
                 <back-button
-                  :link="`/organizations/${organization.value}/units`"
-                  title="Hi"
+                  :link="`/categories/${category.id}/sub-categories`"
                 >
                 </back-button>
-                Unit Details</h1>
+                {{ category.name }} / Sub Categories</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -21,7 +20,7 @@
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item">
-                  <nuxt-link :to="`/organizations/${this.organization.value}/categories`">Categories</nuxt-link>
+                  <nuxt-link :to="`/categories`">Categories</nuxt-link>
                 </li>
                 <li class="breadcrumb-item active">Create</li>
               </ol>
@@ -40,24 +39,34 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Edit Unit</h3>
+                  <h3 class="card-title">Update Sub Category of {{ category.name }}</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
                 <div class="card-body">
                   <div class="form-group">
-                    <label class="form-label">Unit</label>
-                    <input type="text" class="form-control" placeholder="Enter unit"
+                    <label class="form-label">Sub Category</label>
+                    <input type="text" class="form-control" placeholder="Enter sub category"
                       v-model="form.name"
                     >
                     <span class="help-block" 
                       v-if="errors.name"
                     >{{ errors.name[0] }}</span>
                   </div>
+                  <div class="form-group">
+                    <label class="form-label">Photo</label>
+                    <br>
+                    <a :href="mediaUrl + form.imagepath" target="_blank">{{ form.imagepath }}</a>
+                    <input type="text" class="form-control" placeholder="Enter attachment"
+                      v-model="form.imagepath"
+                    >
+                    <br>
+                    <input type="file" id="file" name="file" ref="file" accept="application/ms-excel" multiple>
+                  </div>
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"
                       @click="store"
-                    >{{ loading ? 'Saving...' : 'Update Unit' }}</button>
+                    >{{ loading ? 'Saving...' : 'Update Sub Category' }}</button>
                   </div>
                 </div>
               </div>
@@ -69,6 +78,7 @@
         </div>
       </section>
       <!-- /.content -->
+
     </div>
     <!-- /.content-wrapper -->
   </section>
@@ -78,16 +88,17 @@
 import BackButton from '@/components/back-button.vue'
 
 export default {
-  name: 'UpdateUnit',
+  name: 'UpdateSubCategory',
   async asyncData({$axios, params}) {
-    let user = await $axios.get(`/units/${params.id}`)
+    let category = await $axios.get(`/categories/${params.categoryId}`)
+    let sub_category = await $axios.get(`/categories/${params.categoryId}/sub_categories/${params.id}`)
     return {
-      form: user.data.data
+      category: category.data.data,
+      form: sub_category.data.data
     }
   },
   data: () => ({
-    form: {
-    },
+    subcategoryid: '',
     loading: false
   }),
   mounted() {
@@ -99,13 +110,32 @@ export default {
     async store() {
       this.loading = true
       try {
-        let admin = await this.$axios.patch(`/units/${this.form.id}`, this.form)
-        this.$router.push(`/organizations/${this.organization.value}/units`)
+        let admin = await this.$axios.patch(`/categories/${this.category.id}/sub_categories/${this.form.id}`, this.form)
+        this.subcategoryid = admin.data.data.id
+        await this.handleFileUpload()
+        this.$router.push(`/categories/${this.category.id}/sub-categories`)
         this.loading = false
       }
       catch(e) {
         this.loading = false
       }
+    },
+    async handleFileUpload() {
+      this.attachment = this.$refs.file.files[0]
+      let formData = new FormData();
+      formData.append('subcategoryid', this.subcategoryid);
+      formData.append('attachment', this.attachment);
+      await this.$axios.post('upload_sub_category_photo', formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      ).then(response => {
+      })
+      .catch(function(){
+        console.log('FAILURE!!');
+      });
     },
   }
 }

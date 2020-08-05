@@ -181,6 +181,23 @@ export default {
             name: 'Details', icon: 'fas fa-wrench', link: `/details`, permission: this.permissions.indexOf(2) != -1 ? true : false
           },
           {
+            name: 'Statuses', icon: 'fas fa-thermometer-half', link: `/statuses`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          {
+            name: 'Units', icon: 'fas fa-flag', link: `/units`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          {
+            name: 'Categories', icon: 'fas fa-clipboard-list', link: `/categories`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          {
+            name: 'Tags', icon: 'fas fa-tags', link: `/tags`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+        ]
+      })
+      categories.push({
+        title: 'Company',
+        'items': [
+          {
             name: 'Home', icon: 'fa-envelope', link: '/', permission: this.permissions.indexOf(3) != -1 ? true : false,
             // sub1Items: [
             //   { name: 'D1', link: '/a' },
@@ -193,28 +210,11 @@ export default {
           {
             name: 'Reset Password', icon: 'fas fa-unlock-alt', link: `/auth/reset-password`, permission: this.permissions.indexOf(4) != -1 ? true : false
           },
-        ]
-      })
-      categories.push({
-        title: 'Master',
-        'items': [
           {
             name: 'My CWallet', icon: 'fas fa-shield-alt', link: `/organizations/${this.organizationId}/company_wallets`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
           {
             name: 'Coupons', icon: 'fas fa-shield-alt', link: `/organizations/${this.organizationId}/coupons`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          },
-          {
-            name: 'Statuses', icon: 'fas fa-thermometer-half', link: `/organizations/${this.organizationId}/statuses`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          },
-          {
-            name: 'Units', icon: 'fas fa-flag', link: `/organizations/${this.organizationId}/units`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          },
-          {
-            name: 'Categories', icon: 'fas fa-clipboard-list', link: `/organizations/${this.organizationId}/categories`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          },
-          {
-            name: 'Tags', icon: 'fas fa-tags', link: `/organizations/${this.organizationId}/tags`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
           // {
           //   name: 'Images', icon: 'fas fa-images', link: `/organizations/${this.organizationId}/images`, permission: this.permissions.indexOf(3) != -1 ? true : false

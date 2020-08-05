@@ -9,7 +9,7 @@
             <div class="col-sm-6">
               <h1 class="m-0 text-dark">
                 <back-button
-                  :link="`/organizations/${organization.value}/tags`"
+                  :link="`/tags`"
                 >
                 </back-button>
                 Tag</h1>
@@ -20,7 +20,7 @@
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item">
-                  <nuxt-link :to="`/organizations/${this.organization.value}/tags`">Tags</nuxt-link>
+                  <nuxt-link :to="`/tags`">Tags</nuxt-link>
                 </li>
                 <li class="breadcrumb-item active">Create</li>
               </ol>
@@ -39,7 +39,7 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Create Tag</h3>
+                  <h3 class="card-title">Update Tag</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -56,12 +56,17 @@
                   <div class="form-group">
                     <label class="form-label">Photo</label>
                     <br>
+                    <a :href="mediaUrl + form.imagepath" target="_blank">{{ form.imagepath }}</a>
+                    <input type="text" class="form-control" placeholder="Enter attachment"
+                      v-model="form.imagepath"
+                    >
+                    <br>
                     <input type="file" id="file" name="file" ref="file" accept="application/ms-excel" multiple>
                   </div>
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"
                       @click="store"
-                    >{{ loading ? 'Saving...' : 'Create Tag' }}</button>
+                    >{{ loading ? 'Saving...' : 'Update Tag' }}</button>
                   </div>
                 </div>
               </div>
@@ -83,12 +88,14 @@
 import BackButton from '@/components/back-button.vue'
 
 export default {
-  name: 'CreateTag',
+  name: 'UpdateTag',
+  async asyncData({$axios, params}) {
+    let tag = await $axios.get(`/tags/${params.id}`)
+    return {
+      form: tag.data.data
+    }
+  },
   data: () => ({
-    form: {
-      divide_by: 1
-    },
-    tagid: '',
     loading: false
   }),
   mounted() {
@@ -100,10 +107,9 @@ export default {
     async store() {
       this.loading = true
       try {
-        let admin = await this.$axios.post(`/tags`, this.form)
-        this.tagid = admin.data.data.id
+        let admin = await this.$axios.patch(`/tags/${this.form.id}`, this.form)
         await this.handleFileUpload()
-        this.$router.push(`/organizations/${this.organization.value}/tags`)
+        this.$router.push(`/tags`)
         this.loading = false
       }
       catch(e) {
@@ -113,7 +119,7 @@ export default {
     async handleFileUpload() {
       this.attachment = this.$refs.file.files[0]
       let formData = new FormData();
-      formData.append('tagid', this.tagid);
+      formData.append('tagid', this.form.id);
       formData.append('attachment', this.attachment);
       await this.$axios.post('upload_tag_photo', formData,
         {
