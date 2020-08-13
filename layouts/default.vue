@@ -196,6 +196,9 @@ export default {
             name: 'Locations', icon: 'fas fa-tags', link: `/cities`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
           {
+            name: 'Offers', icon: 'fas fa-tags', link: `/offers`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          {
             name: 'Delivery Boys', icon: 'fas fa-user-friends', link: `/delivery-users`, permission: this.permissions.indexOf(4) != -1 ? true : false
           },
           {

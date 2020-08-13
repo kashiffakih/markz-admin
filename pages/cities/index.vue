@@ -27,7 +27,7 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
-              <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by tag name">
+              <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by city name">
               <a class="refresh" href="#" @click="getData">Refresh</a>
               <br>
               <div class="card">
@@ -42,7 +42,7 @@
                       <tr>
                         <th>Sr. No.</th>
                         <th>Actions</th>
-                        <th>Unit</th>
+                        <th>Description 1</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -51,21 +51,21 @@
                       > 
                         <td colspan="13">Loading...</td>
                       </tr>
-                      <tr v-for="(tag, i) in items"
-                        :key="`tag${i}`"
+                      <tr v-for="(city, i) in items"
+                        :key="`city${i}`"
                       >
                         <td>{{ i + 1 }}</td>
                         <td class="w-1">
-                          <nuxt-link title="Edit Details" class="icon" :to="`/cities/${tag.id}`">
+                          <nuxt-link title="Edit Details" class="icon" :to="`/cities/${city.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
                           <nuxt-link title="Delete Inspector" class="icon" to="">
-                            <span @click="del(tag.id)">
+                            <span @click="del(city.id)">
                               <i class="fa fa-trash"></i>
                             </span>
                           </nuxt-link>
                         </td>
-                        <td>{{ tag.name }}</td>
+                        <td>{{ city.name }}</td>
                       </tr>
                     </tbody>
                   </table>

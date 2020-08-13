@@ -136,7 +136,7 @@ export default {
     async del(id) {
       let r = confirm('Are you sure you want to delete the data?')
       if(r == true)
-        await this.$axios.delete(`/categories/${this.category.id}/sub_categories/${id}`)
+        await this.$axios.delete(`/sub_categories/${this.sub_category.id}/sub_2_categories/${id}`)
       this.getData()
     },
   },
