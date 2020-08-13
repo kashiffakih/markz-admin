@@ -7,14 +7,14 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-dark">Cities</h1>
+              <h1 class="m-0 text-dark">Locations</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item">
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
-                <li class="breadcrumb-item active">Cities</li>
+                <li class="breadcrumb-item active">Locations</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -32,7 +32,7 @@
               <br>
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Manage Cities</h3> &nbsp;
+                  <h3 class="card-title">Manage Locations</h3> &nbsp;
                   <nuxt-link class="btn btn-sm btn-info float-sm-right" :to="`/cities/create`">Add New</nuxt-link>
                 </div>
                 <!-- /.card-header -->

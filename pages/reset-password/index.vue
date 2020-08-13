@@ -56,7 +56,7 @@
             <div class="col-12">
               <button type="submit" class="btn btn-primary btn-block"
                 @click="sendEmail"
-              >Send Password Reset Email</button>
+              >Reset Password</button>
             </div>
             <!-- /.col -->
           </div>

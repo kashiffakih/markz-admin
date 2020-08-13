@@ -124,9 +124,14 @@
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">City</label>
-                        <input type="text" class="form-control" placeholder="Enter city"
-                          v-model="form.city"
-                        >
+                        <select class="form-control" v-model="form.city_id">
+                          <option value="">Select City</option>
+                          <option 
+                            v-for="(city, c) in cities"
+                            :key="`city${c}`"
+                            :value="city.id"
+                          >{{ city.name }}</option>
+                        </select>
                         <span class="help-block" 
                           v-if="errors.city"
                         >{{ errors.city[0] }}</span>
@@ -296,9 +301,11 @@ export default {
   async asyncData({$axios, params}) {
     let organization = await $axios.get(`/companies/${params.id}`)
     let categories = await $axios.get(`/categories`)
+    let cities = await $axios.get(`/cities`)
     return {
       form: organization.data.data,
-      categories: categories.data.data
+      categories: categories.data.data,
+      cities: cities.data.data,
     }
   },
   data: () => ({

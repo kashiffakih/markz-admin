@@ -38,7 +38,7 @@
             <div class="col-md-12">
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Update Order Details</h3>
+                  <h3 class="card-title">Add Order Details</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -49,8 +49,8 @@
                         <label class="form-label">Select user</label>
                         <v-select 
                           v-model="form.user_id" 
-                          :reduce="vendor => vendor.code" 
-                          :options="vendors"
+                          :reduce="user => user.code" 
+                          :options="users"
                         ></v-select>
                         <span class="help-block" 
                           v-if="errors.user_id"
@@ -59,8 +59,8 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
-                        <label class="form-label">Delivery message</label>
-                        <input type="text" class="form-control" placeholder="Enter delivery message"
+                        <label class="form-label"><span style="color: red;">*</span>Order Details</label>
+                        <input type="text" class="form-control" placeholder="Enter order details"
                           v-model="form.details"
                         >
                         <span class="help-block" 
@@ -68,11 +68,51 @@
                         >{{ errors.details[0] }}</span>
                       </div>
                     </div>
+                  </div>
+                  <b>or Create a new User</b>
+                  <div class="row">
                     <div class="col-md-4">
                       <div class="form-group">
-                        <label class="form-label">Total</label>
-                        <br>
-                        {{ cost }} AED
+                        <label class="form-label"><span style="color: red;">*</span>First Name</label>
+                        <input type="text" class="form-control" placeholder="Enter first name"
+                          v-model="user.first_name"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.first_name"
+                        >{{ errors.first_name[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label"><span style="color: red;">*</span>Last Name</label>
+                        <input type="text" class="form-control" placeholder="Enter last name"
+                          v-model="user.last_name"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.last_name"
+                        >{{ errors.last_name[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label"><span style="color: red;">*</span>Email</label>
+                        <input type="text" class="form-control" placeholder="Enter email"
+                          v-model="user.email"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.email"
+                        >{{ errors.email[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label"><span style="color: red;">*</span>Phone</label>
+                        <input type="text" class="form-control" placeholder="Enter phone"
+                          v-model="user.phone"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.phone"
+                        >{{ errors.phone[0] }}</span>
                       </div>
                     </div>
                   </div>
@@ -120,7 +160,7 @@
                             v-model="detail.order_detail_cost"
                           >
                           <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">AED</span>
+                            <span class="input-group-text" id="basic-addon1">INR</span>
                           </div>
                         </div>
                         <span class="help-block" 
@@ -192,10 +232,11 @@ export default {
       if(price)
         products.push({
           code: product.id,
-          label: product.name,
-          unit_id: price.unit_id,
-          unit: price.unit.name,
-          price: price.price,
+          label: product.name + '(' + price.product_pack.value + ' ' + price.product_pack.unit.name + ')',
+          price: price.offer_price || price.price,
+          unit: price.product_pack.unit.name,
+          unit_id: price.product_pack.unit.id,
+          product_pack: price.product_pack.value + ' ' + price.product_pack.unit.name
         })
     })
     let order = await $axios.get(`/orders/${params.id}`)
@@ -203,10 +244,10 @@ export default {
     order.order_details.forEach((detail, d) => {
       detail.position = d
       detail.product_id = parseInt(detail.product_id)
-      detail.unit = detail.unit.name
+      // detail.unit = detail.unit.name
     })
     return {
-      vendors: users,
+      users: users,
       products: products,
       form:order,
     }
@@ -248,6 +289,7 @@ export default {
       if(product && product.code != '') {
         this.form.order_details[position].unit_id = product.unit_id
         this.form.order_details[position].unit = product.unit
+        this.form.order_details[position].product_pack = product.product_pack
         this.getOrderDetailAmount(position, productId, quantity)
       }
     },

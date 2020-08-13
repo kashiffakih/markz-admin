@@ -33,7 +33,7 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Manage Statuses</h3> &nbsp;
-                  <nuxt-link class="btn btn-sm btn-info float-sm-right" :to="`/statuses/create`">Add New</nuxt-link>
+                  <!-- <nuxt-link class="btn btn-sm btn-info float-sm-right" :to="`/statuses/create`">Add New</nuxt-link> -->
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
@@ -58,12 +58,12 @@
                         <td class="w-1">
                           <nuxt-link title="Edit Details" class="icon" :to="`/statuses/${status.id}`">
                             <i class="fa fa-edit"></i>
-                          </nuxt-link>&nbsp;&nbsp;
-                          <nuxt-link title="Delete Inspector" class="icon" to="">
+                          </nuxt-link>
+                          <!-- <nuxt-link title="Delete Inspector" class="icon" to="">
                             <span @click="del(status.id)">
                               <i class="fa fa-trash"></i>
                             </span>
-                          </nuxt-link>
+                          </nuxt-link> -->
                         </td>
                         <td>{{ status.name }}</td>
                       </tr>

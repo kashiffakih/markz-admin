@@ -12,8 +12,8 @@ export const state = () => ({
   baseUrl: 'http://api.foodor.in/api',
   // mediaUrl: 'http://localhost:8080/storage/',
   // baseUrl: 'http://localhost:8080/api',
-  // mediaUrl: 'http://192.168.29.9:8081/storage/',
-  // baseUrl: 'http://192.168.29.9:8081/api',
+  // mediaUrl: 'http://192.168.29.9:8080/storage/',
+  // baseUrl: 'http://192.168.29.9:8080/api',
 })
 
 export const getters = {

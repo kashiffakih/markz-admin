@@ -124,9 +124,14 @@
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">City</label>
-                        <input type="text" class="form-control" placeholder="Enter city"
-                          v-model="form.city"
-                        >
+                        <select class="form-control" v-model="form.city_id">
+                          <option value="">Select City</option>
+                          <option 
+                            v-for="(city, c) in cities"
+                            :key="`city${c}`"
+                            :value="city.id"
+                          >{{ city.name }}</option>
+                        </select>
                         <span class="help-block" 
                           v-if="errors.city"
                         >{{ errors.city[0] }}</span>
@@ -300,8 +305,10 @@ export default {
   name: 'CreateOrganization',
   async asyncData({$axios, params}) {
     let categories = await $axios.get(`/categories`)
+    let cities = await $axios.get(`/cities`)
     return {
-      categories: categories.data.data
+      categories: categories.data.data,
+      cities: cities.data.data,
     }
   },
   data: () => ({
@@ -313,6 +320,7 @@ export default {
       time_zone: '',
       comission_type: '',
       category_id: '',
+      city_id: ''
     },
     time_zones: []
   }),

@@ -193,7 +193,10 @@ export default {
             name: 'Tags', icon: 'fas fa-tags', link: `/tags`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
           {
-            name: 'Cities', icon: 'fas fa-tags', link: `/cities`, permission: this.permissions.indexOf(3) != -1 ? true : false
+            name: 'Locations', icon: 'fas fa-tags', link: `/cities`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          {
+            name: 'Delivery Boys', icon: 'fas fa-user-friends', link: `/delivery-users`, permission: this.permissions.indexOf(4) != -1 ? true : false
           },
         ]
       })

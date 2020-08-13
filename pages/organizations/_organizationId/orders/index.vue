@@ -45,8 +45,6 @@
                         <th>Order ID</th>
                         <th>User</th>
                         <th>Order Details</th>
-                        <th>Message</th>
-                        <th>Time Slot</th>
                         <th>Order Date & Time</th>
                         <th>Order Cost</th>
                         <th>Order Status</th>
@@ -63,12 +61,12 @@
                       >
                         <td>{{ i + 1 }}</td>
                         <td class="w-1">
-                          <a target="_blank" :href="`${baseUrl}/orders/${order.id}/invoice`">
+                          <!-- <a target="_blank" :href="`${baseUrl}/orders/${order.id}/invoice`">
                             Invoice
                           </a>&nbsp;&nbsp;
                            <a target="_blank" :href="`${baseUrl}/orders/${order.id}/order`">
                             Order
-                          </a>&nbsp;&nbsp;
+                          </a>&nbsp;&nbsp; -->
                           <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/orders/${order.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
@@ -79,11 +77,9 @@
                           </nuxt-link>
                         </td>
                         <td>
-                          000 {{ order.id }}
-                          <br>
-                          {{ order.source ? order.source : 'Website' }}
+                          {{ order.id }}
                         </td>
-                        <td>{{ order.user ? order.user.name : '' }}</td>
+                        <td>{{ order.user ? (order.user.first_name + ' ' + order.user.middle_name + ' ' + order.user.last_name) : '' }}</td>
                         <td>
                           <table>
                             <thead>
@@ -102,53 +98,14 @@
                                 <td>{{ d + 1 }}</td>
                                 <td>{{ detail.product ? detail.product.name : '' }}</td>
                                 <td>{{ detail.quantity }}</td>
-                                <td>{{ detail.order_detail_cost }} AED</td>
+                                <td>{{ detail.order_detail_cost }} INR</td>
                               </tr>
                             </tbody>
                           </table>
                         </td>
-                        <td>
-                          Payment Type: {{ order.payment_mode }}
-                          <br>
-                          Express Delivery: {{ order.is_express_delivery == 1 ? 'Yes' : 'No' }}
-                          <br>
-                          Message: {{ order.details }}
-                          <br>
-                          Preferred Delivery: {{ order.delivery_date }}
-                          <br>
-                          Delivery Address: 
-                          <br>
-                          <div
-                            v-if="order.user.is_billing_same == '0'"
-                          >
-                            {{ order.user.bill_prefix + order.user.bill_first_name + order.user.bill_last_name + order.user.bill_flat_no + order.user.bill_building_name }}
-                            <br>
-                            {{ order.user.bill_email + order.user.bill_phone }}
-                            <br>
-                            {{ order.user.bill_street_name + order.user.bill_address }}
-                            <br>
-                            {{ order.user.bill_other_details + order.user.bill_nationality }}
-                          </div>
-                          <div
-                            v-else
-                          >
-                            {{ order.user.prefix + order.user.first_name + order.user.last_name + order.user.flat_no + order.user.building_name }}
-                            <br>
-                            {{ order.user.email + order.user.phone }}
-                            <br>
-                            {{ order.user.street_name + order.user.address }}
-                            <br>
-                            {{ order.user.other_details + order.user.nationality }}
-                          </div>
-                        </td>
-                        <td>{{ order.delivery_time }}</td>
                         <td>{{ order.created_at }}</td>
                         <td>
-                          {{ order.order_cost ? parseInt(order.order_cost).toFixed(2) : '-' }} AED
-                          <br>
-                          Discount: {{ order.discount ? parseInt(order.discount).toFixed(2) : '-' }} AED
-                          <br>
-                          Total: {{ (order.order_cost - order.discount).toFixed(2) }} AED
+                          {{ order.order_cost ? parseInt(order.order_cost).toFixed(2) : '-' }} INR
                         </td>
                         <td>
                           <table>
@@ -177,16 +134,8 @@
                               </tr>
                             </tbody>
                           </table>
-                          <br>
-                          QC: {{ order.quality }}
-                          <br>
-                          Reason: {{ order.quality_details }}
-                          <br>
                           <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/orders/${order.id}/order-statuses/create`">
                            Update Status
-                         </nuxt-link>
-                         <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/orders/${order.id}/quality-control`">
-                           Quality Control
                          </nuxt-link>
                         </td>
                       </tr>

@@ -12,7 +12,7 @@
                   :link="`/cities`"
                 >
                 </back-button>
-                Cities</h1>
+                Locations</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -20,7 +20,7 @@
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item">
-                  <nuxt-link :to="`/cities`">Cities</nuxt-link>
+                  <nuxt-link :to="`/cities`">Locations</nuxt-link>
                 </li>
                 <li class="breadcrumb-item active">Create</li>
               </ol>
@@ -39,7 +39,7 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Update City</h3>
+                  <h3 class="card-title">Update Location</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -56,7 +56,7 @@
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"
                       @click="store"
-                    >{{ loading ? 'Saving...' : 'Update City' }}</button>
+                    >{{ loading ? 'Saving...' : 'Update Location' }}</button>
                   </div>
                 </div>
               </div>
