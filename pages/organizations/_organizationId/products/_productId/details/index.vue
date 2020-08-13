@@ -175,9 +175,11 @@
                     >
                       <div class="card-header">
                         {{ pack.value }} {{ pack.unit.name }} of {{ product.name }} = 
-                        <input type="number" v-model="prices[u]" placeholder="Enter amount" @blur="updatePrice(u, prices[u], pack.id, offers[u])"> INR | 
+                        <input type="number" v-model="prices[u]" placeholder="Enter amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u])"> INR | 
                         Offer Price : &nbsp;
-                        <input type="number" v-model="offers[u]" placeholder="Enter offer amount" @blur="updatePrice(u, prices[u], pack.id, offers[u])"> INR
+                        <input type="number" v-model="offers[u]" placeholder="Enter offer amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u])"> INR | 
+                        Cashback Amount : &nbsp;
+                        <input type="number" v-model="cashbacks[u]" placeholder="Enter offer amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u])"> INR
                         <br>
                         <input type="checkbox"
                           v-if="prices[u]"
@@ -249,6 +251,7 @@ export default {
     tagIds: [],
     prices: [],
     offers: [],
+    cashbacks: [],
     defaults: [],
   }),
   components: {
@@ -281,6 +284,7 @@ export default {
         if(price) {
           this.prices[c] = price.price
           this.offers[c] = price.offer_price
+          this.cashbacks[c] = price.cashback_price
           this.defaults[c] = parseInt(price.is_default)
         }
       })
@@ -318,11 +322,12 @@ export default {
       }
       await this.$axios.post(`/product_tag`, payload)
     },
-    async updatePrice(u, price, productPackId, offerPrice) {
+    async updatePrice(u, price, productPackId, offerPrice, cashbackPrice) {
       let payload = {
         product_id: this.product.id,
         price: price,
         offer_price: offerPrice,
+        cashback_price: cashbackPrice,
         product_pack_id: productPackId,
         is_default: this.defaults[u],
         date: new Date()
