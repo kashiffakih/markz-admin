@@ -46,6 +46,19 @@
                   <div class="row">
                     <div class="col-md-4">
                       <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-control" v-model="form.active">
+                          <option value="">Select Status</option>
+                          <option value="1">Enable</option>
+                          <option value="0">Disable</option>
+                        </select>
+                        <span class="help-block" 
+                          v-if="errors.active"
+                        >{{ errors.active[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
                         <label class="form-label">First Name</label>
                         <input type="text" class="form-control" placeholder="Enter first name"
                           v-model="form.first_name"
@@ -267,11 +280,11 @@ export default {
         }
         await this.$axios.post('/role_user', role_payload)
         // Assign Organization
-        let organization_payload = {
-          user_id: admin.data.data.id,
-          company_id: this.$route.params.organizationId
-        }
-        await this.$axios.post('/company_user', organization_payload)
+        // let organization_payload = {
+        //   user_id: admin.data.data.id,
+        //   company_id: this.$route.params.organizationId
+        // }
+        // await this.$axios.post('/company_user', organization_payload)
         await this.handleFileUpload()
         this.$router.push(`/delivery-users`)
         this.loading = false

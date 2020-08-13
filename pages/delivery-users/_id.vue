@@ -193,6 +193,61 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
+                        <label class="form-label">Account No</label>
+                        <input type="text" class="form-control" placeholder="Enter account no"
+                          v-model="form.acc_no"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.acc_no"
+                        >{{ errors.acc_no[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Account Name</label>
+                        <input type="text" class="form-control" placeholder="Enter account name"
+                          v-model="form.acc_name"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.acc_name"
+                        >{{ errors.acc_name[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Bank</label>
+                        <input type="text" class="form-control" placeholder="Enter bank"
+                          v-model="form.bank"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.bank"
+                        >{{ errors.bank[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Branch</label>
+                        <input type="text" class="form-control" placeholder="Enter branch"
+                          v-model="form.branch"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.branch"
+                        >{{ errors.branch[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">IFSC Code</label>
+                        <input type="text" class="form-control" placeholder="Enter ifsc code"
+                          v-model="form.ifsc_code"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.ifsc_code"
+                        >{{ errors.ifsc_code[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
                         <label class="form-label">Photo</label>
                         <br>
                         <a :href="mediaUrl + form.attachment" target="_blank">{{ form.attachment }}</a>

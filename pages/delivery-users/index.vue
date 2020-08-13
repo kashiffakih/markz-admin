@@ -73,6 +73,9 @@
                               <i class="fa fa-trash"></i>
                             </span>
                           </nuxt-link>
+                          <nuxt-link class="btn btn-primary btn-sm" :to="`/delivery-users/${emp.id}/documents`">
+                            Documents
+                          </nuxt-link>
                         </td>
                         <td>
                           <img style="width: 50px; height: 50px;" :src="mediaUrl + (emp.attachment ? emp.attachment : '/user.png')">

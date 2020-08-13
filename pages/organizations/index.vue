@@ -59,7 +59,7 @@
                       >
                         <td>{{ org.id }}</td>
                         <td>
-                          <img :src="organization.logo_path ? (mediaUrl + organization.logo_path) : mediaUrl + 'company.png'"
+                          <img :src="org.logo_path ? (mediaUrl + org.logo_path) : mediaUrl + 'company.png'"
                            style="width: 70px; height: 70px;opacity: .8;"
                            class="brand-image img-circle elevation-3"
                           >

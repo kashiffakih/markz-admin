@@ -61,6 +61,16 @@
                       v-if="errors.value"
                     >{{ errors.value[0] }}</span>
                   </div>
+                  <div class="form-group">
+                    <label class="form-label">Attachment</label>
+                    <br>
+                    <a :href="mediaUrl + form.imagepath" target="_blank">{{ form.imagepath }}</a>
+                    <input type="text" class="form-control" placeholder="Enter atatchment"
+                      v-model="form.imagepath"
+                    >
+                    <br>
+                    <input type="file" id="file" name="file" ref="file" accept="application/ms-excel" multiple>
+                  </div>
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"
                       @click="store"
@@ -104,6 +114,7 @@ export default {
     },
     dojDateMenu: false,
     dobDateMenu: false,
+    docId: '',
   }),
   mounted() {
     this.form.role_id = 2;
@@ -116,12 +127,31 @@ export default {
     async store() {
       try {
         let admin = await this.$axios.post(`company_documents`, this.form)
+        this.docId = admin.data.data.id
+        await this.handleFileUpload()
         this.$router.push(`/organizations/${this.$route.params.organizationId}/documents`)
       }
       catch(e) {
 
       }
-    }
+    },
+    async handleFileUpload() {
+      this.attachment = this.$refs.file.files[0]
+      let formData = new FormData();
+      formData.append('docid', this.docId);
+      formData.append('attachment', this.attachment);
+      await this.$axios.post('upload_doc_photo', formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      ).then(response => {
+      })
+      .catch(function(){
+        console.log('FAILURE!!');
+      });
+    },
   }
 }
 </script>

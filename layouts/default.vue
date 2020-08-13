@@ -178,7 +178,7 @@ export default {
             name: 'Permissions', icon: 'fas fa-shield-alt', link: `/permissions`, permission: this.permissions.indexOf(2) != -1 ? true : false
           },
           {
-            name: 'Details', icon: 'fas fa-wrench', link: `/details`, permission: this.permissions.indexOf(2) != -1 ? true : false
+            name: 'Pages', icon: 'fas fa-wrench', link: `/details`, permission: this.permissions.indexOf(2) != -1 ? true : false
           },
           {
             name: 'Statuses', icon: 'fas fa-thermometer-half', link: `/statuses`, permission: this.permissions.indexOf(3) != -1 ? true : false
@@ -197,6 +197,9 @@ export default {
           },
           {
             name: 'Delivery Boys', icon: 'fas fa-user-friends', link: `/delivery-users`, permission: this.permissions.indexOf(4) != -1 ? true : false
+          },
+          {
+            name: 'Customers', icon: 'fas fa-user-friends', link: `/customers`, permission: this.permissions.indexOf(4) != -1 ? true : false
           },
         ]
       })
