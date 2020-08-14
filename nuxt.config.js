@@ -102,7 +102,7 @@ module.exports = {
   ],
 
   axios: {
-    baseURL: 'http://api.foodor.in/api'
+    baseURL: 'https://api.foodor.in/api'
     // baseURL: 'http://localhost:8080/api'
     // baseURL: 'http://192.168.29.9:8080/api'
   },
