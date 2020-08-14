@@ -81,11 +81,34 @@
                       v-model="form.sub_category_id" 
                       :reduce="sub_category => sub_category.code" 
                       :options="sub_categories"
-                      @input="getSubCategories(form.category_id)"
+                      @input="getSub2Categories(form.category_id, form.sub_category_id)"
                     ></v-select>
                     <span class="help-block" 
                       v-if="errors.sub_category_id"
                     >{{ errors.sub_category_id[0] }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Sub 2 Category</label>
+                    <v-select 
+                      v-model="form.sub_2_category_id" 
+                      :reduce="sub_2_category => sub_2_category.code" 
+                      :options="sub_2_categories"
+                      @input="getSub3Categories(form.category_id, form.sub_category_id, form.sub_2_category_id)"
+                    ></v-select>
+                    <span class="help-block" 
+                      v-if="errors.sub_2_category_id"
+                    >{{ errors.sub_2_category_id[0] }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Sub 3 Category</label>
+                    <v-select 
+                      v-model="form.sub_3_category_id" 
+                      :reduce="sub_3_category => sub_3_category.code" 
+                      :options="sub_3_categories"
+                    ></v-select>
+                    <span class="help-block" 
+                      v-if="errors.sub_3_category_id"
+                    >{{ errors.sub_3_category_id[0] }}</span>
                   </div>
                   <div class="form-group">
                     <label class="form-label">Product Name</label>
@@ -180,11 +203,11 @@ export default {
       code: '',
       sub_categories: [],
     })
-    c.forEach((role) => {
+    c.forEach((cat) => {
       categories.push({
-        label: role.name,
-        code: role.id,
-        sub_categories: role.sub_categories,
+        label: cat.name,
+        code: cat.id,
+        sub_categories: cat.sub_categories,
       })
     })
     return {
@@ -197,6 +220,8 @@ export default {
       inventory_id: '',
       category_id: '',
       sub_category_id: '',
+      sub_2_category_id: '',
+      sub_3_category_id: '',
       user_id: '',
       location: '',
       is_active: 1,
@@ -204,6 +229,18 @@ export default {
     sub_categories: [
       {
         label: 'Select Sub Category',
+        code: '',
+      }
+    ],
+    sub_2_categories: [
+      {
+        label: 'Select Sub 2 Category',
+        code: '',
+      }
+    ],
+    sub_3_categories: [
+      {
+        label: 'Select Sub 3 Category',
         code: '',
       }
     ],
@@ -228,6 +265,37 @@ export default {
         this.sub_categories.push({
           label: sub_category.name,
           code: sub_category.id,
+        })
+      })
+    },
+    getSub2Categories(categoryId, subCategoryId) {
+      this.sub_2_categories = []
+      this.sub_2_categories.push({
+        label: 'Select Sub 2 Category',
+        code: '',
+      })
+      let category = this.categories.find(cat => cat.code == categoryId)
+      let sub_category = category.sub_categories.find(sub_cat => sub_cat.id == subCategoryId)
+      sub_category.sub_2_categories.forEach(sub_2_category => {
+        this.sub_2_categories.push({
+          label: sub_2_category.name,
+          code: sub_2_category.id,
+        })
+      })
+    },
+    getSub3Categories(categoryId, subCategoryId, sub2CategoryId) {
+      this.sub_3_categories = []
+      this.sub_3_categories.push({
+        label: 'Select Sub 3 Category',
+        code: '',
+      })
+      let category = this.categories.find(cat => cat.code == categoryId)
+      let sub_category = category.sub_categories.find(sub_cat => sub_cat.id == subCategoryId)
+      let sub_2_category = sub_category.sub_2_categories.find(sub_2_cat => sub_2_cat.id == sub2CategoryId)
+      sub_2_category.sub_3_categories.forEach(sub_3_category => {
+        this.sub_3_categories.push({
+          label: sub_3_category.name,
+          code: sub_3_category.id,
         })
       })
     },

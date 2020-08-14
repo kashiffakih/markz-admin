@@ -68,6 +68,30 @@
                         ></editor>
                       </no-ssr>
                     </div>
+                    <div class="form-group">
+                      <no-ssr placeholder="Loading...">
+                        <b>Contact Details</b>
+                        <editor 
+                          :data.sync="form.contact"
+                        ></editor>
+                      </no-ssr>
+                    </div>
+                    <div class="form-group">
+                      <no-ssr placeholder="Loading...">
+                        <b>Return, Refund and Cancellation Policy</b>
+                        <editor 
+                          :data.sync="form.return"
+                        ></editor>
+                      </no-ssr>
+                    </div>
+                    <div class="form-group">
+                      <no-ssr placeholder="Loading...">
+                        <b>Disclaimer</b>
+                        <editor 
+                          :data.sync="form.disclaimer"
+                        ></editor>
+                      </no-ssr>
+                    </div>
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -101,6 +125,9 @@ export default {
       faq: '',
       privacy: '',
       terms: '',
+      contact: '',
+      return: '',
+      disclaimer: '',
     }
   }),
   components: {
