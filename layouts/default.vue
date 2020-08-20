@@ -199,7 +199,7 @@ export default {
             name: 'Offers', icon: 'fas fa-tags', link: `/offers`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
           {
-            name: 'Delivery Boys', icon: 'fas fa-user-friends', link: `/delivery-users`, permission: this.permissions.indexOf(4) != -1 ? true : false
+            name: 'Delivery Riders', icon: 'fas fa-user-friends', link: `/delivery-users`, permission: this.permissions.indexOf(4) != -1 ? true : false
           },
           {
             name: 'Customers', icon: 'fas fa-user-friends', link: `/customers`, permission: this.permissions.indexOf(4) != -1 ? true : false
