@@ -145,7 +145,17 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
-                        <label class="form-label">City</label>
+                        <label class="form-label">City</label> fhbhfbh  
+                        <select class="form-control" v-model="form.city_id">
+                          <option value="">Select City</option>
+                          <option 
+                            v-for="(city, c) in cities"
+                            :key="`city${c}`"
+                            :value="city.id"
+                          >
+                            {{ city.name }}
+                          </option>
+                        </select>
                         <input type="text" class="form-control" placeholder="Enter city"
                           v-model="form.city"
                         >
@@ -226,6 +236,8 @@ export default {
     let user = await $axios.get(`/users/${params.id}`)
     let r = await $axios.get(`/roles`)
     r = r.data.data
+    let cities = await $axios.get(`/cities`)
+    cities = cities.data.data
     let roles = []
     roles.push({
       label: 'Select Role',
@@ -239,7 +251,8 @@ export default {
     })
     return {
       roles: roles,
-      form: user.data.data
+      form: user.data.data,
+      cities: cities,
     }
   },
   data: () => ({

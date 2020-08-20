@@ -6,7 +6,7 @@ export const state = () => ({
     value: '',
     text: '',
     time_zone: '',
-    logo_path: ''
+    logo_path: '',
   },
   mediaUrl: 'https://api.foodor.in/storage/',
   baseUrl: 'https://api.foodor.in/api',

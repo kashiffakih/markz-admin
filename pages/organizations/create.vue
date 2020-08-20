@@ -133,8 +133,8 @@
                           >{{ city.name }}</option>
                         </select>
                         <span class="help-block" 
-                          v-if="errors.city"
-                        >{{ errors.city[0] }}</span>
+                          v-if="errors.city_id"
+                        >{{ errors.city_id[0] }}</span>
                       </div>
                     </div>
                     <div class="col-md-4">
@@ -232,29 +232,7 @@
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
                       <div class="form-group">
-                        <label class="form-label">Account No</label>
-                        <input type="text" class="form-control" placeholder="Enter account no"
-                          v-model="form.acc_no"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.acc_no"
-                        >{{ errors.acc_no[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Account Name</label>
-                        <input type="text" class="form-control" placeholder="Enter account name"
-                          v-model="form.acc_name"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.acc_name"
-                        >{{ errors.acc_name[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Bank</label>
+                        <label class="form-label">Bank Name</label>
                         <input type="text" class="form-control" placeholder="Enter bank"
                           v-model="form.bank"
                         >
@@ -276,6 +254,39 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
+                        <label class="form-label">Account Type</label>
+                        <input type="text" class="form-control" placeholder="Enter account type"
+                          v-model="form.acc_type"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.acc_type"
+                        >{{ errors.acc_type[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Account Holder Name</label>
+                        <input type="text" class="form-control" placeholder="Enter account holder name"
+                          v-model="form.acc_name"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.acc_name"
+                        >{{ errors.acc_name[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Account No</label>
+                        <input type="text" class="form-control" placeholder="Enter account no"
+                          v-model="form.acc_no"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.acc_no"
+                        >{{ errors.acc_no[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
                         <label class="form-label">IFSC Code</label>
                         <input type="text" class="form-control" placeholder="Enter ifsc code"
                           v-model="form.ifsc_code"
@@ -284,8 +295,6 @@
                           v-if="errors.ifsc_code"
                         >{{ errors.ifsc_code[0] }}</span>
                       </div>
-                    </div>
-                    <div class="col-md-4">
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">

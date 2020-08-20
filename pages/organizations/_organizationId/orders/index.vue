@@ -42,11 +42,13 @@
                       <tr>
                         <th>Sr. No.</th>
                         <th>Actions</th>
+                        <th v-if="$route.query.search=='all'">Store</th>
                         <th>Order ID</th>
                         <th>User</th>
                         <th>Order Details</th>
                         <th>Order Date & Time</th>
                         <th>Order Cost</th>
+                        <th>Delivery Boy Details</th>
                         <th>Order Status</th>
                       </tr>
                     </thead>
@@ -76,16 +78,18 @@
                             </span>
                           </nuxt-link>
                         </td>
+                        <td v-if="$route.query.search=='all'">{{ order.company.name }}</td>
                         <td>
                           {{ order.id }}
                         </td>
-                        <td>{{ order.user ? (order.user.first_name + ' ' + order.user.middle_name + ' ' + order.user.last_name) : '' }}</td>
+                        <td>{{ order.user ? ((order.user.first_name || '') + ' ' + (order.user.middle_name || '') + ' ' + (order.user.last_name|| '')) : '' }}</td>
                         <td>
                           <table>
                             <thead>
                               <tr>
                                 <th>Sr No</th>
                                 <th>Name</th>
+                                <th>Pack</th>
                                 <th>Quantity</th>
                                 <th>Price</th>
                               </tr>
@@ -97,6 +101,7 @@
                               >
                                 <td>{{ d + 1 }}</td>
                                 <td>{{ detail.product ? detail.product.name : '' }}</td>
+                                <td>{{ detail.product_pack }}</td>
                                 <td>{{ detail.quantity }}</td>
                                 <td>{{ detail.order_detail_cost }} INR</td>
                               </tr>
@@ -107,6 +112,7 @@
                         <td>
                           {{ order.order_cost ? parseInt(order.order_cost).toFixed(2) : '-' }} INR
                         </td>
+                        <td>{{ order.delivery_boy ? order.delivery_boy.first_name : 'Not Assigned' }}</td>
                         <td>
                           <table>
                             <tbody>
@@ -136,6 +142,11 @@
                           </table>
                           <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/orders/${order.id}/order-statuses/create`">
                            Update Status
+                         </nuxt-link>
+                         <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/orders/${order.id}/delivery-boys/create`"
+                          v-if="$route.query.search=='all'"
+                         >
+                           Assign Delivery Boy
                          </nuxt-link>
                         </td>
                       </tr>
@@ -176,7 +187,7 @@ export default {
     async getData() {
       this.items = []
       this.loading = true
-      let items = await this.$axios.get(`/orders`)
+      let items = await this.$axios.get(`/orders?search=${this.$route.query.search}`)
       items = items.data.data
       items.forEach(item => {
         if(item.user == null)

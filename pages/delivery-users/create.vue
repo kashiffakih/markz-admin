@@ -159,12 +159,17 @@
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">City</label>
-                        <input type="text" class="form-control" placeholder="Enter city"
-                          v-model="form.city"
-                        >
+                        <select class="form-control" v-model="form.city_id">
+                          <option value="">Select City</option>
+                          <option 
+                            v-for="(city, c) in cities"
+                            :key="`city${c}`"
+                            :value="city.id"
+                          >{{ city.name }}</option>
+                        </select>
                         <span class="help-block" 
-                          v-if="errors.city"
-                        >{{ errors.city[0] }}</span>
+                          v-if="errors.city_id"
+                        >{{ errors.city_id[0] }}</span>
                       </div>
                     </div>
                     <div class="col-md-4">
@@ -193,29 +198,7 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
-                        <label class="form-label">Account No</label>
-                        <input type="text" class="form-control" placeholder="Enter account no"
-                          v-model="form.acc_no"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.acc_no"
-                        >{{ errors.acc_no[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Account Name</label>
-                        <input type="text" class="form-control" placeholder="Enter account name"
-                          v-model="form.acc_name"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.acc_name"
-                        >{{ errors.acc_name[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Bank</label>
+                        <label class="form-label">Bank Name</label>
                         <input type="text" class="form-control" placeholder="Enter bank"
                           v-model="form.bank"
                         >
@@ -233,6 +216,39 @@
                         <span class="help-block" 
                           v-if="errors.branch"
                         >{{ errors.branch[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Account Type</label>
+                        <input type="text" class="form-control" placeholder="Enter account type"
+                          v-model="form.acc_type"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.acc_type"
+                        >{{ errors.acc_type[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Account Holder Name</label>
+                        <input type="text" class="form-control" placeholder="Enter account holder name"
+                          v-model="form.acc_name"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.acc_name"
+                        >{{ errors.acc_name[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Account No</label>
+                        <input type="text" class="form-control" placeholder="Enter account no"
+                          v-model="form.acc_no"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.acc_no"
+                        >{{ errors.acc_no[0] }}</span>
                       </div>
                     </div>
                     <div class="col-md-4">
@@ -299,8 +315,10 @@ export default {
         code: role.id,
       })
     })
+    let cities = await $axios.get(`/cities`)
     return {
-      roles: roles
+      roles: roles,
+      cities: cities.data.data,
     }
   },
   data: () => ({
@@ -310,6 +328,7 @@ export default {
       phone: '',
       active: 1,
       role_id: '',
+      city_id: '',
     },
     userid: '',
     loading: false

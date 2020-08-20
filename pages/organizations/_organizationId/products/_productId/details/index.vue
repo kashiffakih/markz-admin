@@ -177,9 +177,9 @@
                         {{ pack.value }} {{ pack.unit.name }} of {{ product.name }} = 
                         <input type="number" v-model="prices[u]" placeholder="Enter amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u])"> INR | 
                         Offer Price : &nbsp;
-                        <input type="number" v-model="offers[u]" placeholder="Enter offer amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u])"> INR | 
+                        <input type="number" v-model="offers[u]" placeholder="Enter offer amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u])"> INR <span v-if="org.is_cashback_applicable">| 
                         Cashback Amount : &nbsp;
-                        <input type="number" v-model="cashbacks[u]" placeholder="Enter offer amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u])"> INR
+                        <input type="number" v-model="cashbacks[u]" placeholder="Enter offer amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u])"> INR</span>
                         <br>
                         <input type="checkbox"
                           v-if="prices[u]"
@@ -221,6 +221,8 @@ import ProductPack from './pack.vue'
 export default {
   name: 'ManageDetails',
   async asyncData({$axios, params}) {
+    let org = await $axios.get(`/companies/${params.organizationId}`)
+    org = org.data.data
     let u = await $axios.get(`/units`)
     u = u.data.data
     let units = []
@@ -236,6 +238,7 @@ export default {
     })
     return {
       units: units,
+      org: org,
     }
   },
   data:() =>  ({
