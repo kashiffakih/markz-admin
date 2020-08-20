@@ -42,6 +42,7 @@
                       <tr>
                         <th>Sr. No.</th>
                         <th>Actions</th>
+                        <th>Order Status</th>
                         <th v-if="$route.query.search=='all'">Store</th>
                         <th>Order ID</th>
                         <th>User</th>
@@ -49,7 +50,6 @@
                         <th>Order Date & Time</th>
                         <th>Order Cost</th>
                         <th>Delivery Boy Details</th>
-                        <th>Order Status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -77,6 +77,43 @@
                               <i class="fa fa-trash"></i>
                             </span>
                           </nuxt-link>
+
+                        </td>
+                        <td>
+                          <table>
+                            <tbody>
+                              <tr>
+                                <td>
+                                  Order Received
+                                </td>
+                                <td>
+                                  {{ order.created_at }}
+                                </td>
+                              </tr>
+                              <tr
+                                v-for="(status,d) in order.order_statuses"
+                                :key="`status${d}`"
+                              >
+                                <td>
+                                  {{ status.status.name }}
+                                  <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/orders/${order.id}/order-statuses/${status.id}`">
+                                    <i class="fa fa-edit"></i>
+                                  </nuxt-link>
+                                </td>
+                                <td>
+                                  {{ status.created_at }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/orders/${order.id}/order-statuses/create`">
+                           Update Status
+                         </nuxt-link>
+                         <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/orders/${order.id}/delivery-boys/create`"
+                          v-if="$route.query.search=='all'"
+                         >
+                           Assign Delivery Rider
+                         </nuxt-link>
                         </td>
                         <td v-if="$route.query.search=='all'">{{ order.company.name }}</td>
                         <td>
@@ -112,42 +149,12 @@
                         <td>
                           {{ order.order_cost ? parseInt(order.order_cost).toFixed(2) : '-' }} INR
                         </td>
-                        <td>{{ order.delivery_boy ? order.delivery_boy.first_name : 'Not Assigned' }}</td>
                         <td>
-                          <table>
-                            <tbody>
-                              <tr>
-                                <td>
-                                  Order Received
-                                </td>
-                                <td>
-                                  {{ order.created_at }}
-                                </td>
-                              </tr>
-                              <tr
-                                v-for="(status,d) in order.order_statuses"
-                                :key="`status${d}`"
-                              >
-                                <td>
-                                  {{ status.status.name }}
-                                  <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/orders/${order.id}/order-statuses/${status.id}`">
-                                    <i class="fa fa-edit"></i>
-                                  </nuxt-link>
-                                </td>
-                                <td>
-                                  {{ status.created_at }}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                          <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/orders/${order.id}/order-statuses/create`">
-                           Update Status
-                         </nuxt-link>
-                         <nuxt-link class="btn btn-sm btn-info" :to="`/organizations/${organization.value}/orders/${order.id}/delivery-boys/create`"
-                          v-if="$route.query.search=='all'"
-                         >
-                           Assign Delivery Boy
-                         </nuxt-link>
+                          {{ order.delivery_boy ? order.delivery_boy.first_name : 'Not Assigned' }}
+                          <br>
+                          <span v-if="order.is_delivery_boy_accepted == 0">Pending</span>
+                          <span v-if="order.is_delivery_boy_accepted == 1">Accepted</span>
+                          <span v-if="order.is_delivery_boy_accepted == 2">Not Accepted</span>
                         </td>
                       </tr>
                     </tbody>
@@ -187,7 +194,7 @@ export default {
     async getData() {
       this.items = []
       this.loading = true
-      let items = await this.$axios.get(`/orders?search=${this.$route.query.search}`)
+      let items = await this.$axios.get(`/orders?search=${this.$route.query.search}&cityId=${this.city.id}`)
       items = items.data.data
       items.forEach(item => {
         if(item.user == null)

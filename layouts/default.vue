@@ -19,6 +19,9 @@
           >
             <select-organization></select-organization>
           </li>
+          <li>
+            <select-city :cities="cities"></select-city>
+          </li>
         </ul>
 
         <!-- Right navbar links -->
@@ -128,13 +131,15 @@
 
 <script>
 import SelectOrganization from '@/components/select-organization.vue'
+import SelectCity from '@/components/select-city.vue'
 
 export default {
   name: 'Root',
   data() {
     return {
       clipped: true,
-      fixed: false
+      fixed: false,
+      cities: [],
     }
   },
   computed: {
@@ -274,12 +279,17 @@ export default {
     }
   },
   components: {
-    SelectOrganization
+    SelectOrganization,
+    SelectCity
   },
-  // mounted() {
-  //   this.logout()
-  // },
+  mounted() {
+    this.getCities()
+  },
   methods: {
+    async getCities() {
+      let cities = await this.$axios.get('/cities')
+      this.cities = cities.data.data
+    },
     logout() {
       this.$auth.logout()
     }

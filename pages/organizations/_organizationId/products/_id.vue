@@ -135,7 +135,7 @@
                       v-if="errors.description"
                     >{{ errors.description[0] }}</span>
                   </div>
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <label class="form-label">Origin</label>
                     <countries
                       :option.sync="form.location"
@@ -143,7 +143,7 @@
                     <span class="help-block" 
                       v-if="errors.location"
                     >{{ errors.location[0] }}</span>
-                  </div>
+                  </div> -->
                   <div class="form-group">
                     <label class="form-label">Position</label>
                     <input type="number" class="form-control" placeholder="Enter postion"
@@ -152,6 +152,14 @@
                     <span class="help-block" 
                       v-if="errors.position"
                     >{{ errors.position[0] }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Is Veg/Non-Veg</label>
+                    <select class="form-control" v-model="form.veg_nonveg">
+                      <option value="">Select Veg/Non-Veg</option>
+                      <option value="Veg">Veg</option>
+                      <option value="Non Veg">Non Veg</option>
+                    </select>
                   </div>
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"

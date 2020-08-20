@@ -95,6 +95,24 @@
                       v-if="errors.value"
                     >{{ errors.value[0] }}</span>
                   </div>
+                  <div class="form-group">
+                    <label class="form-label">No of times a Users can use Coupon</label>
+                    <input type="number" class="form-control" placeholder="Enter no"
+                      v-model="form.no_per_user"
+                    >
+                    <span class="help-block" 
+                      v-if="errors.no_per_user"
+                    >{{ errors.no_per_user[0] }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Min. order value</label>
+                    <input type="number" class="form-control" placeholder="Enter min. order value"
+                      v-model="form.min_order_value"
+                    >
+                    <span class="help-block" 
+                      v-if="errors.min_order_value"
+                    >{{ errors.min_order_value[0] }}</span>
+                  </div>
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"
                       @click="store"

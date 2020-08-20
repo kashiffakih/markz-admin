@@ -13,7 +13,7 @@
                   title="Hi"
                 >
                 </back-button>
-                Delivery Boy Details</h1>
+                Delivery Rider Details</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -21,7 +21,7 @@
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item">
-                  <nuxt-link :to="`/organizations/${this.organization.value}/users`">Delivery Boy</nuxt-link>
+                  <nuxt-link :to="`/organizations/${this.organization.value}/users`">Delivery Rider</nuxt-link>
                 </li>
                 <li class="breadcrumb-item active">Update</li>
               </ol>
@@ -38,7 +38,7 @@
             <div class="col-md-12">
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Update Delivery Boy Details</h3>
+                  <h3 class="card-title">Update Delivery Rider Details</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -286,7 +286,7 @@
                       @click="store"
                       :disabled="loading"
                     >
-                      {{ loading ? 'Saving...': 'Update Delivery Boy' }}
+                      {{ loading ? 'Saving...': 'Update Delivery Rider' }}
                     </button>
                   </div>
                 </div>

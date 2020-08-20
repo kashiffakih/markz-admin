@@ -135,7 +135,7 @@
                       v-if="errors.description"
                     >{{ errors.description[0] }}</span>
                   </div>
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <label class="form-label">Origin</label>
                     <countries
                       :option.sync="form.location"
@@ -143,7 +143,7 @@
                     <span class="help-block" 
                       v-if="errors.location"
                     >{{ errors.location[0] }}</span>
-                  </div>
+                  </div> -->
                   <div class="form-group">
                     <label class="form-label">Position</label>
                     <input type="number" class="form-control" placeholder="Enter postion"

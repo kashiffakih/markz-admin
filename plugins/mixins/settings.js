@@ -13,6 +13,7 @@ const Settings = {
           organization: 'settings/organization',
           mediaUrl: 'settings/mediaUrl',
           baseUrl: 'settings/baseUrl',
+          city: 'settings/city',
         })
       }
     })

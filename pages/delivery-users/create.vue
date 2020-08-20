@@ -13,7 +13,7 @@
                   title="Hi"
                 >
                 </back-button>
-                Delivery Boy Details</h1>
+                Delivery Rider Details</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -21,7 +21,7 @@
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item">
-                  <nuxt-link :to="`/delivery-users`">Delivery Boys</nuxt-link>
+                  <nuxt-link :to="`/delivery-users`">Delivery Riders</nuxt-link>
                 </li>
                 <li class="breadcrumb-item active">Create</li>
               </ol>
@@ -38,7 +38,7 @@
             <div class="col-md-12">
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Add Delivery Boy Details</h3>
+                  <h3 class="card-title">Add Delivery Rider Details</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -136,13 +136,13 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
-                        <label class="form-label">Address line 3</label>
-                        <input type="email" class="form-control" placeholder="Enter address line 3"
-                          v-model="form.add_3"
+                        <label class="form-label">Landmark</label>
+                        <input type="text" class="form-control" placeholder="Enter landmark"
+                          v-model="form.add_2"
                         >
                         <span class="help-block" 
-                          v-if="errors.add_3"
-                        >{{ errors.add_3[0] }}</span>
+                          v-if="errors.add_2"
+                        >{{ errors.add_2[0] }}</span>
                       </div>
                     </div>
                     <div class="col-md-4">
@@ -276,7 +276,7 @@
                       @click="store"
                       :disabled="loading"
                     >
-                      {{ loading ? 'Saving...': 'Create Delivery Boy' }}
+                      {{ loading ? 'Saving...': 'Create Delivery Rider' }}
                     </button>
                   </div>
                 </div>

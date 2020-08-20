@@ -65,7 +65,7 @@
                           >
                         <td>
                           {{ org.name }}<br>
-                          {{ org.address }}
+                          City: {{ org.location ? org.location.name : '' }}
                         </td>
                         <td v-if="org.users.length == 0">
                           <nuxt-link class="btn btn-primary btn-sm" :to="`/organizations/${org.organizationId}/admins/create`">
@@ -111,10 +111,7 @@
 export default {
   name: 'ManageOrganizations',
   async asyncData({$axios}) { 
-    let organizations = await $axios.get('/companies');
-    return {
-      organizations: organizations.data.data
-    }
+    
   },
   data:() =>  ({
     headers: [
@@ -131,7 +128,9 @@ export default {
     items: [],
     loading: true
   }),
-  mounted() {
+  async mounted()  {
+    let organizations = await this.$axios.get(`/companies?cityId=${this.city.id}`);
+    this.organizations = organizations.data.data
     this.organizations.forEach((org, i) => {
       org.users = org.users.filter(u => u.roles[0].name == 'Admin');
       this.items.push({
@@ -140,7 +139,8 @@ export default {
         name: org.name,
         users: org.users,
         address: org.address,
-        logo_path: org.logo_path
+        logo_path: org.logo_path,
+        location: org.location,
       })
     })
     this.loading = false

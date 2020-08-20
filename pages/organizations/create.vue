@@ -100,15 +100,15 @@
                       </div>
                     </div>
                     <div class="col-md-4">
-                      <!-- <div class="form-group">
-                        <label class="form-label">Address line 2</label>
-                        <input type="text" class="form-control" placeholder="Enter address line 2"
+                      <div class="form-group">
+                        <label class="form-label">Landmark</label>
+                        <input type="text" class="form-control" placeholder="Enter landmark"
                           v-model="form.add_2"
                         >
                         <span class="help-block" 
                           v-if="errors.add_2"
                         >{{ errors.add_2[0] }}</span>
-                      </div> -->
+                      </div>
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">

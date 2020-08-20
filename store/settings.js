@@ -8,6 +8,10 @@ export const state = () => ({
     time_zone: '',
     logo_path: '',
   },
+  city: {
+    id: '',
+    name: '',
+  },
   mediaUrl: 'https://api.foodor.in/storage/',
   baseUrl: 'https://api.foodor.in/api',
   // mediaUrl: 'http://localhost:8080/storage/',
@@ -26,6 +30,9 @@ export const getters = {
   darkStatus(state) {
     return state.darkStatus;
   },
+  city(state) {
+    return state.city;
+  },
   organization(state) {
     return state.organization;
   },
@@ -40,11 +47,17 @@ export const getters = {
 export const mutations = {
   SET_ORGANIZATION(state, organization) {
     state.organization = organization
+  },
+  SET_CITY(state, city) {
+    state.city = city;
   }
 }
 
 export const actions = {
   setOrganization({commit}, organization) {
     commit('SET_ORGANIZATION', organization);
+  },
+  setCity({commit}, city) {
+    commit('SET_CITY', city);
   }
 }

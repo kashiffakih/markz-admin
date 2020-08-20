@@ -47,6 +47,7 @@
                         <th>End Date</th>
                         <th>Coupon Type</th>
                         <th>Coupon Value</th>
+                        <th>Min order value</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -74,6 +75,7 @@
                         <td>{{ coupon.end_date }}</td>
                         <td>{{ coupon.type }}</td>
                         <td>{{ coupon.value }}</td>
+                        <td>{{ coupon.min_order_value }}</td>
                       </tr>
                     </tbody>
                   </table>

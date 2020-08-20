@@ -7,14 +7,14 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-dark">Delivery Boys</h1>
+              <h1 class="m-0 text-dark">Delivery Riders</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item">
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
-                <li class="breadcrumb-item active">Delivery Boys</li>
+                <li class="breadcrumb-item active">Delivery Riders</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -32,7 +32,7 @@
               <br>
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Manage Delivery Boys</h3> &nbsp;
+                  <h3 class="card-title">Manage Delivery Riders</h3> &nbsp;
                   <nuxt-link class="btn btn-sm btn-info float-sm-right" to="/delivery-users/create">Add New</nuxt-link>
                 </div>
                 <!-- /.card-header -->
@@ -51,6 +51,7 @@
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Role</th>
+                        <th>Active Location</th>
                         <th>Status</th>
                       </tr>
                     </thead>
@@ -86,6 +87,7 @@
                         <td>{{ emp.email }}</td>
                         <td>{{ emp.phone_code }} {{ emp.phone }}</td>
                         <td>{{ emp.roles[0].name }}</td>
+                        <td>{{ emp.city ? emp.city.name : ''}}</td>
                         <td>{{ emp.active == 1 ? 'Enabled' : 'Disabled' }}</td>
                       </tr>
                     </tbody>
@@ -134,7 +136,7 @@ export default {
       this.items = []
       this.loading = true
       // let items = await this.$axios.get(`/users?role_id=3&page=1`)
-      let items = await this.$axios.get(`/users?role_id=5`)
+      let items = await this.$axios.get(`/users?role_id=5&cityId=${this.city.id}`)
       this.items = items.data.data
       this.loading = false
     },
