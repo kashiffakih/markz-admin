@@ -25,6 +25,26 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
+          <div class="card">
+            <div class="col-md-12" style="padding: 10px;">
+              <div class="row">
+                <div class="col-sm-3">
+                  <v-select 
+                    v-model="category_id" 
+                    :reduce="category => category.code" 
+                    :options="categories"
+                    @input="filter"
+                  ></v-select>
+                </div>
+                <div class="col-sm-3">
+                  <input @change="filter" type="checkbox" v-model="checkApproved"> Only Approved
+                </div>
+                <div class="col-sm-3">
+                  <input @change="filter" type="checkbox" v-model="checkEnabled"> Only Enabled
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="row">
             <div class="col-12">
               <div class="card">
@@ -48,14 +68,18 @@
                       <tr>
                         <th>Sr. No.</th>
                         <th>Logo</th>
-                        <th>Organization</th>
+                        <th>Store</th>
+                        <th>Store Type</th>
                         <th>Admin Details</th>
+                        <th>Is Approved</th>
+                        <th>Is Enabled</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(org, i) in items"
-                        :key="`org{i}`"
+                      <tr 
+                        v-for="(org, i) in items"
+                        :key="`org1${i}`"
                       >
                         <td>{{ org.id }}</td>
                         <td>
@@ -66,6 +90,9 @@
                         <td>
                           {{ org.name }}<br>
                           City: {{ org.location ? org.location.name : '' }}
+                        </td>
+                        <td>
+                          {{ org.category ? org.category.name : '' }}
                         </td>
                         <td v-if="org.users.length == 0">
                           <nuxt-link class="btn btn-primary btn-sm" :to="`/organizations/${org.organizationId}/admins/create`">
@@ -81,6 +108,8 @@
                           Email: {{ org.users[0].email }} <br>
                           Phone: {{ org.users[0].phone }} <br>
                         </td>
+                        <td>{{ org.is_approved == 1 ? 'Approved' : 'Not Approved' }}</td>
+                        <td>{{ org.is_enabled == 1 ? 'Enabled' : 'Not Enabled' }}</td>
                         <td class="w-1">
                           <nuxt-link class="icon" :to="`/organizations/${org.organizationId}`">
                             <i class="fa fa-edit"></i>
@@ -110,8 +139,25 @@
 <script type="text/javascript">
 export default {
   name: 'ManageOrganizations',
-  async asyncData({$axios}) { 
-    
+  async asyncData({$axios, params}) {
+    let c = await $axios.get(`/categories`)
+    c = c.data.data
+    let categories = []
+    categories.push({
+      label: 'Select Category',
+      code: '',
+      sub_categories: [],
+    })
+    c.forEach((cat) => {
+      categories.push({
+        label: cat.name,
+        code: cat.id,
+        sub_categories: cat.sub_categories,
+      })
+    })
+    return {
+      categories: categories,
+    }
   },
   data:() =>  ({
     headers: [
@@ -126,14 +172,19 @@ export default {
       { text: 'Action', value: '' }
     ],
     items: [],
-    loading: true
+    allItems: [],
+    loading: true,
+    category_id: '',
+    checkApproved: '',
+    checkEnabled: '',
   }),
   async mounted()  {
     let organizations = await this.$axios.get(`/companies?cityId=${this.city.id}`);
     this.organizations = organizations.data.data
+    let items = []
     this.organizations.forEach((org, i) => {
       org.users = org.users.filter(u => u.roles[0].name == 'Admin');
-      this.items.push({
+      items.push({
         id: i + 1,
         organizationId: org.id,
         name: org.name,
@@ -141,9 +192,29 @@ export default {
         address: org.address,
         logo_path: org.logo_path,
         location: org.location,
+        category_id: org.category_id,
+        category: org.category,
+        is_approved: org.is_approved,
+        is_enabled: org.is_enabled,
       })
     })
+    this.items = items
+    this.allItems = items
     this.loading = false
+  },
+  methods: {
+    filter() {
+      if(this.category_id)
+        this.items = this.allItems.filter(item => item.category_id == this.category_id)
+      else
+        this.items = this.allItems
+      if(this.checkApproved)
+        this.items = this.items.filter(item => item.is_approved == 1)
+      if(this.checkEnabled)
+        this.items = this.items.filter(item => item.is_enabled == 1)
+      if(!this.category_id && !this.checkApproved && !this.checkEnabled) 
+        this.items = this.allItems
+    },
   }
 }
 </script>

@@ -136,8 +136,8 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
-                        <label class="form-label">Address line 3</label>
-                        <input type="email" class="form-control" placeholder="Enter address line 3"
+                        <label class="form-label">Landmark</label>
+                        <input type="email" class="form-control" placeholder="Enter landmark"
                           v-model="form.add_3"
                         >
                         <span class="help-block" 
@@ -148,9 +148,10 @@
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">State</label>
-                        <input type="text" class="form-control" placeholder="Enter state"
-                          v-model="form.state"
-                        >
+                        <select class="form-control" v-model="form.state">
+                          <option value="">Select State</option>
+                          <option value="Maharashtra">Maharashtra</option>
+                        </select>
                         <span class="help-block" 
                           v-if="errors.state"
                         >{{ errors.state[0] }}</span>

@@ -1,6 +1,6 @@
 <template>
   <section>
-    <select class="form-control" v-model="city" @change="assignCity">
+    <select class="form-control" v-model="selectedCity" @change="assignCity">
       <option>Select City</option>
       <option
         v-for="(city, c) in cities"
@@ -16,18 +16,18 @@
 <script type="text/javascript">
 export default {
   data: () => ({
-    city: 'Select City',
+    selectedCity: 'Select City',
   }),
   props: ['cities'],
   methods: {
     assignCity() {
-      if(this.city == 'Select City') {
-        this.city = {
+      if(this.selectedCity == 'Select City') {
+        this.selectedCity = {
           id: '',
           name: '',
         }
       }
-      this.$store.dispatch('settings/setCity', this.city)
+      this.$store.dispatch('settings/setCity', this.selectedCity)
       this.$router.push('/settings')
     }
   }

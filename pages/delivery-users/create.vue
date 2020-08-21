@@ -138,19 +138,20 @@
                       <div class="form-group">
                         <label class="form-label">Landmark</label>
                         <input type="text" class="form-control" placeholder="Enter landmark"
-                          v-model="form.add_2"
+                          v-model="form.add_3"
                         >
                         <span class="help-block" 
-                          v-if="errors.add_2"
-                        >{{ errors.add_2[0] }}</span>
+                          v-if="errors.add_3"
+                        >{{ errors.add_3[0] }}</span>
                       </div>
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">State</label>
-                        <input type="text" class="form-control" placeholder="Enter state"
-                          v-model="form.state"
-                        >
+                        <select class="form-control" v-model="form.state">
+                          <option value="">Select State</option>
+                          <option value="Maharashtra">Maharashtra</option>
+                        </select>
                         <span class="help-block" 
                           v-if="errors.state"
                         >{{ errors.state[0] }}</span>
@@ -328,6 +329,7 @@ export default {
       phone: '',
       active: 1,
       role_id: '',
+      state: '',
       city_id: '',
     },
     userid: '',

@@ -159,6 +159,7 @@
                       <option value="">Select Veg/Non-Veg</option>
                       <option value="Veg">Veg</option>
                       <option value="Non Veg">Non Veg</option>
+                      <option value="Egg">Egg</option>
                     </select>
                   </div>
                   <div class="form-footer">

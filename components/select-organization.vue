@@ -5,7 +5,7 @@
       @change="updateDetails"
     >
       <option value="">Select Organization</option>
-      <option v-for="org in organizations" :key="`'org'${org.id}`" :value="org.value">{{ org.text }}</option>
+      <option v-for="(org, i) in organizations" :key="`org'${i}`" :value="org.value">{{ org.text }}</option>
     </select>
     <span style="display: none">{{ org.text }}</span>
   </section>
@@ -17,14 +17,30 @@ import BackButton from '@/components/back-button.vue'
 export default {
   name: 'AdminSettings',
   data: () => ({
-    organizations: [],
+    orgs: [],
     organizationId: '',
   }),
   computed: {
     org() {
       this.organizationId = this.$store.getters['settings/organization'].value
       return this.$store.getters['settings/organization']
+    },
+    organizations() {
+      let organizations = []
+      if(this.city.id)
+       organizations = this.orgs.filter(org => org.city_id == this.city.id)
+      else
+       organizations = this.orgs
+      organizations = organizations.map(organization => ({
+        'text': organization.name,
+        'value': organization.id,
+        'time_zone': organization.time_zone ? organization.time_zone : 'Asia/Calcutta',
+        logo_path: organization.logo_path
+      }));
+      return organizations
     }
+  },
+  asyncComputed: {
   },
   mounted() {
     this.getOrganizations()
@@ -33,13 +49,7 @@ export default {
   methods: {
     async getOrganizations() {
       let organizations = await this.$axios.get('/companies');
-      organizations = organizations.data.data.map(organization => ({
-        'text': organization.name,
-        'value': organization.id,
-        'time_zone': organization.time_zone ? organization.time_zone : 'Asia/Calcutta',
-        logo_path: organization.logo_path
-      }));
-      this.organizations = organizations
+      this.orgs = organizations.data.data
     },
     updateDetails() {
       if(this.organizationId){

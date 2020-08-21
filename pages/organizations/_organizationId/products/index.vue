@@ -26,38 +26,40 @@
       <section class="content">
         <div class="container-fluid">
           <div class="card">
-            <div class="row">
-              <div class="col-sm-3">
-                <v-select 
-                  v-model="category_id" 
-                  :reduce="category => category.code" 
-                  :options="categories"
-                  @input="getSubCategories(category_id)"
-                ></v-select>
-              </div>
-              <div class="col-sm-3">
-                <v-select 
-                  v-model="sub_category_id" 
-                  :reduce="sub_category => sub_category.code" 
-                  :options="sub_categories"
-                  @input="getSub2Categories(category_id, sub_category_id)"
-                ></v-select>
-              </div>
-              <div class="col-sm-3">
-                <v-select 
-                  v-model="sub_2_category_id" 
-                  :reduce="sub_2_category => sub_2_category.code" 
-                  :options="sub_2_categories"
-                  @input="getSub3Categories(category_id, sub_category_id, sub_2_category_id)"
-                ></v-select>
-              </div>
-              <div class="col-sm-3">
-                <v-select 
-                  v-model="sub_2_category_id" 
-                  :reduce="sub_2_category => sub_2_category.code" 
-                  :options="sub_2_categories"
-                  @input="getSub3Categories(category_id, sub_category_id, sub_2_category_id)"
-                ></v-select>
+            <div class="col-md-12" style="padding: 10px;">
+              <div class="row">
+                <div class="col-sm-3">
+                  <v-select 
+                    v-model="category_id" 
+                    :reduce="category => category.code" 
+                    :options="categories"
+                    @input="getSubCategories(category_id)"
+                  ></v-select>
+                </div>
+                <div class="col-sm-3">
+                  <v-select 
+                    v-model="sub_category_id" 
+                    :reduce="sub_category => sub_category.code" 
+                    :options="sub_categories"
+                    @input="getSub2Categories(category_id, sub_category_id)"
+                  ></v-select>
+                </div>
+                <div class="col-sm-3">
+                  <v-select 
+                    v-model="sub_2_category_id" 
+                    :reduce="sub_2_category => sub_2_category.code" 
+                    :options="sub_2_categories"
+                    @input="getSub3Categories(category_id, sub_category_id, sub_2_category_id)"
+                  ></v-select>
+                </div>
+                <div class="col-sm-3">
+                  <v-select 
+                    v-model="sub_3_category_id" 
+                    :reduce="sub_3_category => sub_3_category.code" 
+                    :options="sub_3_categories"
+                    @input="filterProducts"
+                  ></v-select>
+                </div>
               </div>
             </div>
           </div>
@@ -224,6 +226,9 @@ export default {
       this.getData()
     },
     getSubCategories(categoryId) {
+      this.sub_category_id = ''
+      this.sub_2_category_id = ''
+      this.sub_3_category_id = ''
       this.filterProducts()
       this.sub_categories = []
       this.sub_categories.push({
@@ -239,6 +244,9 @@ export default {
       })
     },
     getSub2Categories(categoryId, subCategoryId) {
+      this.sub_2_category_id = ''
+      this.sub_3_category_id = ''
+      this.filterProducts()
       this.sub_2_categories = []
       this.sub_2_categories.push({
         label: 'Select Sub 2 Category',
@@ -254,6 +262,8 @@ export default {
       })
     },
     getSub3Categories(categoryId, subCategoryId, sub2CategoryId) {
+      this.sub_3_category_id = ''
+      this.filterProducts()
       this.sub_3_categories = []
       this.sub_3_categories.push({
         label: 'Select Sub 3 Category',
@@ -270,16 +280,17 @@ export default {
       })
     },
     filterProducts() {
-      if(this.category_id != '')
+      if(this.category_id)
         this.items = this.allItems.filter(item => item.category_id == this.category_id)
-      if(this.sub_category_id != '') {
+      else
+        this.items = this.allItems
+      if(this.sub_category_id != '')
         this.items = this.items.filter(item => item.sub_category_id == this.sub_category_id)
-      }
       if(this.sub_2_category_id != '')
         this.items = this.items.filter(item => item.sub_2_category_id == this.sub_2_category_id)
       if(this.sub_3_category_id != '')
         this.items = this.items.filter(item => item.sub_3_category_id == this.sub_3_category_id)
-      if(this.category_id != '' && this.sub_category_id != '' && this.sub_2_category_id != '' && this.sub_3_category_id != '' )
+      if(!this.category_id && !this.sub_category_id && !this.sub_2_category_id && !this.sub_3_category_id)
         this.items = this.allItems
     }
   },

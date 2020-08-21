@@ -67,6 +67,7 @@ module.exports = {
     '@/plugins/mixins/settings',
     '@/plugins/axios',
     '@/plugins/charts',
+    '@/plugins/asyncComputed',
     '@/plugins/vue-select',
     '@/plugins/mask',
     { src: '@/plugins/carousel3d', ssr: false },

@@ -14,13 +14,18 @@
               style="color: black !important; " 
             >Logout</button>
           </li>
+          <li>
+            {{ user.companies.length > 0 ? (user.companies[0].is_enabled == 0 ? 'Your account is not enabled' : '') : ''}}
+          </li>
+          <li
+            v-if="permissions.indexOf(1) != -1"
+          >
+            <select-city :cities="cities"></select-city>
+          </li>
           <li
             v-if="permissions.indexOf(1) != -1"
           >
             <select-organization></select-organization>
-          </li>
-          <li>
-            <select-city :cities="cities"></select-city>
           </li>
         </ul>
 
