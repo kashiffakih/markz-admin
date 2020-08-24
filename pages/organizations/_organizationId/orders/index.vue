@@ -185,16 +185,19 @@ export default {
     items: [],
     loading: true,
     fmt: "YYYY-MM-DD hh:mm:ss A",
-    time_zone: 'Asia/Kolkata'
+    time_zone: 'Asia/Kolkata',
+    searchData: ''
   }),
   mounted() {
     this.getData()
+    if(this.$route.query.search)
+      this.searchData = this.$route.query.search
   },
   methods: {
     async getData() {
       this.items = []
       this.loading = true
-      let items = await this.$axios.get(`/orders?search=${this.$route.query.search}&cityId=${this.city.id}`)
+      let items = await this.$axios.get(`/orders?search=${this.searchData}&cityId=${this.city.id}`)
       items = items.data.data
       items.forEach(item => {
         if(item.user == null)

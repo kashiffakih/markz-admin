@@ -203,6 +203,9 @@ export default {
             name: 'Tags', icon: 'fas fa-tags', link: `/tags`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
           {
+            name: 'Notifications', icon: 'fas fa-tags', link: `/notifications`, permission: this.permissions.indexOf(3) != -1 ? true : false
+          },
+          {
             name: 'Locations', icon: 'fas fa-tags', link: `/cities`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
           {

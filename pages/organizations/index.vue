@@ -25,6 +25,8 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
+          <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by organization name">
+          <br>
           <div class="card">
             <div class="col-md-12" style="padding: 10px;">
               <div class="row">
@@ -177,32 +179,36 @@ export default {
     category_id: '',
     checkApproved: '',
     checkEnabled: '',
+    searchData: ''
   }),
   async mounted()  {
     let organizations = await this.$axios.get(`/companies?cityId=${this.city.id}`);
     this.organizations = organizations.data.data
-    let items = []
-    this.organizations.forEach((org, i) => {
-      org.users = org.users.filter(u => u.roles[0].name == 'Admin');
-      items.push({
-        id: i + 1,
-        organizationId: org.id,
-        name: org.name,
-        users: org.users,
-        address: org.address,
-        logo_path: org.logo_path,
-        location: org.location,
-        category_id: org.category_id,
-        category: org.category,
-        is_approved: org.is_approved,
-        is_enabled: org.is_enabled,
-      })
-    })
-    this.items = items
-    this.allItems = items
-    this.loading = false
+    this.setItems()
   },
   methods: {
+    setItems() {
+      let items = []
+      this.organizations.forEach((org, i) => {
+        org.users = org.users.filter(u => u.roles[0].name == 'Admin');
+        items.push({
+          id: i + 1,
+          organizationId: org.id,
+          name: org.name,
+          users: org.users,
+          address: org.address,
+          logo_path: org.logo_path,
+          location: org.location,
+          category_id: org.category_id,
+          category: org.category,
+          is_approved: org.is_approved,
+          is_enabled: org.is_enabled,
+        })
+      })
+      this.items = items
+      this.allItems = items
+      this.loading = false
+    },
     filter() {
       if(this.category_id)
         this.items = this.allItems.filter(item => item.category_id == this.category_id)
@@ -215,6 +221,15 @@ export default {
       if(!this.category_id && !this.checkApproved && !this.checkEnabled) 
         this.items = this.allItems
     },
+    async search() {
+      if(this.searchData != "")
+      {
+        this.loading = true
+        let organizations = await this.$axios.get(`/companies?search=${this.searchData}`);
+        this.organizations = organizations.data.data
+        this.setItems()
+      }
+    }
   }
 }
 </script>
