@@ -55,13 +55,113 @@
                       </div>
                     </div>
 
+                    <hr>
+                    <h5>Referrals and Cashbacks</h5>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">Referral Amount (in Rs.)</label> 
-                          <input type="number" class="form-control" placeholder="Enter referral amount" v-model="form.referral_amount">
+                          <label class="form-label">Referral Amount to Referrer (in Rs.)</label> 
+                          <input type="number" class="form-control" placeholder="Enter referral amount" v-model="form.referral_amount_to_referrer">
                         </div>
                       </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Referral Amount to Referree (in Rs.)</label> 
+                          <input type="number" class="form-control" placeholder="Enter referral amount" v-model="form.referral_amount_to_referree">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Referral Amount Validity (in Days)</label> 
+                          <input type="number" class="form-control" placeholder="Enter referral amount" v-model="form.referral_amount_validity">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Cashback Amount Validity (in Days)</label> 
+                          <input type="number" class="form-control" placeholder="Enter referral amount" v-model="form.cashback_amount_validity">
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr>
+                    <h5>Best Values Banners</h5>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Best Value Banner 1</label>
+                          <a :href="mediaUrl + form.banner_path_1" target="_blank">{{ form.banner_path_1 }}</a>
+                          <br>
+                          <input type="file" id="file" name="file" ref="bannerpath1" accept="application/ms-excel" multiple>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Best Value Banner 2</label>
+                          <a :href="mediaUrl + form.banner_path_2" target="_blank">{{ form.banner_path_2 }}</a>
+                          <br>
+                          <input type="file" id="file" name="file" ref="bannerpath2" accept="application/ms-excel" multiple>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Best Value Banner 3</label>
+                          <a :href="mediaUrl + form.banner_path_3" target="_blank">{{ form.banner_path_3 }}</a>
+                          <br>
+                          <input type="file" id="file" name="file" ref="bannerpath3" accept="application/ms-excel" multiple>
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr>
+                    <h5>Social Media Links</h5>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Facebook Url</label> 
+                          <input type="text" class="form-control" placeholder="Enter facebook url" v-model="form.fb_path">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Instagram Url</label> 
+                          <input type="text" class="form-control" placeholder="Enter instagram url" v-model="form.instagram_path">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Twitter Url</label> 
+                          <input type="text" class="form-control" placeholder="Enter twitter url" v-model="form.twitter_path">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">LinkedIn Url</label> 
+                          <input type="text" class="form-control" placeholder="Enter linkedin url" v-model="form.linkedin_path">
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <hr>
+                    <h5>Contact Details</h5>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Phone no</label> 
+                          <input type="number" class="form-control" placeholder="Enter phone no" v-model="form.phone">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Email</label> 
+                          <input type="text" class="form-control" placeholder="Enter email" v-model="form.email">
+                        </div>
+                      </div>
+                    </div>
+
+                    <h5>Delivery Riders</h5>
+                    <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">Reject Penalty on Rider (in Rs.)</label> 
@@ -71,8 +171,8 @@
                     </div>
 
                     <button class="btn btn-primary btn-block"
-                            @click="updateSettings"
-                          >Update Details</button>
+                      @click="updateSettings"
+                    >Update Details</button>
 
                   </div>
                 </div>
@@ -137,13 +237,35 @@ export default {
       this.loading = true
       try {
         let admin = await this.$axios.post(`/settings`, this.form)
+        this.handleFileUpload()
         alert('Details Updated')
         this.loading = false
       }
       catch(e) {
         this.loading = false
       }
-    }
+    },
+    async handleFileUpload() {
+      this.bannerpath1 = this.$refs.bannerpath1.files[0]
+      this.bannerpath2 = this.$refs.bannerpath2.files[0]
+      this.bannerpath3 = this.$refs.bannerpath3.files[0]
+      let formData = new FormData();
+      formData.append('settingid', this.form.id);
+      formData.append('bannerpath1', this.bannerpath1);
+      formData.append('bannerpath2', this.bannerpath2);
+      formData.append('bannerpath3', this.bannerpath3);
+      await this.$axios.post('upload_best_values_photo', formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      ).then(response => {
+      })
+      .catch(function(){
+        console.log('FAILURE!!');
+      });
+    },
   }
 }
 </script> 

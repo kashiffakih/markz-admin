@@ -189,9 +189,9 @@ export default {
     searchData: ''
   }),
   mounted() {
-    this.getData()
     if(this.$route.query.search)
       this.searchData = this.$route.query.search
+    this.getData()
   },
   methods: {
     async getData() {
