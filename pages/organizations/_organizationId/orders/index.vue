@@ -95,7 +95,7 @@
                                 :key="`status${d}`"
                               >
                                 <td>
-                                  {{ status.status.name }}
+                                  {{ status.status ? status.status.name : '' }}
                                   <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/orders/${order.id}/order-statuses/${status.id}`">
                                     <i class="fa fa-edit"></i>
                                   </nuxt-link>
@@ -115,7 +115,7 @@
                            Assign Delivery Rider
                          </nuxt-link>
                         </td>
-                        <td v-if="$route.query.search=='all'">{{ order.company.name }}</td>
+                        <td v-if="$route.query.search=='all'">{{ order.company ? order.company.name : '' }}</td>
                         <td>
                           {{ order.id }}
                         </td>
