@@ -218,7 +218,7 @@ export default {
             name: 'Customers', icon: 'fas fa-user-friends', link: `/customers`, permission: this.permissions.indexOf(4) != -1 ? true : false
           },
           {
-            name: 'Orders', icon: 'fas fa-credit-card', link: `/organizations/${this.organizationId}/orders?search=all`, permission: this.permissions.indexOf(3) != -1 ? true : false
+            name: 'Orders', icon: 'fas fa-credit-card', link: `/orders`, permission: this.permissions.indexOf(3) != -1 ? true : false
           },
         ]
       })
@@ -337,7 +337,7 @@ export default {
   }
 
   .main-sidebar {
-    background-color: #F1911F !important;
+    background-color: #F7C40B !important;
   }
 
   .nav-link, .brand-text, .d-block {
