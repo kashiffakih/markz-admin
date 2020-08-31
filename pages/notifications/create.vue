@@ -66,19 +66,23 @@
                   </div>
                   <div class="form-group">
                     <span v-if="form.to == 'Store'">
-                      <input type="radio" name=""> All&nbsp;&nbsp;
-                      <input type="radio" name=""> To Approved Store&nbsp;&nbsp;
-                      <input type="radio" name=""> To Enabled Store&nbsp;&nbsp;
+                      <input type="checkbox" v-model="form.s_all"> All&nbsp;&nbsp;
+                      <input type="checkbox" v-model="form.s_approved"> To Approved Store&nbsp;&nbsp;
+                      <input type="checkbox" v-model="form.s_enabled"> To Enabled Store&nbsp;&nbsp;
                     </span>
                     <span v-if="form.to == 'User'">
-                      <input type="radio" name=""> All&nbsp;&nbsp;
-                      <input type="radio" name=""> To Active User&nbsp;&nbsp;
-                      <input type="radio" name=""> To In Active User&nbsp;&nbsp;
-                      <input type="radio" name=""> To Not Available User&nbsp;&nbsp;
+                      <input type="checkbox" v-model="form.u_all"> All&nbsp;&nbsp;
+                      <input type="checkbox" v-model="form.u_delivery"> To Delivery Rider&nbsp;&nbsp;
+                      <input type="checkbox" v-model="form.u_customer"> To Customer
                       <hr>
-                      <input type="radio" name=""> All&nbsp;&nbsp;
-                      <input type="radio" name=""> To Delivery Rider&nbsp;&nbsp;
-                      <input type="radio" name=""> To Customer
+                      <span v-if="form.u_delivery">
+                        <input type="checkbox" v-model="form.v_a"> To Available Delivery Rider&nbsp;&nbsp;
+                        <input type="checkbox" v-model="form.v_na"> To Not Available Delivery Rider&nbsp;&nbsp;
+                      </span>
+                      <span v-if="form.u_customer">
+                        <input type="checkbox" v-model="form.u_active"> To Active User&nbsp;&nbsp;
+                        <input type="checkbox" v-model="form.u_inactive"> To In Active User&nbsp;&nbsp;
+                      </span>
                     </span>
                   </div>
                   <div class="form-footer">
@@ -122,14 +126,17 @@ export default {
   },
   methods: {
     async store() {
-      this.loading = true
-      try {
-        let notification = await this.$axios.post(`/notifications`, this.form)
-        this.$router.push(`/notifications`)
-        this.loading = false
-      }
-      catch(e) {
-        this.loading = false
+      let r = confirm("Please recheck. Notifications once sent can't be undo")
+      if(r) {
+        this.loading = true
+        try {
+          let notification = await this.$axios.post(`/notifications`, this.form)
+          this.$router.push(`/notifications`)
+          this.loading = false
+        }
+        catch(e) {
+          this.loading = false
+        }
       }
     },
   }

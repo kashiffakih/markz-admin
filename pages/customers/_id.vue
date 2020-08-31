@@ -156,7 +156,7 @@
                         >{{ errors.state[0] }}</span>
                       </div>
                     </div>
-                    <div class="col-md-4">
+                    <!-- <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">City</label>
                         <input type="text" class="form-control" placeholder="Enter city"
@@ -165,6 +165,22 @@
                         <span class="help-block" 
                           v-if="errors.city"
                         >{{ errors.city[0] }}</span>
+                      </div>
+                    </div> -->
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">City</label>
+                        <select class="form-control" v-model="form.city_id">
+                          <option value="">Select City</option>
+                          <option 
+                            v-for="(city, c) in cities"
+                            :key="`city${c}`"
+                            :value="city.id"
+                          >{{ city.name }}</option>
+                        </select>
+                        <span class="help-block" 
+                          v-if="errors.city_id"
+                        >{{ errors.city_id[0] }}</span>
                       </div>
                     </div>
                     <div class="col-md-4">
@@ -250,9 +266,11 @@ export default {
         code: role.id,
       })
     })
+    let cities = await $axios.get(`/cities`)
     return {
       roles: roles,
-      form: user.data.data
+      form: user.data.data,
+      cities: cities.data.data,
     }
   },
   data: () => ({

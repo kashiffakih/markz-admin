@@ -30,6 +30,21 @@
               <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by order id">
               <a class="refresh" href="#" @click="getData">Refresh</a>
               <br>
+              <br>
+              <div class="card">
+                <div class="col-md-12" style="padding: 10px;">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <v-select 
+                        v-model="category_id" 
+                        :reduce="category => category.code" 
+                        :options="categories"
+                        @input="filter"
+                      ></v-select>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Manage Orders</h3> &nbsp;&nbsp;
@@ -46,6 +61,7 @@
                         <th>Store</th>
                         <th>Order ID</th>
                         <th>User</th>
+                        <th>Address</th>
                         <th>Order Details</th>
                         <th>Order Date & Time</th>
                         <th>Order Cost</th>
@@ -119,7 +135,14 @@
                         <td>
                           {{ order.id }}
                         </td>
-                        <td>{{ order.user ? ((order.user.first_name || '') + ' ' + (order.user.middle_name || '') + ' ' + (order.user.last_name|| '')) : '' }}</td>
+                        <td>
+                          {{ order.user ? ((order.user.first_name || '') + ' ' + (order.user.middle_name || '') + ' ' + (order.user.last_name|| '')) : '' }}
+                          <br>
+                          <b>Phone: </b> {{ order.user ? (order.user.phone || '') : '' }}
+                        </td>
+                        <td>
+                          {{ order.user ? (order.user.add_1 || '') + ' ' + (order.user.add_2 || '') + ' ' + (order.user.add_3 || '') + ' ' + (order.user.state || '') + ' ' + (order.user.city || '') + ' ' + (order.user.pincode || '') : '' }}
+                        </td>
                         <td>
                           <table>
                             <thead>
@@ -148,6 +171,16 @@
                         <td>{{ order.created_at }}</td>
                         <td>
                           {{ order.order_cost ? parseInt(order.order_cost).toFixed(2) : '-' }} INR
+                          <br>
+                          <b>Coupon: </b>
+                          <br>
+                          <b>Delivery Charges: {{ order.delivery_charges }}</b>
+                          <br>
+                          <b>Tip: </b>
+                          <br>
+                          <b>Tax: </b>
+                          <br>
+                          <b>Wallet Amount Used: </b>
                         </td>
                         <td>
                           {{ order.delivery_boy ? order.delivery_boy.first_name : 'Not Assigned' }}
@@ -180,13 +213,35 @@ import moment_timezone from 'moment-timezone'
 
 export default {
   name: 'ManageOrders',
+  async asyncData({$axios, params}) {
+    let c = await $axios.get(`/categories`)
+    c = c.data.data
+    let categories = []
+    categories.push({
+      label: 'Select Category',
+      code: '',
+      sub_categories: [],
+    })
+    c.forEach((cat) => {
+      categories.push({
+        label: cat.name,
+        code: cat.id,
+        sub_categories: cat.sub_categories,
+      })
+    })
+    return {
+      categories: categories,
+    }
+  },
   data:() =>  ({
     searchData: '',
     items: [],
     loading: true,
     fmt: "YYYY-MM-DD hh:mm:ss A",
     time_zone: 'Asia/Kolkata',
-    searchData: ''
+    searchData: '',
+    allItems: [],
+    category_id: ''
   }),
   mounted() {
     this.getData()
@@ -231,7 +286,7 @@ export default {
         })
       })
       this.items = items
-
+      this.allItems = items
       this.loading = false
     },
     async search() {
@@ -240,8 +295,15 @@ export default {
         this.loading = true
         let items = await this.$axios.get(`/orders?search=${this.searchData}`);
         this.items = items.data.data
+        this.allItems = items
         this.loading = false
       }
+    },
+    filter() {
+      if(this.category_id)
+        this.items = this.allItems.filter(item => item.company.category_id == this.category_id)
+      else
+        this.items = this.allItems
     },
     async del(id) {
       let r = confirm('Are you sure you want to delete the data?')

@@ -57,9 +57,9 @@
                       >
                         <td>{{ i + 1 }}</td>
                         <td class="w-1">
-                          <nuxt-link title="Edit Details" class="icon" :to="`/notifications/${notification.id}`">
+                          <!-- <nuxt-link title="Edit Details" class="icon" :to="`/notifications/${notification.id}`">
                             <i class="fa fa-edit"></i>
-                          </nuxt-link>&nbsp;&nbsp;
+                          </nuxt-link>&nbsp;&nbsp; -->
                           <nuxt-link title="Delete Inspector" class="icon" to="">
                             <span @click="del(notification.id)">
                               <i class="fa fa-trash"></i>

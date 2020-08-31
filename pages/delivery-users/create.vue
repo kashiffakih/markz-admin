@@ -327,7 +327,7 @@ export default {
       name: '',
       email: '',
       phone: '',
-      active: 1,
+      active: 0,
       role_id: '',
       state: '',
       city_id: '',

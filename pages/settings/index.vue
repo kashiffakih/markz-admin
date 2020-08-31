@@ -72,6 +72,12 @@
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
+                          <label class="form-label">Referral Min Amount</label> 
+                          <input type="number" class="form-control" placeholder="Enter referral min amount" v-model="form.referral_min_amount">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
                           <label class="form-label">Referral Amount Validity (in Days)</label> 
                           <input type="number" class="form-control" placeholder="Enter referral amount" v-model="form.referral_amount_validity">
                         </div>

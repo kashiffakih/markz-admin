@@ -151,6 +151,67 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
+                        <label class="form-label">Short Address</label>
+                        <input type="number" class="form-control" placeholder="Enter short address"
+                          v-model="form.short_address"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.short_address"
+                        >{{ errors.short_address[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Delivery Duration</label>
+                        <input type="number" class="form-control" placeholder="Enter delivery duration"
+                          v-model="form.delivery_duration"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.delivery_duration"
+                        >{{ errors.delivery_duration[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Open Time</label>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <select class="form-control" v-model="form.open_time_hr"> 
+                              <option value="">Select Hr</option>
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                              <option value="5">5</option>
+                              <option value="6">6</option>
+                              <option value="7">7</option>
+                              <option value="8">8</option>
+                              <option value="9">9</option>
+                              <option value="10">10</option>
+                              <option value="11">11</option>
+                              <option value="12">12</option>
+                            </select>
+                          </div>
+                          <div class="col-md-4">
+                            <select class="form-control" v-model="form.open_time_min"> 
+                              <option value="">Select Min</option>
+                              <option value="15">15</option>
+                              <option value="30">30</option>
+                              <option value="45">45</option>
+                            </select>
+                          </div>
+                          <div class="col-md-4">
+                            <select class="form-control" v-model="form.open_time_am_pm"> 
+                              <option value="">Select AM/PM</option>
+                              <option value="AM">AM</option>
+                              <option value="PM">PM</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
                         <label class="form-label">Email</label>
                         <input type="email" class="form-control" placeholder="Enter email"
                           v-model="form.email"

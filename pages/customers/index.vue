@@ -50,6 +50,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
+                        <th>City</th>
                         <th>Role</th>
                         <th>Status</th>
                       </tr>
@@ -82,6 +83,7 @@
                         <td>{{ emp.first_name || '' }} {{ emp.middle_name || '' }} {{ emp.last_name || '' }}</td>
                         <td>{{ emp.email }}</td>
                         <td>{{ emp.phone_code }} {{ emp.phone }}</td>
+                        <td>{{ emp.city ? emp.city.name : '' }}</td>
                         <td>{{ emp.roles[0].name }}</td>
                         <td>{{ emp.active == 1 ? 'Enabled' : 'Disabled' }}</td>
                       </tr>
@@ -131,7 +133,7 @@ export default {
       this.items = []
       this.loading = true
       // let items = await this.$axios.get(`/users?role_id=3&page=1`)
-      let items = await this.$axios.get(`/users?role_id=6`)
+      let items = await this.$axios.get(`/users?role_id=6&cityId=${this.city.id}`)
       this.items = items.data.data
       this.loading = false
     },
