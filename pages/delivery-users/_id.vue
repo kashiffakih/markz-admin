@@ -270,6 +270,42 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
+                        <label class="form-label">Vehicle Type</label>
+                        <select class="form-control" v-model="form.vehicle_type">
+                          <option value="">Select Vehicle Type</option>
+                          <option value="Moped">Moped</option>
+                          <option value="Bicycle">Bicycle</option>
+                          <option value="Tempo">Tempo</option>
+                        </select>
+                        <span class="help-block" 
+                          v-if="errors.pincode"
+                        >{{ errors.pincode[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Vehicle Name</label>
+                        <input type="text" class="form-control" placeholder="Enter vehicle name"
+                          v-model="form.vehicle_name"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.vehicle_name"
+                        >{{ errors.vehicle_name[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Vehicle no</label>
+                        <input type="text" class="form-control" placeholder="Enter vehicle no"
+                          v-model="form.vehicle_no"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.vehicle_no"
+                        >{{ errors.vehicle_no[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
                         <label class="form-label">Photo</label>
                         <br>
                         <a :href="mediaUrl + form.attachment" target="_blank">{{ form.attachment }}</a>

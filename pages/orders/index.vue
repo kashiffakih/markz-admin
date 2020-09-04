@@ -170,17 +170,44 @@
                         </td>
                         <td>{{ order.created_at }}</td>
                         <td>
-                          {{ order.order_cost ? parseInt(order.order_cost).toFixed(2) : '-' }} INR
-                          <br>
-                          <b>Coupon: </b>
-                          <br>
-                          <b>Delivery Charges: {{ order.delivery_charges }}</b>
-                          <br>
-                          <b>Tip: </b>
-                          <br>
-                          <b>Tax: </b>
-                          <br>
-                          <b>Wallet Amount Used: </b>
+                          <table>
+                            <thead>
+                              <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>Order Cost</td>
+                                <td>Rs. {{ order.order_cost ? parseInt(order.order_cost).toFixed(2) : '-' }}</td>
+                              </tr>
+                              <tr>
+                                <td>Coupon</td>
+                                <td>- Rs. {{ order.coupon_amount }}</td>
+                              </tr>
+                              <tr>
+                                <td>Tax</td>
+                                <td>Rs. {{ order.tax_amount }}</td>
+                              </tr>
+                              <tr>
+                                <td>Delivery Charges</td>
+                                <td>Rs. {{ order.delivery_amount }}</td>
+                              </tr>
+                              <tr>
+                                <td>Tip</td>
+                                <td>Rs. {{ order.tip_amount }} </td>
+                              </tr>
+                              <tr>
+                                <td>Wallet Amount Used</td>
+                                <td>- Rs. {{ order.wallet_amount_used }}</td>
+                              </tr>
+                              <tr>
+                                <td>Total Payable</td>
+                                <td>Rs. {{ order.total_amount }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </td>
                         <td>
                           {{ order.delivery_boy ? order.delivery_boy.first_name : 'Not Assigned' }}

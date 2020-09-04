@@ -55,7 +55,7 @@
                   <div class="form-footer">
                     <button class="btn btn-primary btn-block"
                       @click="store"
-                    >{{ loading ? 'Saving...' : 'Add Order Status' }}</button>
+                    >{{ loading ? 'Saving...' : 'Assign Delivery Boy' }}</button>
                   </div>
                 </div>
               </div>

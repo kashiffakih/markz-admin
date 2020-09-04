@@ -45,6 +45,15 @@
                 <!-- form start -->
                 <div class="card-body">
                   <div class="form-group">
+                    <label class="form-label">Notification Title</label>
+                    <input type="text" class="form-control" placeholder="Enter notification title"
+                      v-model="form.title"
+                    >
+                    <span class="help-block" 
+                      v-if="errors.title"
+                    >{{ errors.title[0] }}</span>
+                  </div>
+                  <div class="form-group">
                     <label class="form-label">Notification Text</label>
                     <input type="text" class="form-control" placeholder="Enter text"
                       v-model="form.text"

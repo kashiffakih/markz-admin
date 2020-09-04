@@ -77,6 +77,10 @@
                         >{{ errors.category_id[0] }}</span>
                       </div>
                     </div>
+                    <div class="col-md-12">
+                      <hr>
+                      <h3>Address</h3>
+                    </div>
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">Address line 1</label>
@@ -160,6 +164,10 @@
                         >{{ errors.short_address[0] }}</span>
                       </div>
                     </div>
+                    <div class="col-md-12">
+                      <hr>
+                      <h3>Delivery Details</h3>
+                    </div>
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">Delivery Duration</label>
@@ -195,6 +203,7 @@
                           <div class="col-md-4">
                             <select class="form-control" v-model="form.open_time_min"> 
                               <option value="">Select Min</option>
+                              <option value="00">00</option>
                               <option value="15">15</option>
                               <option value="30">30</option>
                               <option value="45">45</option>
@@ -209,39 +218,6 @@
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" placeholder="Enter email"
-                          v-model="form.email"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.email"
-                        >{{ errors.email[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Phone</label>
-                        <input type="number" class="form-control" placeholder="Enter phone"
-                          v-model="form.phone"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.phone"
-                        >{{ errors.phone[0] }}</span>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <!-- <div class="form-group">
-                        <label class="form-label">Address</label>
-                        <input type="text" class="form-control" placeholder="Enter address"
-                          v-model="form.address"
-                        >
-                        <span class="help-block" 
-                          v-if="errors.address"
-                        >{{ errors.address[0] }}</span>
-                      </div> -->
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
@@ -265,7 +241,35 @@
                         >{{ errors.reject_penalty[0] }}</span>
                       </div>
                     </div>
+                    <div class="col-md-12">
+                      <hr>
+                      <h3>Contact Details</h3>
+                    </div>
                     <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" placeholder="Enter email"
+                          v-model="form.email"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.email"
+                        >{{ errors.email[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Phone</label>
+                        <input type="number" class="form-control" placeholder="Enter phone"
+                          v-model="form.phone"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.phone"
+                        >{{ errors.phone[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <hr>
+                      <h3>Comission Details</h3>
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
@@ -291,7 +295,10 @@
                         >{{ errors.comission_value[0] }}</span>
                       </div>
                     </div>
-                    <div class="col-md-4"></div>
+                    <div class="col-md-12">
+                      <hr>
+                      <h3>Account Details</h3>
+                    </div>
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">Bank Name</label>
@@ -358,6 +365,80 @@
                         >{{ errors.ifsc_code[0] }}</span>
                       </div>
                     </div>
+                    <div class="col-md-12">
+                      <hr>
+                      <h3>Dine In Details</h3>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <input type="checkbox"
+                          v-model="form.is_dine_in_and_delivery"
+                        >&nbsp;&nbsp;Is Dine In and Delivery Both
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Dine In Minimum Amount</label>
+                        <input type="number" class="form-control" placeholder="Enter dine in minimum amount"
+                          v-model="form.dine_in_min_amount"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.dine_in_min_amount"
+                        >{{ errors.dine_in_min_amount[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <hr>
+                      <h3>Free Delivery</h3>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <input type="checkbox"
+                          v-model="form.free_delivery_applicable"
+                        >&nbsp;&nbsp;Is Free Delivery Applicable
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Free Delivery Minimum Amount</label>
+                        <input type="number" class="form-control" placeholder="Enter free delivery minimum amount"
+                          v-model="form.free_delivery_min_amount"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.free_delivery_min_amount"
+                        >{{ errors.free_delivery_min_amount[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <hr>
+                      <h3>Tax and Packaging</h3>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Tax Percent</label>
+                        <input type="number" class="form-control" placeholder="Enter tax percent"
+                          v-model="form.tax_percent"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.tax_percent"
+                        >{{ errors.tax_percent[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Packaging Charges</label>
+                        <input type="number" class="form-control" placeholder="Enter packaging charges"
+                          v-model="form.packaging_charges"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.packaging_charges"
+                        >{{ errors.packaging_charges[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <hr>
+                      <h3>Status</h3>
+                    </div>
                     <div class="col-md-4">
                       <div class="form-group">
                         <input type="checkbox"
@@ -372,7 +453,6 @@
                         >&nbsp;&nbsp;Is Enabled
                       </div>
                     </div>
-                    <div class="col-md-4"></div>
                     <div class="col-md-4">
                       <div class="form-group">
                         <input type="checkbox"
@@ -380,20 +460,14 @@
                         >&nbsp;&nbsp;Is Cashback Applicable
                       </div>
                     </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <input type="checkbox"
-                          v-model="form.is_dine_in_and_delivery"
-                        >&nbsp;&nbsp;Is Dine In and Delivery Both
-                      </div>
-                    </div>
-                    <div class="col-md-4">
+                    
+                    <!-- <div class="col-md-4">
                       <div class="form-group">
                         <input type="checkbox"
                           v-model="form.is_referral_amount_usability"
                         >&nbsp;&nbsp;Is Referral Applicable
                       </div>
-                    </div>
+                    </div> -->
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">Logo</label>

@@ -23,6 +23,8 @@ export default function({store, redirect, route}) {
     || route.name == 'delivery-users-userId-documents' || route.name == 'delivery-users-userId-documents-create' || route.name == 'delivery-users-userId-documents-id'
     || route.name == 'customers' || route.name == 'customers-create' || route.name == 'customers-id'
     || route.name == 'orders' || route.name == 'orders-create' || route.name == 'orders-id'
+    || route.name == 'orders-orderId-delivery-boys' || route.name == 'orders-orderId-delivery-boys-create' || route.name == 'orders-orderId-delivery-boys-id'
+    || route.name == 'orders-orderId-order-statuses' || route.name == 'orders-orderId-order-statuses-create' || route.name == 'orders-orderId-order-statuses-id'
 
   )
     return;

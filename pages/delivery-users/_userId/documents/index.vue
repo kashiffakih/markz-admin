@@ -7,14 +7,14 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-dark">User Documnets</h1>
+              <h1 class="m-0 text-dark">User Documents</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item">
                     <nuxt-link to="/">Home</nuxt-link>
                 </li>
-                <li class="breadcrumb-item active">User Documnets</li>
+                <li class="breadcrumb-item active">User Documents</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -122,7 +122,7 @@ export default {
     async del(id) {
       let r = confirm('Are you sure you want to delete the data?')
       if(r == true)
-        await this.$axios.delete(`/company_documents/${id}`)
+        await this.$axios.delete(`/user_documents/${id}`)
       this.getData()
     },
   }

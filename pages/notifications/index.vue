@@ -42,6 +42,7 @@
                       <tr>
                         <th>Sr. No.</th>
                         <th>Actions</th>
+                        <th>Title</th>
                         <th>Text</th>
                         <th>To</th>
                       </tr>
@@ -66,6 +67,7 @@
                             </span>
                           </nuxt-link>
                         </td>
+                        <td>{{ notification.title }}</td>
                         <td>{{ notification.text }}</td>
                         <td>{{ notification.to }}</td>
                       </tr>
