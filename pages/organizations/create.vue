@@ -156,12 +156,23 @@
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">Short Address</label>
-                        <input type="number" class="form-control" placeholder="Enter short address"
+                        <input type="text" class="form-control" placeholder="Enter short address"
                           v-model="form.short_address"
                         >
                         <span class="help-block" 
                           v-if="errors.short_address"
                         >{{ errors.short_address[0] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Short Category</label>
+                        <input type="text" class="form-control" placeholder="Enter short category"
+                          v-model="form.short_category"
+                        >
+                        <span class="help-block" 
+                          v-if="errors.short_category"
+                        >{{ errors.short_category[0] }}</span>
                       </div>
                     </div>
                     <div class="col-md-12">

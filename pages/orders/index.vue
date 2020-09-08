@@ -58,14 +58,12 @@
                         <th>Sr. No.</th>
                         <th>Actions</th>
                         <th>Order Status</th>
+                        <th>Delivery Boy Details</th>
                         <th>Store</th>
                         <th>Order ID</th>
                         <th>User</th>
-                        <th>Address</th>
                         <th>Order Details</th>
-                        <th>Order Date & Time</th>
                         <th>Order Cost</th>
-                        <th>Delivery Boy Details</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -85,9 +83,9 @@
                            <a target="_blank" :href="`${baseUrl}/orders/${order.id}/order`">
                             Order
                           </a>&nbsp;&nbsp; -->
-                          <nuxt-link title="Edit Details" class="icon" :to="`/orders/${order.id}`">
+                          <!-- <nuxt-link title="Edit Details" class="icon" :to="`/orders/${order.id}`">
                             <i class="fa fa-edit"></i>
-                          </nuxt-link>&nbsp;&nbsp;
+                          </nuxt-link>&nbsp;&nbsp; -->
                           <nuxt-link title="Delete Inspector" class="icon" to="">
                             <span @click="del(order.id)">
                               <i class="fa fa-trash"></i>
@@ -122,14 +120,22 @@
                               </tr>
                             </tbody>
                           </table>
+                          <br>
                           <nuxt-link class="btn btn-sm btn-info" :to="`/orders/${order.id}/order-statuses/create`">
-                           Update Status
-                         </nuxt-link>
-                         <nuxt-link class="btn btn-sm btn-info" :to="`/orders/${order.id}/delivery-boys/create`"
-                         
-                         >
-                           Assign Delivery Rider
-                         </nuxt-link>
+                            Update Status
+                          </nuxt-link>
+                          <nuxt-link v-if="order.is_approved_by_hotelier" class="btn btn-sm btn-info" :to="`/orders/${order.id}/delivery-boys/create`">
+                            Assign Delivery Rider
+                          </nuxt-link>
+                          <br><br>
+                          <input type="checkbox" @change="approveOrder(order, order.is_approved_by_hotelier)" v-model="order.is_approved_by_hotelier">  Is Approved by Hotelier
+                        </td>
+                        <td>
+                          {{ order.delivery_boy ? order.delivery_boy.first_name : 'Not Assigned' }}
+                          <br>
+                          <span v-if="order.is_delivery_boy_accepted == 0">Pending</span>
+                          <span v-if="order.is_delivery_boy_accepted == 1">Accepted</span>
+                          <span v-if="order.is_delivery_boy_accepted == 2">Not Accepted</span>
                         </td>
                         <td>{{ order.company ? order.company.name : '' }}</td>
                         <td>
@@ -139,8 +145,7 @@
                           {{ order.user ? ((order.user.first_name || '') + ' ' + (order.user.middle_name || '') + ' ' + (order.user.last_name|| '')) : '' }}
                           <br>
                           <b>Phone: </b> {{ order.user ? (order.user.phone || '') : '' }}
-                        </td>
-                        <td>
+                          <br>
                           {{ order.user ? (order.user.add_1 || '') + ' ' + (order.user.add_2 || '') + ' ' + (order.user.add_3 || '') + ' ' + (order.user.state || '') + ' ' + (order.user.city || '') + ' ' + (order.user.pincode || '') : '' }}
                         </td>
                         <td>
@@ -168,7 +173,6 @@
                             </tbody>
                           </table>
                         </td>
-                        <td>{{ order.created_at }}</td>
                         <td>
                           <table>
                             <thead>
@@ -208,13 +212,6 @@
                               </tr>
                             </tbody>
                           </table>
-                        </td>
-                        <td>
-                          {{ order.delivery_boy ? order.delivery_boy.first_name : 'Not Assigned' }}
-                          <br>
-                          <span v-if="order.is_delivery_boy_accepted == 0">Pending</span>
-                          <span v-if="order.is_delivery_boy_accepted == 1">Accepted</span>
-                          <span v-if="order.is_delivery_boy_accepted == 2">Not Accepted</span>
                         </td>
                       </tr>
                     </tbody>
@@ -268,7 +265,8 @@ export default {
     time_zone: 'Asia/Kolkata',
     searchData: '',
     allItems: [],
-    category_id: ''
+    category_id: '',
+    isApproved: []
   }),
   mounted() {
     this.getData()
@@ -349,6 +347,17 @@ export default {
       var s = m.format(this.fmt)
 
       return s
+    },
+    async approveOrder(order, approvedStatus) {
+      let r = confirm(`Are you sure you want to change the status of order ${order.id}`)
+      if(r) {
+        if(approvedStatus)
+          order.is_approved_by_hotelier = 1
+        else
+          order.is_approved_by_hotelier = 0
+        await this.$axios.post(`/orders`, order)
+        alert('Done')
+      }
     }
   },
 }
