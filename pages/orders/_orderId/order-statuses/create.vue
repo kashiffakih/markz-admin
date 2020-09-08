@@ -120,7 +120,6 @@ export default {
       this.loading = true
       try {
         let admin = await this.$axios.post(`/orders/${this.order.id}/order_statuses`, this.form)
-        this.subcategoryid = admin.data.data.id
         this.$router.push(`/orders`)
         this.loading = false
       }

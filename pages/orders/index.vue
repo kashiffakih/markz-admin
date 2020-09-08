@@ -140,6 +140,8 @@
                         <td>{{ order.company ? order.company.name : '' }}</td>
                         <td>
                           {{ order.id }}
+                          <br>
+                          {{ order.is_dinein == 1 ? '(Dine In)' : '' }}
                         </td>
                         <td>
                           {{ order.user ? ((order.user.first_name || '') + ' ' + (order.user.middle_name || '') + ' ' + (order.user.last_name|| '')) : '' }}
