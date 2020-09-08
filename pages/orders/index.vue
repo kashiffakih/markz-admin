@@ -353,10 +353,14 @@ export default {
       if(r) {
         if(approvedStatus)
           order.is_approved_by_hotelier = 1
-        else
+        else {
           order.is_approved_by_hotelier = 0
-        await this.$axios.post(`/orders`, order)
+          order.delivery_boy_id = null
+          order.is_delivery_boy_accepted = 0
+        }
+        await this.$axios.patch(`/orders/${order.id}`, order)
         alert('Done')
+        this.getData()
       }
     }
   },
