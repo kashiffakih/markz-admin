@@ -70,11 +70,13 @@
                       <tr>
                         <th>Sr. No.</th>
                         <th>Logo</th>
+                        <th>Position</th>
                         <th>Store</th>
                         <th>Store Type</th>
                         <th>Admin Details</th>
                         <th>Is Approved</th>
                         <th>Is Enabled</th>
+                        <th>Is Available</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
@@ -89,6 +91,10 @@
                            style="width: 70px; height: 70px;opacity: .8;"
                            class="brand-image img-circle elevation-3"
                           >
+                        </td>
+                        <td>
+                          {{ org.position }}
+                        </td>
                         <td>
                           {{ org.name }}<br>
                           City: {{ org.location ? org.location.name : '' }}
@@ -112,6 +118,7 @@
                         </td>
                         <td>{{ org.is_approved == 1 ? 'Approved' : 'Not Approved' }}</td>
                         <td>{{ org.is_enabled == 1 ? 'Enabled' : 'Not Enabled' }}</td>
+                        <td>{{ org.is_available == 1 ? 'Available' : 'Not Available' }}</td>
                         <td class="w-1">
                           <nuxt-link class="icon" :to="`/organizations/${org.organizationId}`">
                             <i class="fa fa-edit"></i>
@@ -203,6 +210,8 @@ export default {
           category: org.category,
           is_approved: org.is_approved,
           is_enabled: org.is_enabled,
+          is_available: org.is_available,
+          position: org.position,
         })
       })
       this.items = items

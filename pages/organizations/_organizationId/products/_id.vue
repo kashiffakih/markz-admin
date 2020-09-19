@@ -289,12 +289,13 @@ export default {
       })
       let category = this.categories.find(cat => cat.code == categoryId)
       let sub_category = category.sub_categories.find(sub_cat => sub_cat.id == subCategoryId)
-      sub_category.sub_2_categories.forEach(sub_2_category => {
-        this.sub_2_categories.push({
-          label: sub_2_category.name,
-          code: sub_2_category.id,
+      if(sub_category)
+        sub_category.sub_2_categories.forEach(sub_2_category => {
+          this.sub_2_categories.push({
+            label: sub_2_category.name,
+            code: sub_2_category.id,
+          })
         })
-      })
     },
     getSub3Categories(categoryId, subCategoryId, sub2CategoryId) {
       this.sub_3_categories = []
@@ -305,12 +306,13 @@ export default {
       let category = this.categories.find(cat => cat.code == categoryId)
       let sub_category = category.sub_categories.find(sub_cat => sub_cat.id == subCategoryId)
       let sub_2_category = sub_category.sub_2_categories.find(sub_2_cat => sub_2_cat.id == sub2CategoryId)
-      sub_2_category.sub_3_categories.forEach(sub_3_category => {
-        this.sub_3_categories.push({
-          label: sub_3_category.name,
-          code: sub_3_category.id,
+      if(sub_2_category)
+        sub_2_category.sub_3_categories.forEach(sub_3_category => {
+          this.sub_3_categories.push({
+            label: sub_3_category.name,
+            code: sub_3_category.id,
+          })
         })
-      })
     },
     async store() {
       this.loading = true

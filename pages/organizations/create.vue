@@ -37,6 +37,13 @@
                 <!-- form start -->
                 <div class="card-body">
                   <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label class="form-label">Position:</label>
+                        <input class="form-control" type="number" v-model="form.position" placeholder="Enter position">
+                      </div>
+                    </div>
+                    <div class="col-md-9"></div>
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">Organization name</label>
