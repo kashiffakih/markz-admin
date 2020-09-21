@@ -62,11 +62,11 @@
                           <nuxt-link title="Edit Details" class="icon" :to="`/categories/${category.id}/sub-categories/${sub_category.id}/sub-2-categories/${sub_2_category.id}/sub-3-categories/${sub_3_category.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
-                          <nuxt-link title="Delete Inspector" class="icon" to="">
+                          <!-- <nuxt-link title="Delete Inspector" class="icon" to="">
                             <span @click="del(sub_3_category.id)">
                               <i class="fa fa-trash"></i>
                             </span>
-                          </nuxt-link>
+                          </nuxt-link> -->
                         </td>
                         <td>
                           <img style="width: 50px; height: 50px;" :src="sub_3_category.imagepath ? (mediaUrl + sub_3_category.imagepath) : '/product-vector.png'">

@@ -59,11 +59,11 @@
                           <nuxt-link title="Edit Details" class="icon" :to="`/cities/${city.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
-                          <nuxt-link title="Delete Inspector" class="icon" to="">
+                          <!-- <nuxt-link title="Delete Inspector" class="icon" to="">
                             <span @click="del(city.id)">
                               <i class="fa fa-trash"></i>
                             </span>
-                          </nuxt-link>
+                          </nuxt-link> -->
                         </td>
                         <td>{{ city.name }}</td>
                       </tr>

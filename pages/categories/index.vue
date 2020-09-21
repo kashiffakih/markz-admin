@@ -60,11 +60,11 @@
                           <nuxt-link title="Edit Details" class="icon" :to="`/categories/${category.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
-                          <nuxt-link title="Delete Inspector" class="icon" to="">
+                          <!-- <nuxt-link title="Delete Inspector" class="icon" to="">
                             <span @click="del(category.id)">
                               <i class="fa fa-trash"></i>
                             </span>
-                          </nuxt-link>&nbsp;&nbsp;
+                          </nuxt-link> -->&nbsp;&nbsp;
                           <nuxt-link class="btn btn-sm btn-info" :to="`/categories/${category.id}/sub-categories`">Sub Categories</nuxt-link>
                         </td>
                         <td>

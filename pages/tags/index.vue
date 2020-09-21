@@ -60,11 +60,11 @@
                           <nuxt-link title="Edit Details" class="icon" :to="`/tags/${tag.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
-                          <nuxt-link title="Delete Inspector" class="icon" to="">
+                          <!-- <nuxt-link title="Delete Inspector" class="icon" to="">
                             <span @click="del(tag.id)">
                               <i class="fa fa-trash"></i>
                             </span>
-                          </nuxt-link>
+                          </nuxt-link> -->
                         </td>
                         <td>
                           <img style="width: 50px; height: 50px;" :src="tag.imagepath ? (mediaUrl + tag.imagepath) : '/product-vector.png'">

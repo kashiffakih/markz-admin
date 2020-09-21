@@ -56,7 +56,7 @@
                     <thead>
                       <tr>
                         <th>Sr. No.</th>
-                        <th>Actions</th>
+                        <!-- <th>Actions</th> -->
                         <th>Order Status</th>
                         <th>Delivery Boy Details</th>
                         <th>Store</th>
@@ -76,7 +76,7 @@
                         :key="`order${i}`"
                       >
                         <td>{{ i + 1 }}</td>
-                        <td class="w-1">
+                        <!-- <td class="w-1"> -->
                           <!-- <a target="_blank" :href="`${baseUrl}/orders/${order.id}/invoice`">
                             Invoice
                           </a>&nbsp;&nbsp;
@@ -86,13 +86,13 @@
                           <!-- <nuxt-link title="Edit Details" class="icon" :to="`/orders/${order.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp; -->
-                          <nuxt-link title="Delete Inspector" class="icon" to="">
+                          <!-- <nuxt-link title="Delete Inspector" class="icon" to="">
                             <span @click="del(order.id)">
                               <i class="fa fa-trash"></i>
                             </span>
                           </nuxt-link>
-
-                        </td>
+ -->
+                        <!-- </td> -->
                         <td>
                           <table>
                             <tbody>

@@ -69,11 +69,11 @@
                           <nuxt-link title="Edit Details" class="icon" :to="`/customers/${emp.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
-                          <nuxt-link title="Delete Inspector" class="icon" to="">
+                          <!-- <nuxt-link title="Delete Inspector" class="icon" to="">
                             <span @click="del(emp.id)">
                               <i class="fa fa-trash"></i>
                             </span>
-                          </nuxt-link>
+                          </nuxt-link> -->
                         </td>
                         <td>
                           <img style="width: 50px; height: 50px;" :src="mediaUrl + (emp.attachment ? emp.attachment : '/user.png')">
