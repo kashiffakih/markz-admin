@@ -27,13 +27,10 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
-              <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by unit">
-              <a class="refresh" href="#" @click="getData">Refresh</a>
-              <br>
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Manage Company Wallet</h3> &nbsp;
-                  <nuxt-link class="btn btn-sm btn-info float-sm-right" :to="`/organizations/${organization.value}/company_wallets/create`">Add New</nuxt-link>
+                  <!-- <nuxt-link class="btn btn-sm btn-info float-sm-right" :to="`/organizations/${organization.value}/company_wallets/create`">Add New</nuxt-link> -->
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
@@ -41,9 +38,11 @@
                     <thead>
                       <tr>
                         <th>Sr. No.</th>
-                        <th>Actions</th>
-                        <th>Source</th>
+                        <th>Order Id</th>
                         <th>Amount (in Rs.)</th>
+                        <th>Comission (in Rs.)</th>
+                        <th>Is Settled By Delivery Boy</th>
+                        <th>Amount Settled (in Rs.)</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -56,18 +55,11 @@
                         :key="`wallet${i}`"
                       >
                         <td>{{ i + 1 }}</td>
-                        <td class="w-1">
-                          <nuxt-link title="Edit Details" class="icon" :to="`/organizations/${organization.value}/company_wallets/${wallet.id}`">
-                            <i class="fa fa-edit"></i>
-                          </nuxt-link>&nbsp;&nbsp;
-                          <nuxt-link title="Delete Inspector" class="icon" to="">
-                            <span @click="del(wallet.id)">
-                              <i class="fa fa-trash"></i>
-                            </span>
-                          </nuxt-link>
-                        </td>
-                        <td>{{ wallet.source }}</td>
+                        <td>{{ wallet.order_id }}</td>
                         <td>{{ wallet.amount }}</td>
+                        <td>{{ wallet.comission }}</td>
+                        <td>{{ wallet.is_settled_by_delivery_boy == 1 ? 'YES' : 'NO'  }}</td>
+                        <td>{{ wallet.amountSettled }}</td>
                       </tr>
                     </tbody>
                   </table>

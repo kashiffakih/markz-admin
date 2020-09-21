@@ -128,7 +128,11 @@
                             Assign Delivery Rider
                           </nuxt-link>
                           <br><br>
-                          <input type="checkbox" @change="approveOrder(order, order.is_approved_by_hotelier)" v-model="order.is_approved_by_hotelier">  Is Approved by Hotelier
+                          <input type="radio" @change="approveOrder(order, 0)" value="0" v-model="order.is_approved_by_hotelier">  Not Yet Approved by Hotelier
+                          <br>
+                          <input type="radio" @change="approveOrder(order, 1)" value="1" v-model="order.is_approved_by_hotelier">  Is Approved by Hotelier
+                          <br>
+                          <input type="radio" @change="approveOrder(order, 2)" value="2" v-model="order.is_approved_by_hotelier">  Is Rejected by Hotelier
                         </td>
                         <td>
                           {{ order.delivery_boy ? order.delivery_boy.first_name : 'Not Assigned' }}
@@ -353,8 +357,13 @@ export default {
     async approveOrder(order, approvedStatus) {
       let r = confirm(`Are you sure you want to change the status of order ${order.id}`)
       if(r) {
-        if(approvedStatus)
+        if(approvedStatus == 1)
           order.is_approved_by_hotelier = 1
+        else if(approvedStatus == 2) {
+          order.is_approved_by_hotelier = 2
+          order.delivery_boy_id = null
+          order.is_delivery_boy_accepted = 0
+        }
         else {
           order.is_approved_by_hotelier = 0
           order.delivery_boy_id = null
@@ -363,7 +372,10 @@ export default {
         await this.$axios.patch(`/orders/${order.id}`, order)
         alert('Done')
         this.getData()
-      }
+      } 
+      // else {
+      //   order.is_approved_by_hotelier = !order.is_approved_by_hotelier
+      // }
     }
   },
 }
