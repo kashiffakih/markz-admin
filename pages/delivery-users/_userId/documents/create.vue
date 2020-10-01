@@ -47,6 +47,9 @@
                       <option value="">Select Doc. Type</option>
                       <option value="Adhaar Card">Adhaar Card</option>
                       <option value="Pan Card">Pan Card</option>
+                      <option value="RC book">RC book</option>
+                      <option value="PUC">PUC</option>
+                      <option value="Insurance">Insurance</option>
                     </select>
                     <span class="help-block" 
                       v-if="errors.type"

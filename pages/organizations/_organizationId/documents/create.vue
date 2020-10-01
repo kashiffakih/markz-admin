@@ -47,6 +47,9 @@
                       <option value="">Select Doc. Type</option>
                       <option value="Adhaar Card">Adhaar Card</option>
                       <option value="Pan Card">Pan Card</option>
+                      <option value="Food License">Food License</option>
+                      <option value="Award">Award</option>
+                      <option value="Other License">Other License</option>
                     </select>
                     <span class="help-block" 
                       v-if="errors.type"

@@ -18,8 +18,8 @@ export const state = () => ({
   // baseUrl: 'http://localhost:8080/api',
   // mediaUrl: 'http://192.168.29.9:8080/storage/',
   // baseUrl: 'http://192.168.29.9:8080/api',
-  // mediaUrl: 'http://192.168.1.129:8080/storage/',
-  // baseUrl: 'http://192.168.1.129:8080/api',
+  // mediaUrl: 'http://192.168.1.118:8080/storage/',
+  // baseUrl: 'http://192.168.1.118:8080/api',
   // mediaUrl: 'http://172.20.10.2:8080/storage/',
   // baseUrl: 'http://172.20.10.2:8080/api',
 })

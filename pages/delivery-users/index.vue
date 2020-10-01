@@ -69,11 +69,11 @@
                           <nuxt-link title="Edit Details" class="icon" :to="`/delivery-users/${emp.id}`">
                             <i class="fa fa-edit"></i>
                           </nuxt-link>&nbsp;&nbsp;
-                          <!-- <nuxt-link title="Delete Inspector" class="icon" to="">
+                          <nuxt-link title="Delete Inspector" class="icon" to="">
                             <span @click="del(emp.id)">
                               <i class="fa fa-trash"></i>
                             </span>
-                          </nuxt-link> -->
+                          </nuxt-link>
                           <nuxt-link class="btn btn-primary btn-sm" :to="`/delivery-users/${emp.id}/documents`">
                             Documents
                           </nuxt-link>

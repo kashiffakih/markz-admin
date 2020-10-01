@@ -109,7 +109,7 @@ export default {
     async getData() {
       this.items = []
       this.loading = true
-      let items = await this.$axios.get(`/company_coupons`)
+      let items = await this.$axios.get(`/company_coupons?search=all`)
       this.items = items.data.data
       this.loading = false
     },
