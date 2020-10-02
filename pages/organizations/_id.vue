@@ -550,6 +550,10 @@ export default {
   }),
   methods: {
     async store() {
+      if(!this.form.is_enabled)
+        this.form.is_available = 0
+      // else
+      //   this.form.is_available = 1
       await this.$axios.patch(`/companies/${this.$route.params.id}`, this.form)
       await this.handleFileUpload()
       this.$router.push('/organizations');
