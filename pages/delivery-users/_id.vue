@@ -59,6 +59,26 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
+                        <label class="form-label">Is Available</label>
+                        <select class="form-control" v-model="form.is_available">
+                          <option value="">Select Availability Status</option>
+                          <option value="1">Available</option>
+                          <option value="0">Not Available</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Is Occupied</label>
+                        <select class="form-control" v-model="form.is_occupied">
+                          <option value="">Select Occupied Status</option>
+                          <option value="1">Occupied</option>
+                          <option value="0">Not Occupied</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
                         <label class="form-label">First Name</label>
                         <input type="text" class="form-control" placeholder="Enter first name"
                           v-model="form.first_name"

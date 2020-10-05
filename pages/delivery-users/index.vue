@@ -52,6 +52,8 @@
                         <th>Phone</th>
                         <th>Role</th>
                         <th>Active Location</th>
+                        <th>Is Available</th>
+                        <th>Is Occupied</th>
                         <th>Status</th>
                       </tr>
                     </thead>
@@ -89,6 +91,8 @@
                         <td>{{ emp.roles[0].name }}</td>
                         <td>{{ emp.city ? emp.city.name : ''}}</td>
                         <td>{{ emp.active == 1 ? 'Enabled' : 'Disabled' }}</td>
+                        <td>{{ emp.is_available == 1 ? 'Available' : 'Not Available' }}</td>
+                        <td>{{ emp.is_occupied == 1 ? 'Occupied' : 'Not Occupied' }}</td>
                       </tr>
                     </tbody>
                   </table>
