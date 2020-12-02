@@ -45,6 +45,7 @@
                         <th>Title</th>
                         <th>Text</th>
                         <th>To</th>
+                        <th>Details</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -70,6 +71,19 @@
                         <td>{{ notification.title }}</td>
                         <td>{{ notification.text }}</td>
                         <td>{{ notification.to }}</td>
+                        <td>
+                          {{ notification.s_all == 1 ? 'All Stores | ' : '' }}
+                          {{ notification.s_approved == 1 ? 'Approved Stores | ' : '' }}
+                          {{ notification.s_enabled == 1 ? 'Enabled Stores | ' : '' }}
+                          {{ notification.u_all == 1 ? 'All Users | ' : '' }}
+                          {{ notification.u_delivery == 1 ? 'Delivery Rider | ' : '' }}
+                          {{ notification.v_a == 1 ? 'Available Delivery Rider | ' : '' }}
+                          {{ notification.v_na == 1 ? 'Not Available Delivery Rider | ' : '' }}
+                          {{ notification.u_customer == 1 ? 'Customer | '  : ''}}
+                          {{ notification.s_approved == 1 ? 'Approved Stores | ' : '' }}
+                          {{ notification.u_active == 1 ? 'Active Customer | ' : '' }} 
+                          {{ notification.u_inactive == 1 ? 'InActive Customer | ' : '' }} 
+                        </td>
                       </tr>
                     </tbody>
                   </table>

@@ -122,7 +122,19 @@ export default {
   name: 'CreateNotification',
   data: () => ({
     form: {
+      title: '',
+      text: '',
       to: '',
+      s_all: false,
+      s_approved: false,
+      s_enabled: false,
+      u_all: false,
+      u_delivery: false,
+      u_customer: false,
+      v_a: false,
+      v_na: false,
+      u_active: false,
+      u_inactive: false,
       details: 'Other Details'
     },
     tagid: '',

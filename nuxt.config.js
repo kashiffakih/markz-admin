@@ -106,7 +106,7 @@ module.exports = {
     baseURL: 'https://api.foodor.in/api'
     // baseURL: 'http://localhost:8080/api'
     // baseURL: 'http://172.20.10.2:8080/api'
-    // baseURL: 'http://192.168.1.101:8080/api'
+    // baseURL: 'http://192.168.0.112:8080/api'
     // baseURL: 'http://172.20.10.2:8080/api'
   },
   
