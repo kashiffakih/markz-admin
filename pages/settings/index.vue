@@ -34,8 +34,8 @@
                 <!-- form start -->
                 <div class="card-body">
                   <div class="col-md-12">
-                    <label class="form-label">Select Organization</label>
-                    <div class="row">
+                    <!-- <label class="form-label">Select Organization</label> -->
+                    <!-- <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
                           <select class="form-control custom-select"
@@ -53,7 +53,7 @@
                           >Update Organization</button>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
 
                     <hr>
                     <h5>Referrals and Cashbacks</h5>

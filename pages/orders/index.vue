@@ -152,7 +152,7 @@
                           <br>
                           <b>Phone: </b> {{ order.user ? (order.user.phone || '') : '' }}
                           <br>
-                          {{ order.user ? (order.user.add_1 || '') + ' ' + (order.user.add_2 || '') + ' ' + (order.user.add_3 || '') + ' ' + (order.user.state || '') + ' ' + (order.user.city || '') + ' ' + (order.user.pincode || '') : '' }}
+                          {{ order.address ? (order.address.add_1 || '') + ' ' + (order.address.add_2 || '') + ' ' + (order.address.add_3 || '') + ' ' + (order.address.state || '') + ' ' + (order.address.city || '') + ' ' + (order.address.pincode || '') : (order.user.add_1 || '') + ' ' + (order.user.add_2 || '') + ' ' + (order.user.add_3 || '') + ' ' + (order.user.state || '') + ' ' + (order.user.city || '') + ' ' + (order.user.pincode || '') }}
                         </td>
                         <td>
                           <table>
