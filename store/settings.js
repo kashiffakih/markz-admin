@@ -12,8 +12,8 @@ export const state = () => ({
     id: '',
     name: '',
   },
-  mediaUrl: 'https://api.venkon.aaibuzz.com/storage/',
-  baseUrl: 'https://api.venkon.aaibuzz.com/api',
+  mediaUrl: 'http://api.venkon.aaibuzz.com/storage',
+  baseUrl: 'http://api.venkon.aaibuzz.com/api',
   
   // mediaUrl: 'http://localhost:8080/storage/',
   // baseUrl: 'http://localhost:8080/api',
