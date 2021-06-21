@@ -106,7 +106,7 @@ module.exports = {
     baseURL: 'https://api.venkon.in/api'
     // baseURL: 'http://localhost:8080/api'
     // baseURL: 'http://172.20.10.2:8080/api'
-    // baseURL: 'http://192.168.29.9:8080/api'
+    // baseURL: 'http://192.168.100.143:8080/api'
     // baseURL: 'http://172.20.10.2:8080/api'
   },
   
