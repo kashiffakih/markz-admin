@@ -1,18 +1,8 @@
 #!/bin/bash
 export PATH="$PATH:"/usr/local/bin/
-<<<<<<< HEAD
-cd /var/www/vhosts/venkon/venkon-client
-
-npm run build
-
-
-pm2 delete venkon-client 
-pm2 start npm --name venkon-client -- start
-=======
 cd /var/www/vhosts/venkon/venkon-distributor
 
 npm run build
 
 pm2 delete venkon-distributor 
 pm2 start npm --name venkon-distributor -- start
->>>>>>> a52795eb4bdca17d83d4d8fdab5eb3cb32eb4575
