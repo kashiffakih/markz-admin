@@ -4,6 +4,5 @@ cd /var/www/vhosts/venkon/venkon-distributor
 
 npm run build
 
-
 pm2 delete venkon-distributor 
 pm2 start npm --name venkon-distributor -- start
