@@ -2,7 +2,11 @@ version: 0.0
 os: linux
 files:
   - source: /
+<<<<<<< HEAD
     destination: /var/www/vhosts/venkon/venkon-client
+=======
+    destination: /var/www/vhosts/venkon/venkon-distributor
+>>>>>>> a52795eb4bdca17d83d4d8fdab5eb3cb32eb4575
 hooks:
   BeforeInstall:
     - location: scripts/install_dependencies
@@ -18,4 +22,8 @@ hooks:
   ApplicationStop:
     - location: scripts/stop_server
       timeout: 300
+<<<<<<< HEAD
       runas: root
+=======
+      runas: root
+>>>>>>> a52795eb4bdca17d83d4d8fdab5eb3cb32eb4575
