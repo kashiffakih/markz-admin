@@ -80,10 +80,4 @@ dist
 # IDE
 .idea
 
-scripts/
-.htaccess
-appspec.yml
-nuxt.config.js
-package.json
-
 
