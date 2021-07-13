@@ -50,6 +50,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
+                        <th>City</th>
                         <th>Role</th>
                       </tr>
                     </thead>
@@ -81,6 +82,7 @@
                         <td>{{ emp.first_name || '' }} {{ emp.middle_name || '' }} {{ emp.last_name || '' }}</td>
                         <td>{{ emp.email }}</td>
                         <td>{{ emp.phone_code }} {{ emp.phone }}</td>
+                        <td>{{ emp.city ? emp.city.name : '' }}</td>
                         <td>{{ emp.roles[0].name }}</td>
                       </tr>
                     </tbody>

@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /var/www/vhosts/venkon/venkon-client
+    destination: /var/www/vhosts/venkon/venkon-distributor
 hooks:
   BeforeInstall:
     - location: scripts/install_dependencies
