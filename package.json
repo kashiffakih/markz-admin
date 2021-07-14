@@ -5,9 +5,9 @@
   "author": "VijayKadiyam",
   "private": true,
   "scripts": {
-    "dev": "NUXT_PORT=3051 nuxt",
-    "build": "NUXT_PORT=3051 nuxt build",
-    "start": "NUXT_PORT=3051 nuxt start",
+    "dev": "NUXT_PORT=3019 nuxt",
+    "build": "NUXT_PORT=3019 nuxt build",
+    "start": "NUXT_PORT=3019 nuxt start",
     "generate": "nuxt generate"
   },
   "dependencies": {
