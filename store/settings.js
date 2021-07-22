@@ -12,11 +12,11 @@ export const state = () => ({
     id: '',
     name: '',
   },
-  // mediaUrl: 'http://api.distributor.venkon.aaibuzz.com/storage/',
-  // baseUrl: 'http://api.distributor.venkon.aaibuzz.com/api',
+  mediaUrl: 'http://api.distributor.venkon.aaibuzz.com/storage/',
+  baseUrl: 'http://api.distributor.venkon.aaibuzz.com/api',
   
-  mediaUrl: 'http://192.168.29.9:8080/storage/',
-  baseUrl: 'http://192.168.29.9:8080/api',
+  // mediaUrl: 'http://192.168.29.9:8080/storage/',
+  // baseUrl: 'http://192.168.29.9:8080/api',
   
   // mediaUrl: 'http://192.168.29.9:8080/storage/',
   // baseUrl: 'http://192.168.29.9:8080/api',
