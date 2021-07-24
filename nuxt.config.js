@@ -104,7 +104,7 @@ module.exports = {
 
   axios: {
     baseURL: 'http://api.distributor.venkon.aaibuzz.com/api'
-    // baseURL: 'http://192.168.29.9:8080/api'
+    // baseURL: 'http://192.168.0.104:8080/api'
     // baseURL: 'http://172.20.10.2:8080/api'
     // baseURL: 'http://192.168.100.143:8080/api'
     // baseURL: 'http://172.20.10.2:8080/api'
