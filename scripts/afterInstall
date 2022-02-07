@@ -1,9 +1,9 @@
 #!/bin/bash
 export PATH="$PATH:"/usr/local/bin/
-cd /var/www/vhosts/foodor/foodor-client
+cd /var/www/vhosts/venkon1/venkon1-client
 
-npm run build
+# npm run build
 
 
-pm2 delete foodor-client 
-pm2 start npm --name foodor-client -- start
+# pm2 delete venkon1-client 
+# pm2 start npm --name venkon1-client -- start
