@@ -5,5 +5,5 @@ cd /var/www/vhosts/venkon1/venkon1-client
 npm run build
 
 
-# pm2 delete venkon1-client 
-# pm2 start npm --name venkon1-client -- start
+pm2 delete venkon-client 
+pm2 start npm --name venkon-client -- start
