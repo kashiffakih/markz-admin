@@ -2,7 +2,7 @@
   <section class="hold-transition login-page">
     <div class="login-box">
       <div class="login-logo">
-        <nuxt-link to="/"><b>FOOD</b>OR</nuxt-link>
+        <nuxt-link to="/"><b>VENKON</b></nuxt-link>
       </div>
       <!-- /.login-logo -->
       <div class="card">

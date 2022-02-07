@@ -83,7 +83,7 @@
                         <td>{{ emp.first_name || '' }} {{ emp.middle_name || '' }} {{ emp.last_name || '' }}</td>
                         <td>{{ emp.email }}</td>
                         <td>{{ emp.phone_code }} {{ emp.phone }}</td>
-                        <td>{{ emp.city ? emp.city.name : '' }}</td>
+                        ç
                         <td>{{ emp.roles[0].name }}</td>
                         <td>{{ emp.active == 1 ? 'Enabled' : 'Disabled' }}</td>
                       </tr>
