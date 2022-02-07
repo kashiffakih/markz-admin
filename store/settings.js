@@ -12,13 +12,13 @@ export const state = () => ({
     id: '',
     name: '',
   },
-  // mediaUrl: 'https://api.foodor.in/storage/',
-  // baseUrl: 'https://api.foodor.in/api',
+  mediaUrl: 'https://api.venkon.aaibuzz.com/storage/',
+  baseUrl: 'https://api.venkon.aaibuzz.com/api',
   // mediaUrl: 'http://localhost:8080/storage/',
   // baseUrl: 'http://localhost:8080/api',
-  
-  mediaUrl: 'http://192.168.1.206:8080/storage/',
-  baseUrl: 'http://192.168.1.206:8080/api',
+
+  // mediaUrl: 'http://192.168.1.206:8080/storage/',
+  // baseUrl: 'http://192.168.1.206:8080/api',
 })
 
 export const getters = {
