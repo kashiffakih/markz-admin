@@ -1,8 +1,9 @@
 #!/bin/bash
 export PATH="$PATH:"/usr/local/bin/
-cd /var/www/vhosts/venkon/venkon-distributor
+cd /var/www/vhosts/venkon1/venkon1-client
 
 npm run build
 
-pm2 delete venkon-distributor 
-pm2 start npm --name venkon-distributor -- start
+
+pm2 delete venkon-client 
+pm2 start npm --name venkon-client -- start
