@@ -5,7 +5,7 @@
       @change="updateDetails"
     >
       <option value="">Select Organization</option>
-      <option v-for="(org, i) in organizations" :key="`org'${i}`" :value="org.value">{{ org.text }}</option>
+      <option v-for="(org, i) in organizations" :key="`org'${i}`" :value="org.value">{{ org.text }} - {{ org.category ? org.category.name : '' }}</option>
     </select>
     <span style="display: none">{{ org.text }}</span>
   </section>
@@ -26,6 +26,7 @@ export default {
       return this.$store.getters['settings/organization']
     },
     organizations() {
+      console.log(this.orgs)
       let organizations = []
       if(this.city.id)
        organizations = this.orgs.filter(org => org.city_id == this.city.id)
@@ -34,6 +35,7 @@ export default {
       organizations = organizations.map(organization => ({
         'text': organization.name,
         'value': organization.id,
+        'category': organization.category,
         'time_zone': organization.time_zone ? organization.time_zone : 'Asia/Calcutta',
         logo_path: organization.logo_path
       }));
