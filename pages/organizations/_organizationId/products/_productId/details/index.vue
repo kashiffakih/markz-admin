@@ -172,14 +172,24 @@
                     <br>
                     <div class="card"
                       v-for="(pack, u) in product.product_packs"
+                      :key="`pack${u}`"
                     >
                       <div class="card-header">
                         {{ pack.value }} {{ pack.unit.name }} of {{ product.name }} = 
-                        <input type="number" v-model="prices[u]" placeholder="Enter amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u])"> INR | 
-                        Offer Price : &nbsp;
-                        <input type="number" v-model="offers[u]" placeholder="Enter offer amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u])"> INR <span v-if="org.is_cashback_applicable">| 
-                        Cashback Amount : &nbsp;
-                        <input type="number" v-model="cashbacks[u]" placeholder="Enter offer amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u])"> INR</span>
+                        <br>
+                        Customer Price:
+                        <input type="number" v-model="prices[u]" placeholder="Enter amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u], distributorPrices[u], distributorOfferPrices[u])"> INR | 
+                        Customer Offer Price : &nbsp;
+                        <input type="number" v-model="offers[u]" placeholder="Enter offer amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u], distributorPrices[u], distributorOfferPrices[u])"> INR 
+                        <span v-if="org.is_cashback_applicable">| 
+                          Cashback Amount : &nbsp;
+                          <input type="number" v-model="cashbacks[u]" placeholder="Enter amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u], distributorPrices[u], distributorOfferPrices[u])"> INR
+                        </span>
+                        <br><br>
+                        Distributor Price:
+                        <input type="number" v-model="distributorPrices[u]" placeholder="Enter amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u], distributorPrices[u], distributorOfferPrices[u])"> INR | 
+                        Distributor Offer Price : &nbsp;
+                        <input type="number" v-model="distributorOfferPrices[u]" placeholder="Enter offer amount" @blur="updatePrice(u, prices[u], pack.id, offers[u], cashbacks[u], distributorPrices[u], distributorOfferPrices[u])"> INR 
                         <br>
                         <input type="checkbox"
                           v-if="prices[u]"
@@ -255,6 +265,8 @@ export default {
     prices: [],
     offers: [],
     cashbacks: [],
+    distributorPrices: [],
+    distributorOfferPrices: [],
     defaults: [],
   }),
   components: {
@@ -288,6 +300,8 @@ export default {
           this.prices[c] = price.price
           this.offers[c] = price.offer_price
           this.cashbacks[c] = price.cashback_price
+          this.distributorPrices[c] = price.distributor_price
+          this.distributorOfferPrices[c] = price.distributor_offer_price
           this.defaults[c] = parseInt(price.is_default)
         }
       })
@@ -325,12 +339,14 @@ export default {
       }
       await this.$axios.post(`/product_tag`, payload)
     },
-    async updatePrice(u, price, productPackId, offerPrice, cashbackPrice) {
+    async updatePrice(u, price, productPackId, offerPrice, cashbackPrice, distributorPrice, distributorOfferPrice) {
       let payload = {
         product_id: this.product.id,
         price: price,
         offer_price: offerPrice,
         cashback_price: cashbackPrice,
+        distributor_price: distributorPrice,
+        distributor_offer_price: distributorOfferPrice,
         product_pack_id: productPackId,
         is_default: this.defaults[u],
         date: new Date()

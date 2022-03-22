@@ -107,10 +107,9 @@ module.exports = {
     // baseURL: 'http://192.168.29.9:8080/api'
   },
   
-  
   build: {
     /*
-    ** You can extend webpack config here
+    ** You can extend webpack config here    qqqq
     */
     extend(config, ctx) {
       transpile: [/^vue2-google-maps($|\/)/]

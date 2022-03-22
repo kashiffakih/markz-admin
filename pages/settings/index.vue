@@ -149,6 +149,48 @@
                     </div>
 
                     <hr>
+                    <h5>Accounts Banner</h5>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Distributor Accounts Banner</label>
+                          <a :href="mediaUrl + form.banner_path_7" target="_blank">{{ form.banner_path_7 }}</a>
+                          <br>
+                          <input type="file" id="file" name="file" ref="bannerpath7" accept="application/ms-excel" multiple>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Client Accounts Banner</label>
+                          <a :href="mediaUrl + form.banner_path_8" target="_blank">{{ form.banner_path_8 }}</a>
+                          <br>
+                          <input type="file" id="file" name="file" ref="bannerpath8" accept="application/ms-excel" multiple>
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr>
+                    <h5>Orders Banner</h5>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">New Orders Banner</label>
+                          <a :href="mediaUrl + form.banner_path_9" target="_blank">{{ form.banner_path_9 }}</a>
+                          <br>
+                          <input type="file" id="file" name="file" ref="bannerpath9" accept="application/ms-excel" multiple>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Order History Banner</label>
+                          <a :href="mediaUrl + form.banner_path_10" target="_blank">{{ form.banner_path_10 }}</a>
+                          <br>
+                          <input type="file" id="file" name="file" ref="bannerpath10" accept="application/ms-excel" multiple>
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr>
                     <h5>Social Media Links</h5>
                     <div class="row">
                       <div class="col-md-6">
@@ -287,6 +329,10 @@ export default {
       this.bannerpath4 = this.$refs.bannerpath4.files[0]
       this.bannerpath5 = this.$refs.bannerpath5.files[0]
       this.bannerpath6 = this.$refs.bannerpath6.files[0]
+      this.bannerpath7 = this.$refs.bannerpath7.files[0]
+      this.bannerpath8 = this.$refs.bannerpath8.files[0]
+      this.bannerpath9 = this.$refs.bannerpath9.files[0]
+      this.bannerpath10 = this.$refs.bannerpath10.files[0]
       let formData = new FormData();
       formData.append('settingid', this.form.id);
       formData.append('bannerpath1', this.bannerpath1);
@@ -295,6 +341,10 @@ export default {
       formData.append('bannerpath4', this.bannerpath4);
       formData.append('bannerpath5', this.bannerpath5);
       formData.append('bannerpath6', this.bannerpath6);
+      formData.append('bannerpath7', this.bannerpath7);
+      formData.append('bannerpath8', this.bannerpath8);
+      formData.append('bannerpath9', this.bannerpath9);
+      formData.append('bannerpath10', this.bannerpath10);
       await this.$axios.post('upload_best_values_photo', formData,
         {
           headers: {
