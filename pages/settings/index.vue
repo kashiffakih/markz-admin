@@ -189,6 +189,34 @@
                         </div>
                       </div>
                     </div>
+                    <hr>
+                    <h5>Other Banners</h5>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label"> Banner 11</label>
+                          <a :href="mediaUrl + form.banner_path_11" target="_blank">{{ form.banner_path_11 }}</a>
+                          <br>
+                          <input type="file" id="file" name="file" ref="bannerpath11" accept="application/ms-excel" multiple>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Banner 12</label>
+                          <a :href="mediaUrl + form.banner_path_12" target="_blank">{{ form.banner_path_12 }}</a>
+                          <br>
+                          <input type="file" id="file" name="file" ref="bannerpath12" accept="application/ms-excel" multiple>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Banner 13</label>
+                          <a :href="mediaUrl + form.banner_path_13" target="_blank">{{ form.banner_path_13 }}</a>
+                          <br>
+                          <input type="file" id="file" name="file" ref="bannerpath13" accept="application/ms-excel" multiple>
+                        </div>
+                      </div>
+                    </div>
 
                     <hr>
                     <h5>Social Media Links</h5>
@@ -333,6 +361,9 @@ export default {
       this.bannerpath8 = this.$refs.bannerpath8.files[0]
       this.bannerpath9 = this.$refs.bannerpath9.files[0]
       this.bannerpath10 = this.$refs.bannerpath10.files[0]
+      this.bannerpath11 = this.$refs.bannerpath11.files[0]
+      this.bannerpath12 = this.$refs.bannerpath12.files[0]
+      this.bannerpath13 = this.$refs.bannerpath13.files[0]
       let formData = new FormData();
       formData.append('settingid', this.form.id);
       formData.append('bannerpath1', this.bannerpath1);
@@ -345,6 +376,9 @@ export default {
       formData.append('bannerpath8', this.bannerpath8);
       formData.append('bannerpath9', this.bannerpath9);
       formData.append('bannerpath10', this.bannerpath10);
+      formData.append('bannerpath11', this.bannerpath11);
+      formData.append('bannerpath12', this.bannerpath12);
+      formData.append('bannerpath13', this.bannerpath13);
       await this.$axios.post('upload_best_values_photo', formData,
         {
           headers: {
