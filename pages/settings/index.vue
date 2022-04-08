@@ -8,17 +8,21 @@
           <div class="row mb-2">
             <div class="col-sm-6">
               <h1 class="m-0 text-dark">Settings</h1>
-            </div><!-- /.col -->
+            </div>
+            <!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item">
-                    <nuxt-link to="/">Home</nuxt-link>
+                  <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item active">Settings</li>
               </ol>
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
       </div>
       <!-- /.content-header -->
 
@@ -55,212 +59,481 @@
                       </div>
                     </div> -->
 
-                    <hr>
+                    <hr />
                     <h5>Referrals and Cashbacks</h5>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">Referral Amount to Referrer (in Rs.)</label> 
-                          <input type="number" class="form-control" placeholder="Enter referral amount" v-model="form.referral_amount_to_referrer">
+                          <label class="form-label"
+                            >Referral Amount to Referrer (in Rs.)</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            placeholder="Enter referral amount"
+                            v-model="form.referral_amount_to_referrer"
+                          />
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">Referral Amount to Referree (in Rs.)</label> 
-                          <input type="number" class="form-control" placeholder="Enter referral amount" v-model="form.referral_amount_to_referree">
+                          <label class="form-label"
+                            >Referral Amount to Referree (in Rs.)</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            placeholder="Enter referral amount"
+                            v-model="form.referral_amount_to_referree"
+                          />
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">Referral Min Amount</label> 
-                          <input type="number" class="form-control" placeholder="Enter referral min amount" v-model="form.referral_min_amount">
+                          <label class="form-label">Referral Min Amount</label>
+                          <input
+                            type="number"
+                            class="form-control"
+                            placeholder="Enter referral min amount"
+                            v-model="form.referral_min_amount"
+                          />
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">Referral Amount Validity (in Days)</label> 
-                          <input type="number" class="form-control" placeholder="Enter referral amount" v-model="form.referral_amount_validity">
+                          <label class="form-label"
+                            >Referral Amount Validity (in Days)</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            placeholder="Enter referral amount"
+                            v-model="form.referral_amount_validity"
+                          />
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">Cashback Amount Validity (in Days)</label> 
-                          <input type="number" class="form-control" placeholder="Enter referral amount" v-model="form.cashback_amount_validity">
+                          <label class="form-label"
+                            >Cashback Amount Validity (in Days)</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            placeholder="Enter referral amount"
+                            v-model="form.cashback_amount_validity"
+                          />
                         </div>
                       </div>
                     </div>
 
-                    <hr>
+                    <hr />
                     <h5>Best Values Banners</h5>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">Best Value Banner 1</label>
-                          <a :href="mediaUrl + form.banner_path_1" target="_blank">{{ form.banner_path_1 }}</a>
-                          <br>
-                          <input type="file" id="file" name="file" ref="bannerpath1" accept="application/ms-excel" multiple>
+                          <a
+                            :href="mediaUrl + form.banner_path_1"
+                            target="_blank"
+                            >{{ form.banner_path_1 }}</a
+                          >
+                          <br />
+                          <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            ref="bannerpath1"
+                            accept="application/ms-excel"
+                            multiple
+                          />
                         </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label"
+                          >Best Value Banner 1 Tag</label
+                        >
+                        <v-select
+                          v-model="form.banner_1_tag_id"
+                          :reduce="(tag) => tag.code"
+                          :options="tags"
+                        ></v-select>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">Best Value Banner 2</label>
-                          <a :href="mediaUrl + form.banner_path_2" target="_blank">{{ form.banner_path_2 }}</a>
-                          <br>
-                          <input type="file" id="file" name="file" ref="bannerpath2" accept="application/ms-excel" multiple>
+                          <a
+                            :href="mediaUrl + form.banner_path_2"
+                            target="_blank"
+                            >{{ form.banner_path_2 }}</a
+                          >
+                          <br />
+                          <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            ref="bannerpath2"
+                            accept="application/ms-excel"
+                            multiple
+                          />
                         </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label"
+                          >Best Value Banner 2 Tag</label
+                        >
+                        <v-select
+                          v-model="form.banner_2_tag_id"
+                          :reduce="(tag) => tag.code"
+                          :options="tags"
+                        ></v-select>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">Best Value Banner 3</label>
-                          <a :href="mediaUrl + form.banner_path_3" target="_blank">{{ form.banner_path_3 }}</a>
-                          <br>
-                          <input type="file" id="file" name="file" ref="bannerpath3" accept="application/ms-excel" multiple>
+                          <a
+                            :href="mediaUrl + form.banner_path_3"
+                            target="_blank"
+                            >{{ form.banner_path_3 }}</a
+                          >
+                          <br />
+                          <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            ref="bannerpath3"
+                            accept="application/ms-excel"
+                            multiple
+                          />
                         </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label"
+                          >Best Value Banner 3 Tag</label
+                        >
+                        <v-select
+                          v-model="form.banner_3_tag_id"
+                          :reduce="(tag) => tag.code"
+                          :options="tags"
+                        ></v-select>
                       </div>
                     </div>
 
-                    <hr>
+                    <hr />
                     <h5>More Offers</h5>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">More Offers Banner 1</label>
-                          <a :href="mediaUrl + form.banner_path_4" target="_blank">{{ form.banner_path_4 }}</a>
-                          <br>
-                          <input type="file" id="file" name="file" ref="bannerpath4" accept="application/ms-excel" multiple>
+                          <a
+                            :href="mediaUrl + form.banner_path_4"
+                            target="_blank"
+                            >{{ form.banner_path_4 }}</a
+                          >
+                          <br />
+                          <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            ref="bannerpath4"
+                            accept="application/ms-excel"
+                            multiple
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label"
+                            >More Offers Banner 1 Tag</label
+                          >
+                          <v-select
+                            v-model="form.banner_4_tag_id"
+                            :reduce="(tag) => tag.code"
+                            :options="tags"
+                          ></v-select>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">More Offers Banner 2</label>
-                          <a :href="mediaUrl + form.banner_path_5" target="_blank">{{ form.banner_path_5 }}</a>
-                          <br>
-                          <input type="file" id="file" name="file" ref="bannerpath5" accept="application/ms-excel" multiple>
+                          <a
+                            :href="mediaUrl + form.banner_path_5"
+                            target="_blank"
+                            >{{ form.banner_path_5 }}</a
+                          >
+                          <br />
+                          <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            ref="bannerpath5"
+                            accept="application/ms-excel"
+                            multiple
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label"
+                            >More Offers Banner 2 Tag</label
+                          >
+                          <v-select
+                            v-model="form.banner_5_tag_id"
+                            :reduce="(tag) => tag.code"
+                            :options="tags"
+                          ></v-select>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">More Offers Banner 3</label>
-                          <a :href="mediaUrl + form.banner_path_6" target="_blank">{{ form.banner_path_6 }}</a>
-                          <br>
-                          <input type="file" id="file" name="file" ref="bannerpath6" accept="application/ms-excel" multiple>
+                          <a
+                            :href="mediaUrl + form.banner_path_6"
+                            target="_blank"
+                            >{{ form.banner_path_6 }}</a
+                          >
+                          <br />
+                          <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            ref="bannerpath6"
+                            accept="application/ms-excel"
+                            multiple
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label"
+                            >More Offers Banner 3 Tag</label
+                          >
+                          <v-select
+                            v-model="form.banner_6_tag_id"
+                            :reduce="(tag) => tag.code"
+                            :options="tags"
+                          ></v-select>
                         </div>
                       </div>
                     </div>
 
-                    <hr>
+                    <hr />
                     <h5>Accounts Banner</h5>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">Distributor Accounts Banner</label>
-                          <a :href="mediaUrl + form.banner_path_7" target="_blank">{{ form.banner_path_7 }}</a>
-                          <br>
-                          <input type="file" id="file" name="file" ref="bannerpath7" accept="application/ms-excel" multiple>
+                          <label class="form-label"
+                            >Distributor Accounts Banner</label
+                          >
+                          <a
+                            :href="mediaUrl + form.banner_path_7"
+                            target="_blank"
+                            >{{ form.banner_path_7 }}</a
+                          >
+                          <br />
+                          <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            ref="bannerpath7"
+                            accept="application/ms-excel"
+                            multiple
+                          />
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">Client Accounts Banner</label>
-                          <a :href="mediaUrl + form.banner_path_8" target="_blank">{{ form.banner_path_8 }}</a>
-                          <br>
-                          <input type="file" id="file" name="file" ref="bannerpath8" accept="application/ms-excel" multiple>
+                          <label class="form-label"
+                            >Client Accounts Banner</label
+                          >
+                          <a
+                            :href="mediaUrl + form.banner_path_8"
+                            target="_blank"
+                            >{{ form.banner_path_8 }}</a
+                          >
+                          <br />
+                          <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            ref="bannerpath8"
+                            accept="application/ms-excel"
+                            multiple
+                          />
                         </div>
                       </div>
                     </div>
 
-                    <hr>
+                    <hr />
                     <h5>Orders Banner</h5>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">New Orders Banner</label>
-                          <a :href="mediaUrl + form.banner_path_9" target="_blank">{{ form.banner_path_9 }}</a>
-                          <br>
-                          <input type="file" id="file" name="file" ref="bannerpath9" accept="application/ms-excel" multiple>
+                          <a
+                            :href="mediaUrl + form.banner_path_9"
+                            target="_blank"
+                            >{{ form.banner_path_9 }}</a
+                          >
+                          <br />
+                          <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            ref="bannerpath9"
+                            accept="application/ms-excel"
+                            multiple
+                          />
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">Order History Banner</label>
-                          <a :href="mediaUrl + form.banner_path_10" target="_blank">{{ form.banner_path_10 }}</a>
-                          <br>
-                          <input type="file" id="file" name="file" ref="bannerpath10" accept="application/ms-excel" multiple>
+                          <a
+                            :href="mediaUrl + form.banner_path_10"
+                            target="_blank"
+                            >{{ form.banner_path_10 }}</a
+                          >
+                          <br />
+                          <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            ref="bannerpath10"
+                            accept="application/ms-excel"
+                            multiple
+                          />
                         </div>
                       </div>
                     </div>
-                    <hr>
+                    <hr />
                     <h5>Other Banners</h5>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label"> Banner 11</label>
-                          <a :href="mediaUrl + form.banner_path_11" target="_blank">{{ form.banner_path_11 }}</a>
-                          <br>
-                          <input type="file" id="file" name="file" ref="bannerpath11" accept="application/ms-excel" multiple>
+                          <a
+                            :href="mediaUrl + form.banner_path_11"
+                            target="_blank"
+                            >{{ form.banner_path_11 }}</a
+                          >
+                          <br />
+                          <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            ref="bannerpath11"
+                            accept="application/ms-excel"
+                            multiple
+                          />
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">Banner 12</label>
-                          <a :href="mediaUrl + form.banner_path_12" target="_blank">{{ form.banner_path_12 }}</a>
-                          <br>
-                          <input type="file" id="file" name="file" ref="bannerpath12" accept="application/ms-excel" multiple>
+                          <a
+                            :href="mediaUrl + form.banner_path_12"
+                            target="_blank"
+                            >{{ form.banner_path_12 }}</a
+                          >
+                          <br />
+                          <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            ref="bannerpath12"
+                            accept="application/ms-excel"
+                            multiple
+                          />
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">Banner 13</label>
-                          <a :href="mediaUrl + form.banner_path_13" target="_blank">{{ form.banner_path_13 }}</a>
-                          <br>
-                          <input type="file" id="file" name="file" ref="bannerpath13" accept="application/ms-excel" multiple>
+                          <a
+                            :href="mediaUrl + form.banner_path_13"
+                            target="_blank"
+                            >{{ form.banner_path_13 }}</a
+                          >
+                          <br />
+                          <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            ref="bannerpath13"
+                            accept="application/ms-excel"
+                            multiple
+                          />
                         </div>
                       </div>
                     </div>
 
-                    <hr>
+                    <hr />
                     <h5>Social Media Links</h5>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">Facebook Url</label> 
-                          <input type="text" class="form-control" placeholder="Enter facebook url" v-model="form.fb_path">
+                          <label class="form-label">Facebook Url</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter facebook url"
+                            v-model="form.fb_path"
+                          />
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">Instagram Url</label> 
-                          <input type="text" class="form-control" placeholder="Enter instagram url" v-model="form.instagram_path">
+                          <label class="form-label">Instagram Url</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter instagram url"
+                            v-model="form.instagram_path"
+                          />
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">Twitter Url</label> 
-                          <input type="text" class="form-control" placeholder="Enter twitter url" v-model="form.twitter_path">
+                          <label class="form-label">Twitter Url</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter twitter url"
+                            v-model="form.twitter_path"
+                          />
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">LinkedIn Url</label> 
-                          <input type="text" class="form-control" placeholder="Enter linkedin url" v-model="form.linkedin_path">
+                          <label class="form-label">LinkedIn Url</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter linkedin url"
+                            v-model="form.linkedin_path"
+                          />
                         </div>
                       </div>
-
                     </div>
 
-                    <hr>
+                    <hr />
                     <h5>Contact Details</h5>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">Phone no</label> 
-                          <input type="number" class="form-control" placeholder="Enter phone no" v-model="form.phone">
+                          <label class="form-label">Phone no</label>
+                          <input
+                            type="number"
+                            class="form-control"
+                            placeholder="Enter phone no"
+                            v-model="form.phone"
+                          />
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">Email</label> 
-                          <input type="text" class="form-control" placeholder="Enter email" v-model="form.email">
+                          <label class="form-label">Email</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter email"
+                            v-model="form.email"
+                          />
                         </div>
                       </div>
                     </div>
@@ -269,21 +542,30 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label">Reject Penalty on Rider (in Rs.)</label> 
-                          <input type="number" class="form-control" placeholder="Enter reject penalty amount" v-model="form.reject_penalty_on_rider">
+                          <label class="form-label"
+                            >Reject Penalty on Rider (in Rs.)</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            placeholder="Enter reject penalty amount"
+                            v-model="form.reject_penalty_on_rider"
+                          />
                         </div>
                       </div>
                     </div>
 
-                    <button class="btn btn-primary btn-block"
+                    <button
+                      class="btn btn-primary btn-block"
                       @click="updateSettings"
-                    >Update Details</button>
-
+                    >
+                      Update Details
+                    </button>
                   </div>
                 </div>
               </div>
               <!-- /.card -->
-              </div>
+            </div>
             <!--/.col (left) -->
           </div>
           <!-- /.row -->
@@ -296,101 +578,130 @@
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
+import BackButton from "@/components/back-button.vue";
+import "vue-select/dist/vue-select.css";
 
 export default {
-  name: 'AdminSettings',
-  async asyncData({$axios}) {
-    let organizations = await $axios.get('/companies');
-    organizations = organizations.data.data.map(organization => ({
-      'text': organization.name,
-      'value': organization.id,
-      'time_zone': organization.time_zone ? organization.time_zone : 'Asia/Calcutta',
-      logo_path: organization.logo_path
+  name: "AdminSettings",
+  async asyncData({ $axios }) {
+    let organizations = await $axios.get("/companies");
+    organizations = organizations.data.data.map((organization) => ({
+      text: organization.name,
+      value: organization.id,
+      time_zone: organization.time_zone
+        ? organization.time_zone
+        : "Asia/Calcutta",
+      logo_path: organization.logo_path,
     }));
-    let setting = await $axios.get(`/settings/1`)
-    let form = setting.data.data == null ? {} : setting.data.data
+    let setting = await $axios.get(`/settings/1`);
+    let form = setting.data.data == null ? {} : setting.data.data;
+    form.banner_1_tag_id = parseInt(form.banner_1_tag_id)
+    form.banner_2_tag_id = parseInt(form.banner_2_tag_id)
+    form.banner_3_tag_id = parseInt(form.banner_3_tag_id)
+    form.banner_4_tag_id = parseInt(form.banner_4_tag_id)
+    form.banner_5_tag_id = parseInt(form.banner_5_tag_id)
+    form.banner_6_tag_id = parseInt(form.banner_6_tag_id)
     return {
       organizations: organizations,
-      form: form
-    }
+      form: form,
+    };
   },
   data: () => ({
-    organizationId: '',
+    organizationId: "",
     form: {
       referral_amount: 0,
-      reject_penalty_on_rider: 0
+      reject_penalty_on_rider: 0,
+      banner_1_tag_id: "",
+      banner_2_tag_id: "",
+      banner_3_tag_id: "",
+      banner_4_tag_id: "",
+      banner_5_tag_id: "",
+      banner_6_tag_id: "",
     },
-    loading: false
+    tags: [],
+    loading: false,
   }),
-  mounted() {
-    this.organizationId = this.$store.getters['settings/organization'].value;
+  async mounted() {
+    this.organizationId = this.$store.getters["settings/organization"].value;
+
+    let tags = await this.$axios.get(`/tags`);
+    this.tags = [];
+    this.tags.push({
+      label: "Select Sub 2 Category",
+      code: "",
+    });
+    tags.data.data.forEach((tag) => {
+      this.tags.push({
+        label: tag.name,
+        code: tag.id,
+      });
+    });
   },
   methods: {
     updateDetails() {
-      if(this.organizationId){
-        let organization = this.organizations.filter(o => o.value == this.organizationId)
-        if(organization.length) {
-          this.$store.dispatch('settings/setOrganization', organization[0])
-          alert("Details Updated")
+      if (this.organizationId) {
+        let organization = this.organizations.filter(
+          (o) => o.value == this.organizationId
+        );
+        if (organization.length) {
+          this.$store.dispatch("settings/setOrganization", organization[0]);
+          alert("Details Updated");
         }
       } else {
-        alert("Please select the organization")
+        alert("Please select the organization");
       }
     },
     async updateSettings() {
-      this.loading = true
+      this.loading = true;
       try {
-        let admin = await this.$axios.post(`/settings`, this.form)
-        this.handleFileUpload()
-        alert('Details Updated')
-        this.loading = false
-      }
-      catch(e) {
-        this.loading = false
+        let admin = await this.$axios.post(`/settings`, this.form);
+        this.handleFileUpload();
+        alert("Details Updated");
+        this.loading = false;
+      } catch (e) {
+        this.loading = false;
       }
     },
     async handleFileUpload() {
-      this.bannerpath1 = this.$refs.bannerpath1.files[0]
-      this.bannerpath2 = this.$refs.bannerpath2.files[0]
-      this.bannerpath3 = this.$refs.bannerpath3.files[0]
-      this.bannerpath4 = this.$refs.bannerpath4.files[0]
-      this.bannerpath5 = this.$refs.bannerpath5.files[0]
-      this.bannerpath6 = this.$refs.bannerpath6.files[0]
-      this.bannerpath7 = this.$refs.bannerpath7.files[0]
-      this.bannerpath8 = this.$refs.bannerpath8.files[0]
-      this.bannerpath9 = this.$refs.bannerpath9.files[0]
-      this.bannerpath10 = this.$refs.bannerpath10.files[0]
-      this.bannerpath11 = this.$refs.bannerpath11.files[0]
-      this.bannerpath12 = this.$refs.bannerpath12.files[0]
-      this.bannerpath13 = this.$refs.bannerpath13.files[0]
+      this.bannerpath1 = this.$refs.bannerpath1.files[0];
+      this.bannerpath2 = this.$refs.bannerpath2.files[0];
+      this.bannerpath3 = this.$refs.bannerpath3.files[0];
+      this.bannerpath4 = this.$refs.bannerpath4.files[0];
+      this.bannerpath5 = this.$refs.bannerpath5.files[0];
+      this.bannerpath6 = this.$refs.bannerpath6.files[0];
+      this.bannerpath7 = this.$refs.bannerpath7.files[0];
+      this.bannerpath8 = this.$refs.bannerpath8.files[0];
+      this.bannerpath9 = this.$refs.bannerpath9.files[0];
+      this.bannerpath10 = this.$refs.bannerpath10.files[0];
+      this.bannerpath11 = this.$refs.bannerpath11.files[0];
+      this.bannerpath12 = this.$refs.bannerpath12.files[0];
+      this.bannerpath13 = this.$refs.bannerpath13.files[0];
       let formData = new FormData();
-      formData.append('settingid', this.form.id);
-      formData.append('bannerpath1', this.bannerpath1);
-      formData.append('bannerpath2', this.bannerpath2);
-      formData.append('bannerpath3', this.bannerpath3);
-      formData.append('bannerpath4', this.bannerpath4);
-      formData.append('bannerpath5', this.bannerpath5);
-      formData.append('bannerpath6', this.bannerpath6);
-      formData.append('bannerpath7', this.bannerpath7);
-      formData.append('bannerpath8', this.bannerpath8);
-      formData.append('bannerpath9', this.bannerpath9);
-      formData.append('bannerpath10', this.bannerpath10);
-      formData.append('bannerpath11', this.bannerpath11);
-      formData.append('bannerpath12', this.bannerpath12);
-      formData.append('bannerpath13', this.bannerpath13);
-      await this.$axios.post('upload_best_values_photo', formData,
-        {
+      formData.append("settingid", this.form.id);
+      formData.append("bannerpath1", this.bannerpath1);
+      formData.append("bannerpath2", this.bannerpath2);
+      formData.append("bannerpath3", this.bannerpath3);
+      formData.append("bannerpath4", this.bannerpath4);
+      formData.append("bannerpath5", this.bannerpath5);
+      formData.append("bannerpath6", this.bannerpath6);
+      formData.append("bannerpath7", this.bannerpath7);
+      formData.append("bannerpath8", this.bannerpath8);
+      formData.append("bannerpath9", this.bannerpath9);
+      formData.append("bannerpath10", this.bannerpath10);
+      formData.append("bannerpath11", this.bannerpath11);
+      formData.append("bannerpath12", this.bannerpath12);
+      formData.append("bannerpath13", this.bannerpath13);
+      await this.$axios
+        .post("upload_best_values_photo", formData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      ).then(response => {
-      })
-      .catch(function(){
-        console.log('FAILURE!!');
-      });
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {})
+        .catch(function () {
+          console.log("FAILURE!!");
+        });
     },
-  }
-}
+  },
+};
 </script> 
