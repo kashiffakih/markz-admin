@@ -103,8 +103,9 @@ module.exports = {
   ],
 
   axios: {
-    baseURL: 'http://api.venkon.aaibuzz.com/api'
+    // baseURL: 'http://api.venkon.aaibuzz.com/api'
     // baseURL: 'http://192.168.29.9:8080/api'
+    baseURL: 'http://localhost:8080/api'
   },
   
   build: {

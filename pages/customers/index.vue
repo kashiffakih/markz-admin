@@ -76,7 +76,7 @@
                           </nuxt-link> -->
                         </td>
                         <td>
-                          <img style="width: 50px; height: 50px;" :src="mediaUrl + (emp.attachment ? emp.attachment : '/user.png')">
+                          <img style="width: 50px; height: 50px;" :src="mediaUrl + (emp.attachment ? emp.attachment : 'user.png')">
                           <br>
                           {{ emp.emp_code }}
                         </td>

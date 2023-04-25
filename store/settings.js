@@ -12,13 +12,10 @@ export const state = () => ({
     id: '',
     name: '',
   },
-  mediaUrl: 'http://api.venkon.aaibuzz.com/storage/',
-  baseUrl: 'http://api.venkon.aaibuzz.com/api',
-  // mediaUrl: 'http://localhost:8080/storage/',
-  // baseUrl: 'http://localhost:8080/api',
 
-  // mediaUrl: 'http://192.168.29.9:8080/storage/',
-  // baseUrl: 'http://192.168.29.9:8080/api',
+  mediaUrl: 'https://az1-medias.s3.ap-south-1.amazonaws.com/pinewraps/',
+  // baseUrl: 'http://api.aethon.aaibuzz.com/api',
+  baseUrl: 'http://localhost:8080/api',
 })
 
 export const getters = {
