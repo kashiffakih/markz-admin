@@ -80,4 +80,5 @@ dist
 # IDE
 .idea
 
+nuxt.config.js
 
