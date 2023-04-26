@@ -1,8 +1,8 @@
 #!/bin/bash
 export PATH="$PATH:"/usr/local/bin/
-cd /var/www/vhosts/venkon1/venkon1-client
+cd /var/www/vhosts/pw/pinewraps-client
 
 npm run build
 
-pm2 delete venkon-client 
-pm2 start npm --name venkon-client -- start
+pm2 delete pinewraps-client 
+pm2 start npm --name pinewraps-client -- start
