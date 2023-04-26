@@ -4,6 +4,7 @@ export const state = () => ({
   user: null
 })
 
+
 export const getters = {
   authenticated(state) {
     return state.loggedIn
