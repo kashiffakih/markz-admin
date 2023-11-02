@@ -194,8 +194,9 @@ export default {
             " [" +
             this.$auth.$state.user.roles[0].name +
             "]"
-          : this.$store.getters["settings/organization"].text +
-            " [By Super Admin]"
+          : this.$store.getters["settings/organization"]
+          ? this.$store.getters["settings/organization"].text
+          : "" + " [By Super Admin]"
         : "";
     },
     organizationId() {
