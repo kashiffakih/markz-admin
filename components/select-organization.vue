@@ -55,7 +55,9 @@ export default {
   asyncComputed: {},
   mounted() {
     this.getOrganizations();
-    this.organizationId = this.$store.getters["settings/organization"].value;
+    this.organizationId = this.$store.getters["settings/organization"]
+      ? this.$store.getters["settings/organization"].value
+      : "";
   },
   methods: {
     async getOrganizations() {
