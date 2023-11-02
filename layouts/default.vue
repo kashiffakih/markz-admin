@@ -57,8 +57,10 @@
         <nuxt-link to="/" class="brand-link" style="background-color: white">
           <img
             :src="
-              organization.logo_path
-                ? mediaUrl + organization.logo_path
+              organization
+                ? organization.logo_path
+                  ? mediaUrl + organization.logo_path
+                  : mediaUrl + 'company.png'
                 : mediaUrl + 'company.png'
             "
             alt="Logo"
