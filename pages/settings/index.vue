@@ -595,12 +595,12 @@ export default {
     }));
     let setting = await $axios.get(`/settings/1`);
     let form = setting.data.data == null ? {} : setting.data.data;
-    form.banner_1_tag_id = parseInt(form.banner_1_tag_id)
-    form.banner_2_tag_id = parseInt(form.banner_2_tag_id)
-    form.banner_3_tag_id = parseInt(form.banner_3_tag_id)
-    form.banner_4_tag_id = parseInt(form.banner_4_tag_id)
-    form.banner_5_tag_id = parseInt(form.banner_5_tag_id)
-    form.banner_6_tag_id = parseInt(form.banner_6_tag_id)
+    form.banner_1_tag_id = parseInt(form.banner_1_tag_id);
+    form.banner_2_tag_id = parseInt(form.banner_2_tag_id);
+    form.banner_3_tag_id = parseInt(form.banner_3_tag_id);
+    form.banner_4_tag_id = parseInt(form.banner_4_tag_id);
+    form.banner_5_tag_id = parseInt(form.banner_5_tag_id);
+    form.banner_6_tag_id = parseInt(form.banner_6_tag_id);
     return {
       organizations: organizations,
       form: form,
@@ -622,7 +622,9 @@ export default {
     loading: false,
   }),
   async mounted() {
-    this.organizationId = this.$store.getters["settings/organization"].value;
+    this.organizationId = this.$store.getters["settings/organization"]
+      ? this.$store.getters["settings/organization"].value
+      : "";
 
     let tags = await this.$axios.get(`/tags`);
     this.tags = [];
