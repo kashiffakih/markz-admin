@@ -1,10 +1,10 @@
 #!/bin/bash
 export PATH="$PATH:"/usr/local/bin/
-cd /var/www/vhosts/pw/pinewraps-client
+cd /var/www/vhosts/aadab/aadab-client
 
 npm run build
 
-pm2 delete pinewraps-client
-pm2 start npm --name pinewraps-client -- start
+pm2 delete aadab-client
+pm2 start npm --name aadab-client -- start
 
 
