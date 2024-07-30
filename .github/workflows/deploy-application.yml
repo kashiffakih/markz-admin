@@ -1,4 +1,4 @@
-name: Deploy Vuejs Application
+name: Deploy Nuxt Application
 
 on:
   push:
@@ -13,53 +13,210 @@ jobs:
       DEPLOYMENT_MATRIX: ${{ steps.export-deployment-matrix.outputs.DEPLOYMENT_MATRIX }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 16
 
       - name: Install npm dependencies
         run: |
           apiPath=`cat ./deployment-config.json | jq -c '.[0].apiPath'`
           mediaPath=`cat ./deployment-config.json | jq -c '.[0].mediaPath'`
-          basePath=`cat ./deployment-config.json | jq -c '.[0].basePath'`
           echo $apiPath
           echo $mediaPath
-          echo $basePath
 
-          cd src
-          touch axios.js
+          touch nuxt.config.js
           echo "
-              import store from '@/store'
-              import axios from 'axios'
+            const pkg = require('./package')
 
-              axios.defaults.baseURL = "$apiPath";
-              store.dispatch('settings/setMediaUrl', "$mediaPath")
-              store.dispatch('settings/setBaseUrl', "$basePath")
+            module.exports = {
+              target: 'static',
 
-              axios.interceptors.request.use(config => {
-                  store.dispatch('errors/setErrors', {})
-                  store.dispatch('errors/setStatus', {})
-                  return config
-              }, error => {
-                  return Promise.reject(error)
-              })
+              /*
+              ** Headers of the page
+              */
+              head: {
+                title: pkg.name,
+                meta: [
+                  { charset: 'utf-8' },
+                  { name: 'viewport', content: 'width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' },
+                  { hid: 'description', name: 'description', content: pkg.description }
+                ],
+                link: [
+                  { rel: 'stylesheet', href: '/plugins/fontawesome-free/css/all.min.css' },
+                  { rel: 'stylesheet', href: 'https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css' },
+                  { rel: 'stylesheet', href: '/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' },
+                  { rel: 'stylesheet', href: '/dist/css/adminlte.min.css' },
+                  { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700' },
+                ],
+                script: [
+                  { src: '/plugins/jquery/jquery.min.js' },
+                  { src: '/plugins/bootstrap/js/bootstrap.bundle.min.js' },
+                  { src: '/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js' },
+                  { src: '/plugins/inputmask/min/jquery.inputmask.bundle.min.js' },
+                  { src: '/plugins/jquery-mousewheel/jquery.mousewheel.js' },
+                  { src: '/plugins/raphael/raphael.min.js' },
+                  { src: '/plugins/jquery-mapael/jquery.mapael.min.js' },
+                  { src: '/plugins/jquery-mapael/maps/usa_states.min.js' },
+                  { src: '/plugins/chart.js/Chart.min.js' },
+                  { src: '/dist/js/pages/dashboard2.js' },
+                  { src: '/dist/js/demo.js' },
+                ]
+              },
+
+              /*
+              ** Customize the progress-bar color
+              */
+              loading: { 
+                continuous: 'true',
+                color: 'red',
+                height: '4px'
+              },
+
+              /*
+              ** Global CSS
+              */
+              css: [
+              ],
+
+              router: {
+                middleware: [
+                  'clearValidationErrors',
+                  'auth',
+                  'organization'
+                ]
+              },
+
+              /*
+              ** Plugins to load before mounting the App
+              */
+              plugins: [
+                '@/plugins/mixins/validation',
+                '@/plugins/mixins/auth',
+                '@/plugins/mixins/settings',
+                '@/plugins/axios',
+                '@/plugins/charts',
+                '@/plugins/asyncComputed',
+                '@/plugins/vue-select',
+                '@/plugins/mask',
+                { src: '@/plugins/carousel3d', ssr: false },
+                { src: '@/plugins/vue-json-excel', ssr: false },
+                { src: '@/plugins/vue2-google-maps.js', ssr: false},
+                { src: '@/plugins/datepicker', ssr: false }
+              ],
+
+              auth: {
+                strategies: {
+                  local: {
+                    endpoints: {
+                      login: {url: '/login', method: 'post', propertyName: 'token'},
+                      logout: {url: '/logout', method: 'get'},
+                      user: {url: '/me', method: 'get', propertyName: 'data'},
+                    }
+                  }
+                },
+                redirect: {
+                  login: '/auth/login',
+                  logout: '/auth/login',
+                  home: '/'
+                }
+              },
+
+              /*
+              ** Nuxt.js modules
+              */
+              modules: [
+                // Doc: https://github.com/nuxt-community/axios-module#usage
+                '@nuxtjs/axios',
+                '@nuxtjs/auth'
+              ],
+
+              axios: {
+                baseURL: $apiPath
+              },
               
-              axios.interceptors.response.use((response) => {
-                  return response
-              }, error => {
-                  const errors = error.response.data.errors
-                  Object.keys(errors).forEach((key) => {
-                      errors[key] = errors[key][0]
-                  })
-                  store.dispatch('errors/setErrors', errors)
-                  store.dispatch('errors/setStatus', error.response.status)
-                  return Promise.reject(error)
-              })" > axios.js
+              build: {
+                /*
+                ** You can extend webpack config here    qqqq
+                */
+                extend(config, ctx) {
+                  transpile: [/^vue2-google-maps($|\/)/]
+                },
+              },
+            }
+            //
+            " > nuxt.config.js
+
+          cd store
+          touch settings.js
+          echo "
+            export const state = () => ({
+              baseColor: 'blue',
+              baseHeight: '50px',
+              darkStatus: true,
+              organization: {
+                value: '',
+                text: '',
+                time_zone: '',
+                logo_path: '',
+              },
+              city: {
+                id: '',
+                name: '',
+              },
+              mediaUrl: $mediaPath,
+              baseUrl: $apiPath,
+            })
+            
+            export const getters = {
+              baseColor(state) {
+                return state.baseColor;
+              },
+              baseHeight(state) {
+                return state.baseHeight;
+              },
+              darkStatus(state) {
+                return state.darkStatus;
+              },
+              city(state) {
+                return state.city;
+              },
+              organization(state) {
+                return state.organization;
+              },
+              mediaUrl(state) {
+                return state.mediaUrl;
+              },
+              baseUrl(state) {
+                return state.baseUrl;
+              },
+            }
+            
+            export const mutations = {
+              SET_ORGANIZATION(state, organization) {
+                state.organization = organization
+              },
+              SET_CITY(state, city) {
+                state.city = city;
+              }
+            }
+            
+            export const actions = {
+              setOrganization({commit}, organization) {
+                commit('SET_ORGANIZATION', organization);
+              },
+              setCity({commit}, city) {
+                commit('SET_CITY', city);
+              }
+            }
+          " > settings.js
           cd ..
-          npm install --force
-          npm run build
+          npm install
+          npm run generate
 
       - name: Create deployment artifacts
         env:
           GITHUB_SHA: ${{ github.sha }}
-        run: tar -czf "${GITHUB_SHA}".tar.gz dist .htaccess
+        run: tar -czf "${GITHUB_SHA}".tar.gz dist static
 
       - name: Store artifacts for distribution
         uses: actions/upload-artifact@v4
@@ -170,6 +327,20 @@ jobs:
           script: |
             # To link the release path as the active release path
             ln -s -n -f $RELEASE_PATH $ACTIVE_RELEASE_PATH
+
+            # To add .htaccess
+            cd $ACTIVE_RELEASE_PATH
+            touch .htaccess
+            echo "
+              <ifModule mod_rewrite.c>
+                  RewriteEngine On
+                RewriteBase /
+                RewriteRule ^index\.html$ - [L]
+                RewriteCond %{REQUEST_FILENAME} !-f
+                RewriteCond %{REQUEST_FILENAME} !-d
+                RewriteRule . /index.html [L]
+              </ifModule>
+            " > .htaccess
 
             # This code is to generate the virtual host if it is not there
             if [ ! -e $VIRTUAL_HOST_FILE_PATH/$VIRTUAL_HOST_FILE ] || [ $REFRESH_VIRTUAL_HOST = true ]; then
