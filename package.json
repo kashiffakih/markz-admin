@@ -5,9 +5,9 @@
   "author": "VijayKadiyam",
   "private": true,
   "scripts": {
-    "dev": "NUXT_PORT=3061 nuxt",
-    "build": "NUXT_PORT=3061 nuxt build",
-    "start": "NUXT_PORT=3061 nuxt start",
+    "dev": "NUXT_PORT=3061 NODE_OPTIONS=--openssl-legacy-provider nuxt",
+    "build": "NUXT_PORT=3061 NODE_OPTIONS=--openssl-legacy-provider nuxt build",
+    "start": "NUXT_PORT=3061 NODE_OPTIONS=--openssl-legacy-provider nuxt start",
     "generate": "nuxt generate"
   },
   "dependencies": {

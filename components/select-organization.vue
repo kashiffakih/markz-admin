@@ -37,7 +37,7 @@ export default {
     organizations() {
       console.log(this.orgs);
       let organizations = [];
-      if (this.city.id)
+      if (this.city?.id)
         organizations = this.orgs.filter((org) => org.city_id == this.city.id);
       else organizations = this.orgs;
       organizations = organizations.map((organization) => ({

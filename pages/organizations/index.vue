@@ -186,7 +186,8 @@ export default {
     category_id: '',
     checkApproved: '',
     checkEnabled: '',
-    searchData: ''
+    searchData: '',
+    organizations: [],
   }),
   async mounted()  {
     let organizations = await this.$axios.get(`/companies?cityId=${this.city.id}`);

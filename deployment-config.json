@@ -13,10 +13,10 @@
         "serverName": "aadab.aaibuzz.com",
         "serverAlias": "",
         "serverAdmin": "kvjkumr@gmail.com",
-        "refreshVirtualHost": false,
+        "refreshVirtualHost": true,
         
         "basePath": "http://api.aadab.aaibuzz.com/",
         "apiPath": "http://api.aadab.aaibuzz.com/api",
-        "mediaPath": "https://az-do-bucket-1.blr1.cdn.digitaloceanspaces.com/"
+        "mediaPath": "https://az-do-bucket-1.blr1.cdn.digitaloceanspaces.com/Aadab/"
     }
 ]
