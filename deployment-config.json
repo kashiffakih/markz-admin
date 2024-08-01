@@ -13,7 +13,7 @@
         "serverName": "aadab.aaibuzz.com",
         "serverAlias": "",
         "serverAdmin": "kvjkumr@gmail.com",
-        "refreshVirtualHost": true,
+        "refreshVirtualHost": false,
         
         "basePath": "http://api.aadab.aaibuzz.com/",
         "apiPath": "http://api.aadab.aaibuzz.com/api",
