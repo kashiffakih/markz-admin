@@ -200,6 +200,7 @@
                             <th>Image 2</th>
                             <th>Image 3</th>
                             <th>Image 4</th>
+                            <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -256,6 +257,13 @@
                                 style="width: 70px; height: 70px; opacity: 0.8"
                                 class="brand-image img-circle elevation-3"
                               />
+                            </td>
+                            <td>
+                              <i
+                                class="fa fa-trash"
+                                style="color: red"
+                                @click="deleteImage(image.id)"
+                              ></i>
                             </td>
                           </tr>
                         </tbody>
@@ -655,6 +663,11 @@ export default {
         .catch(function () {
           console.log("FAILURE!!");
         });
+      this.getData();
+    },
+    deleteImage(product_image_id) {
+      let r = confirm("Are you sure you want to delete the data?");
+      if (r == true) this.$axios.patch(`/product_images/${product_image_id}`);
       this.getData();
     },
   },

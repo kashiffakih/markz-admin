@@ -95,7 +95,7 @@
                       <tr>
                         <th>Sr. No.</th>
                         <th>Actions</th>
-                        <th>Position</th>
+                        <!-- <th>Position</th> -->
                         <th>Photo</th>
                         <th>Name</th>
                         <th>Inventory</th>
@@ -135,7 +135,7 @@
                             >Add More Details</nuxt-link
                           >
                         </td>
-                        <td>{{ product.position }}</td>
+                        <!-- <td>{{ product.position }}</td> -->
                         <td>
                           <img
                             :src="
