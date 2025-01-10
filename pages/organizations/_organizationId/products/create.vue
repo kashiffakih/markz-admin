@@ -144,7 +144,11 @@
                   <div class="form-group">
                     <label class="form-label">Small Description</label>
 
-                    <Editor :data.sync="form.small_description"></Editor>
+                    <VueEditor v-model="form.small_description" />
+                    <!-- <editor
+                      :data="form.small_description"
+                      @updateHtml="updateHtml"
+                    ></editor> -->
 
                     <span class="help-block" v-if="errors.small_description">{{
                       errors.small_description[0]
@@ -152,7 +156,7 @@
                   </div>
                   <div class="form-group">
                     <label class="form-label">Long Description</label>
-                    <Editor :data.sync="form.description"></Editor>
+                    <VueEditor v-model="form.description" />
                     <!-- <textarea
                       type="text"
                       class="form-control"
@@ -165,7 +169,7 @@
                   </div>
                   <div class="form-group">
                     <label class="form-label">Long Description 2</label>
-                    <Editor :data.sync="form.description_1"></Editor>
+                    <VueEditor v-model="form.description_1" />
                     <!-- <textarea
                       type="text"
                       class="form-control"
@@ -178,7 +182,7 @@
                   </div>
                   <div class="form-group">
                     <label class="form-label">Long Description 3</label>
-                    <Editor :data.sync="form.description_2"></Editor>
+                    <VueEditor v-model="form.description_2" />
                     <!-- <textarea
                       type="text"
                       class="form-control"
@@ -253,8 +257,7 @@
 import BackButton from "@/components/back-button.vue";
 import "vue-select/dist/vue-select.css";
 import Countries from "@/components/countries.vue";
-import Editor from "../../../../components/editor.vue";
-
+import { VueEditor } from "vue2-editor";
 export default {
   name: "CreateProduct",
   async asyncData({ $axios, params }) {
@@ -328,7 +331,6 @@ export default {
   components: {
     BackButton,
     Countries,
-    Editor,
   },
   methods: {
     getSubCategories(categoryId) {

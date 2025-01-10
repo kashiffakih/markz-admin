@@ -1,7 +1,5 @@
-<!-- <template>
-  <section>
-    <ckeditor :editor="editor" v-model="html" :config="editorConfig"></ckeditor>
-  </section>
+<template>
+  <ckeditor :editor="editor" v-model="html" :config="editorConfig"></ckeditor>
 </template>
 
 <script type="text/javascript">
@@ -15,13 +13,15 @@ export default {
     editorConfig: {
       height: "800px",
       color: "red",
-      ckfinder: {},
+      ckfinder: {
+        uploadUrl:
+          "http://13.126.249.88:8088/ckfinder/connector?command=QuickUpload&type=Images&responseType=json",
+      },
     },
   }),
   props: ["data"],
   watch: {
-    html: "updateData",
-    data: "updateHtml",
+    html: "updateHtml",
   },
   created() {
     this.html = this.data;
@@ -32,64 +32,9 @@ export default {
     this.editor = ClassicEditor;
   },
   methods: {
-    updateData() {
-      this.$emit("update:data", this.html);
-    },
     updateHtml() {
-      this.html = this.data;
+      this.$emit("updateHtml", this.html);
     },
-  },
-};
-</script> -->
-<template>
-  <section>
-    <ckeditor
-      :editor="editor"
-      v-model="localHtml"
-      :config="editorConfig"
-    ></ckeditor>
-  </section>
-</template>
-
-<script type="text/javascript">
-import Vue from "vue";
-
-export default {
-  name: "Editor",
-  props: {
-    data: {
-      type: String,
-      default: "",
-    },
-  },
-  data: () => ({
-    localHtml: "",
-    editor: "",
-    editorConfig: {
-      height: "800px",
-      color: "red",
-      ckfinder: {},
-    },
-  }),
-  watch: {
-    localHtml(newVal) {
-      this.$emit("update:data", newVal);
-    },
-    data: {
-      immediate: true,
-      handler(newVal) {
-        this.localHtml = newVal;
-      },
-    },
-  },
-  created() {
-    this.localHtml = this.data;
-
-    const CKEDITOR = require("@ckeditor/ckeditor5-vue");
-    Vue.use(CKEDITOR);
-
-    const ClassicEditor = require("@ckeditor/ckeditor5-build-classic");
-    this.editor = ClassicEditor;
   },
 };
 </script>
