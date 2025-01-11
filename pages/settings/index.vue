@@ -60,7 +60,7 @@
                     </div> -->
 
                     <hr />
-                    <h5>Referrals and Cashbacks</h5>
+                    <h5>Referrals</h5>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
@@ -75,7 +75,7 @@
                           />
                         </div>
                       </div>
-                      <div class="col-md-6">
+                      <!-- <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label"
                             >Referral Amount to Referree (in Rs.)</label
@@ -125,6 +125,7 @@
                           />
                         </div>
                       </div>
+                      -->
                     </div>
 
                     <hr />
@@ -706,4 +707,4 @@ export default {
     },
   },
 };
-</script> 
+</script>
