@@ -331,6 +331,7 @@ export default {
   components: {
     BackButton,
     Countries,
+    VueEditor
   },
   methods: {
     getSubCategories(categoryId) {
