@@ -339,7 +339,7 @@ export default {
   components: {
     BackButton,
     Countries,
-    editor,
+    VueEditor,
   },
   methods: {
     getSubCategories(categoryId) {
