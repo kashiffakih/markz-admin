@@ -48,7 +48,7 @@
                     @input="getSub2Categories(category_id, sub_category_id)"
                   ></v-select>
                 </div>
-                <div class="col-sm-3">
+                <!-- <div class="col-sm-3">
                   <v-select
                     v-model="sub_2_category_id"
                     :reduce="(sub_2_category) => sub_2_category.code"
@@ -69,7 +69,7 @@
                     :options="sub_3_categories"
                     @input="filterProducts"
                   ></v-select>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
