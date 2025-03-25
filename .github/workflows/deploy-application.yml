@@ -148,7 +148,6 @@ jobs:
                 },
               },
             }
-            //
             " > nuxt.config.js
 
           cd store
