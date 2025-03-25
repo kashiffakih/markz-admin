@@ -147,9 +147,7 @@ jobs:
                   transpile: [/^vue2-google-maps($|\/)/]
                 },
               },
-            }
-            //
-            " > nuxt.config.js
+            }" > nuxt.config.js
 
           cd store
           touch settings.js
