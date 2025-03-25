@@ -72,7 +72,7 @@ jobs:
               ** Customize the progress-bar color
               */
               loading: { 
-                continuous: 'true',
+                continuous: true,
                 color: 'red',
                 height: '4px'
               },
@@ -136,7 +136,7 @@ jobs:
               ],
 
               axios: {
-                baseURL: $apiPath,
+                baseURL: "$apiPath"
               },
               
               build: {
@@ -144,7 +144,7 @@ jobs:
                 ** You can extend webpack config here    qqqq
                 */
                 extend(config, ctx) {
-                  transpile: [/^vue2-google-maps($|\/)/]
+                  transpile: [/^vue2-google-maps($|\/)/];
                 },
               },
             }
