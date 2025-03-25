@@ -143,9 +143,9 @@ jobs:
                 /*
                 ** You can extend webpack config here    qqqq
                 */
-               extend(config, ctx) {
-                  config.transpile = [/^vue2-google-maps($|\/)/]; // ✅ Fixed syntax
-                }
+                extend(config, ctx) {
+                  transpile: [/^vue2-google-maps($|\/)/];
+                },
               },
             }
             " > nuxt.config.js
