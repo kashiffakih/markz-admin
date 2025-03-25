@@ -136,7 +136,7 @@ jobs:
               ],
 
               axios: {
-                baseURL: $apiPath
+                baseURL: $apiPath,
               },
               
               build: {
