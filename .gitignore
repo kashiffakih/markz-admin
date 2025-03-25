@@ -82,4 +82,5 @@ typings/
 
 nuxt.config.js
 store/settings.js
+deployment-config.json
 

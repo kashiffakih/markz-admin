@@ -3,24 +3,29 @@ name: Deploy Nuxt Application
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   create-deployment-artifacts:
     name: Create deployment artifacts
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       DEPLOYMENT_MATRIX: ${{ steps.export-deployment-matrix.outputs.DEPLOYMENT_MATRIX }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Install Node.js and npm
+        uses: actions/setup-node@v3
         with:
           node-version: 16
 
+      - name: Retrieve deployment-config.json from Secrets
+        run: |
+          echo '${{ secrets.DEPLOYMENT_CONFIG }}' | jq '.' > deployment-config.json
+
       - name: Install npm dependencies
         run: |
-          apiPath=`cat ./deployment-config.json | jq -c '.[0].apiPath'`
-          mediaPath=`cat ./deployment-config.json | jq -c '.[0].mediaPath'`
+          apiPath=$(jq -r '.[0].apiPath' deployment-config.json)
+          mediaPath=$(jq -r '.[0].mediaPath' deployment-config.json)
           echo $apiPath
           echo $mediaPath
 
@@ -234,7 +239,7 @@ jobs:
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
 
   prepare-release-on-server:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: create-deployment-artifacts
     strategy:
       matrix:
@@ -273,7 +278,7 @@ jobs:
 
   run-before-hooks:
     name: "${{ matrix.server.name }}: Before hook"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [create-deployment-artifacts, prepare-release-on-server]
     strategy:
       matrix:
@@ -298,7 +303,7 @@ jobs:
 
   activate-release:
     name: "${{ matrix.server.name }}: Activate release"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs:
       [create-deployment-artifacts, prepare-release-on-server, run-before-hooks]
     strategy:
@@ -364,7 +369,7 @@ jobs:
 
   run-after-hooks:
     name: "${{ matrix.server.name }}: After hook"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs:
       [create-deployment-artifacts, prepare-release-on-server, activate-release]
     strategy:
@@ -389,7 +394,7 @@ jobs:
 
   clean-up:
     name: "${{ matrix.server.name }}: Clean up"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs:
       [
         create-deployment-artifacts,
