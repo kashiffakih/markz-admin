@@ -167,8 +167,8 @@ jobs:
                 id: '',
                 name: '',
               },
-              mediaUrl: $mediaPath,
-              baseUrl: $apiPath,
+              mediaUrl: '$mediaPath',
+              baseUrl: '$apiPath',
             })
             
             export const getters = {
