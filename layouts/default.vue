@@ -3,6 +3,8 @@
     class="hold-transition sidebar-mini layout-fixed"
     v-if="authenticated"
   >
+
+  
     <!-- Site wrapper -->
     <div class="wrapper">
       <!-- Navbar -->
