@@ -41,7 +41,7 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" data-toggle="dropdown" href="#">
-              <h3><b>FooDor</b></h3>
+              <h3><b style="color:black">Aadab</b></h3>
             </a>
           </li>
           <!-- <li class="nav-item">
