@@ -61,131 +61,132 @@
                           <br />
                           <div class="col-md-6">
                             <div class="form-group">
-                              <!-- <img
-                                :src="
-                                  product.imagepath1
-                                    ? mediaUrl + product.imagepath1
-                                    : '/product-vector.png'
-                                "
-                                style="
-                                  width: 100px;
-                                  height: 100px;
-                                  opacity: 0.8;
-                                "
-                                class="brand-image img-circle elevation-3"
-                              />
-                              <br />
-                              <br />
                               <label class="form-label"
-                                >Image 1 (This will be the profile image)</label
+                                >Image 1 (Primary Images) - Select multiple
+                                files</label
                               >
-                              <br /> -->
+                              <br />
                               <input
                                 type="file"
-                                id="file"
-                                name="file"
+                                id="imagepath"
+                                name="imagepath"
                                 ref="imagepath"
-                                accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf"
+                                accept="image/*"
                                 multiple
+                                class="form-control-file"
+                                @change="updateFileCount()"
                               />
+                              <small class="form-text text-muted"
+                                >You can select multiple images at once</small
+                              >
+                              <div v-if="fileCount.imagepath > 0" class="mt-1">
+                                <small class="text-success"
+                                  >✓ {{ fileCount.imagepath }} file(s)
+                                  selected</small
+                                >
+                              </div>
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group">
-                              <!-- <img
-                                :src="
-                                  product.imagepath2
-                                    ? mediaUrl + product.imagepath2
-                                    : '/product-vector.png'
-                                "
-                                style="
-                                  width: 100px;
-                                  height: 100px;
-                                  opacity: 0.8;
-                                "
-                                class="brand-image img-circle elevation-3"
-                              />
+                              <label class="form-label"
+                                >Image 2 (Secondary Images) - Select multiple
+                                files</label
+                              >
                               <br />
-                              <br />
-                              <label class="form-label">Image 2</label>
-                              <br /> -->
                               <input
                                 type="file"
-                                id="file"
-                                name="file"
+                                id="imagepath2"
+                                name="imagepath2"
                                 ref="imagepath2"
-                                accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf"
+                                accept="image/*"
                                 multiple
+                                class="form-control-file"
+                                @change="updateFileCount()"
                               />
+                              <small class="form-text text-muted"
+                                >You can select multiple images at once</small
+                              >
+                              <div v-if="fileCount.imagepath2 > 0" class="mt-1">
+                                <small class="text-success"
+                                  >✓ {{ fileCount.imagepath2 }} file(s)
+                                  selected</small
+                                >
+                              </div>
                             </div>
                           </div>
                         </div>
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group">
-                              <!-- <img
-                                :src="
-                                  product.imagepath3
-                                    ? mediaUrl + product.imagepath3
-                                    : '/product-vector.png'
-                                "
-                                style="
-                                  width: 100px;
-                                  height: 100px;
-                                  opacity: 0.8;
-                                "
-                                class="brand-image img-circle elevation-3"
-                              />
+                              <label class="form-label"
+                                >Image 3 (Detail Images) - Select multiple
+                                files</label
+                              >
                               <br />
-                              <br />
-                              <label class="form-label">Image 3</label>
-                              <br /> -->
                               <input
                                 type="file"
-                                id="file"
-                                name="file"
+                                id="imagepath3"
+                                name="imagepath3"
                                 ref="imagepath3"
-                                accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf"
+                                accept="image/*"
                                 multiple
+                                class="form-control-file"
+                                @change="updateFileCount()"
                               />
+                              <small class="form-text text-muted"
+                                >You can select multiple images at once</small
+                              >
+                              <div v-if="fileCount.imagepath3 > 0" class="mt-1">
+                                <small class="text-success"
+                                  >✓ {{ fileCount.imagepath3 }} file(s)
+                                  selected</small
+                                >
+                              </div>
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group">
-                              <!-- <img
-                                :src="
-                                  product.imagepath4
-                                    ? mediaUrl + product.imagepath4
-                                    : '/product-vector.png'
-                                "
-                                style="
-                                  width: 100px;
-                                  height: 100px;
-                                  opacity: 0.8;
-                                "
-                                class="brand-image img-circle elevation-3"
-                              />
+                              <label class="form-label"
+                                >Image 4 (Extra Images) - Select multiple
+                                files</label
+                              >
                               <br />
-                              <br />
-                              <label class="form-label">Image 4</label>
-                              <br /> -->
                               <input
                                 type="file"
-                                id="file"
-                                name="file"
+                                id="imagepath4"
+                                name="imagepath4"
                                 ref="imagepath4"
-                                accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf"
+                                accept="image/*"
                                 multiple
+                                class="form-control-file"
+                                @change="updateFileCount()"
                               />
+                              <small class="form-text text-muted"
+                                >You can select multiple images at once</small
+                              >
+                              <div v-if="fileCount.imagepath4 > 0" class="mt-1">
+                                <small class="text-success"
+                                  >✓ {{ fileCount.imagepath4 }} file(s)
+                                  selected</small
+                                >
+                              </div>
                             </div>
                           </div>
                         </div>
                         <button
                           class="btn btn-primary"
                           @click="handleFileUpload()"
+                          :disabled="loading || !unit_id"
                         >
-                          {{ loading ? "Saving..." : "Upload Images" }}
+                          <i v-if="loading" class="fas fa-spinner fa-spin"></i>
+                          {{ loading ? "Uploading..." : "Upload Images" }}
                         </button>
+                        <div v-if="!unit_id" class="mt-2">
+                          <small class="text-warning"
+                            >⚠️ Please select a unit first</small
+                          >
+                        </div>
                       </div>
                       <br />
                       <!-- <div class="row">
@@ -396,6 +397,12 @@ export default {
     distributorPrices: [],
     distributorOfferPrices: [],
     defaults: [],
+    fileCount: {
+      imagepath: 0,
+      imagepath2: 0,
+      imagepath3: 0,
+      imagepath4: 0,
+    },
   }),
   components: {
     ProductPack,
@@ -454,10 +461,7 @@ export default {
     async update() {
       this.loading = true;
       try {
-        let product = await this.$axios.patch(
-          `/products/${this.product.id}`,
-          this.form
-        );
+        await this.$axios.patch(`/products/${this.product.id}`, this.form);
         // this.handleFileUpload();
         this.loading = false;
         this.$router.push(`/organizations/${this.organization.value}/products`);
@@ -505,33 +509,91 @@ export default {
       this.product.product_packs = packs;
     },
     async handleFileUpload() {
-      this.imagepath = this.$refs.imagepath.files[0];
-      this.imagepath2 = this.$refs.imagepath2.files[0];
-      this.imagepath3 = this.$refs.imagepath3.files[0];
-      this.imagepath4 = this.$refs.imagepath4.files[0];
-      let formData = new FormData();
-      formData.append("productid", this.product.id);
-      formData.append("unitid", this.unit_id);
-      formData.append("imagepath", this.imagepath);
-      formData.append("imagepath2", this.imagepath2);
-      formData.append("imagepath3", this.imagepath3);
-      formData.append("imagepath4", this.imagepath4);
-      await this.$axios
-        .post("upload_product_attachment", formData, {
+      this.loading = true;
+
+      // Check if unit is selected
+      if (!this.unit_id) {
+        alert("Please select a unit before uploading images");
+        this.loading = false;
+        return;
+      }
+
+      // Get all files from all inputs
+      const imageFiles = {
+        imagepath: this.$refs.imagepath.files,
+        imagepath2: this.$refs.imagepath2.files,
+        imagepath3: this.$refs.imagepath3.files,
+        imagepath4: this.$refs.imagepath4.files,
+      };
+
+      // Check if any files are selected
+      const hasFiles = Object.values(imageFiles).some(
+        (fileList) => fileList.length > 0
+      );
+      if (!hasFiles) {
+        alert("Please select at least one image to upload");
+        this.loading = false;
+        return;
+      }
+
+      try {
+        // Create single FormData with all images
+        const formData = new FormData();
+        formData.append("productid", this.product.id);
+        formData.append("unitid", this.unit_id);
+
+        // Add all files from each input to the same FormData
+        for (const [fieldName, fileList] of Object.entries(imageFiles)) {
+          if (fileList.length > 0) {
+            // Add all files from this input
+            for (let i = 0; i < fileList.length; i++) {
+              formData.append(fieldName, fileList[i]);
+            }
+          }
+        }
+
+        // Single API call with all images
+        await this.$axios.post("upload_product_attachment", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        })
-        .then((response) => {})
-        .catch(function () {
-          console.log("FAILURE!!");
         });
-      this.getData();
+
+        // Clear file inputs after successful upload
+        this.$refs.imagepath.value = "";
+        this.$refs.imagepath2.value = "";
+        this.$refs.imagepath3.value = "";
+        this.$refs.imagepath4.value = "";
+
+        // Reset file counts
+        this.fileCount = {
+          imagepath: 0,
+          imagepath2: 0,
+          imagepath3: 0,
+          imagepath4: 0,
+        };
+
+        // Refresh data to show new images
+        await this.getData();
+
+        alert("Images uploaded successfully!");
+      } catch (error) {
+        console.error("Upload failed:", error);
+        alert("Upload failed. Please try again.");
+      } finally {
+        this.loading = false;
+      }
     },
     deleteImage(product_image_id) {
       let r = confirm("Are you sure you want to delete the data?");
       if (r == true) this.$axios.patch(`/product_images/${product_image_id}`);
       this.getData();
+    },
+    updateFileCount() {
+      this.fileCount.imagepath = this.$refs.imagepath?.files?.length || 0;
+      this.fileCount.imagepath2 = this.$refs.imagepath2?.files?.length || 0;
+      this.fileCount.imagepath3 = this.$refs.imagepath3?.files?.length || 0;
+      this.fileCount.imagepath4 = this.$refs.imagepath4?.files?.length || 0;
     },
   },
 };

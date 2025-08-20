@@ -331,7 +331,7 @@ export default {
   components: {
     BackButton,
     Countries,
-    VueEditor
+    VueEditor,
   },
   methods: {
     getSubCategories(categoryId) {
@@ -388,14 +388,24 @@ export default {
     async store() {
       this.loading = true;
       try {
-        let admin = await this.$axios.post(`/products`, this.form);
-        this.admin = admin.data.data;
-        this.handleFileUpload();
+        let response = await this.$axios.post(`/products`, this.form);
+        this.admin = response.data.data;
+        const productId = response.data.data.id;
+
+        console.log("response", response);
+        console.log("product data", response.data.data);
+        console.log("product.id", productId);
+
+        if (this.$refs.size_chart_path.files[0]) {
+          await this.handleFileUpload();
+        }
+
         this.$router.push(
-          `/organizations/${this.organization.value}/products/${admin.id}/details`
+          `/organizations/${this.organization.value}/products/${productId}/details`
         );
         this.loading = false;
       } catch (e) {
+        console.error("Error creating product:", e);
         this.loading = false;
       }
     },
@@ -410,7 +420,9 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         })
-        .then((response) => {})
+        .then((response) => {
+          console.log("Size chart uploaded successfully", response);
+        })
         .catch(function () {
           console.log("FAILURE!!");
         });
