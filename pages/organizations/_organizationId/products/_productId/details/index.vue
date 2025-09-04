@@ -90,7 +90,7 @@
                           <div class="col-md-6">
                             <div class="form-group">
                               <label class="form-label"
-                                >Image 2 (Secondary Images) - Select multiple
+                                >Image 2 (Secondary Images) - Select
                                 files</label
                               >
                               <br />

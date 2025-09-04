@@ -75,19 +75,20 @@
                           />
                         </div>
                       </div>
-                      <!-- <div class="col-md-6">
+                      <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label"
-                            >Referral Amount to Referree (in Rs.)</label
+                            >Register bonus amount (in Rs.)</label
                           >
                           <input
                             type="number"
                             class="form-control"
-                            placeholder="Enter referral amount"
-                            v-model="form.referral_amount_to_referree"
+                            placeholder="Enter register bonus amount"
+                            v-model="form.register_bonus"
                           />
                         </div>
                       </div>
+                      <!-- 
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">Referral Min Amount</label>

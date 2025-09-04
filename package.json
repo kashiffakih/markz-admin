@@ -20,7 +20,7 @@
     "cross-env": "^5.2.1",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
-    "nuxt": "^2.10.2",
+    "nuxt": "^2.18.1",
     "v-mask": "^2.1.0",
     "vue-async-computed": "^3.9.0",
     "vue-carousel-3d": "^0.2.0",
