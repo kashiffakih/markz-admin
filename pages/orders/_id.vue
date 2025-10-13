@@ -7,12 +7,10 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">
-                <back-button
-                  :link="`/orders`"
-                  title="Hi"
-                >
-                </back-button>
+                
                 Order Details</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
@@ -194,18 +192,21 @@
         </div>
       </section>
       <!-- /.content -->
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
+import BackButton from "@/components/BackButton.vue";
 import 'vue-select/dist/vue-select.css';
 import moment from 'moment'
 
 export default {
   name: 'UpdateOrder',
+  components: {
+    BackButton
+  },
   async asyncData({$axios, params}) {
     let u = await $axios.get(`/users?role_id=6`)
     u = u.data.data
@@ -255,9 +256,7 @@ export default {
   data: () => ({
     loading: false
   }),
-  components: {
-    BackButton,
-  },
+  
   computed: {
     cost() {
       let cost = 0

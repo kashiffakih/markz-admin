@@ -7,11 +7,10 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">
-                <back-button
-                  :link="`/categories/${category.id}/sub-categories/${sub_category.id}/sub-2-categories`"
-                >
-                </back-button>{{ category.name }} / {{ sub_category.name }} / Sub 3 Categories</h1>
+                {{ category.name }} / {{ sub_category.name }} / Sub 3 Categories</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -85,16 +84,18 @@
         </div>
       </section>
       <!-- /.content -->
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
-
+import BackButton from "@/components/BackButton.vue";
 export default {
   name: 'ManageSub3Categories',
+  components: {
+    BackButton
+  },
   data:() =>  ({
     searchData: '',
     category: {},
@@ -105,9 +106,7 @@ export default {
   mounted() {
     this.getData()
   },
-  components: {
-    BackButton,
-  },
+  
   methods: {
     async getData() {
       this.category = {}

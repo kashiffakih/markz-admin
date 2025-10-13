@@ -7,12 +7,10 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">
-                <back-button
-                  :link="`/organizations/${organization.value}/orders`"
-                  title="Hi"
-                >
-                </back-button>
+                
                 Order Details</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
@@ -194,87 +192,23 @@
         </div>
       </section>
       <!-- /.content -->
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
+import BackButton from "@/components/BackButton.vue";
 import 'vue-select/dist/vue-select.css';
 import moment from 'moment'
 import Countries from '@/components/countries.vue'
 
 export default {
   name: 'CreateOrder',
-  async asyncData({$axios, params}) {
-    let u = await $axios.get(`/users?role_id=6`)
-    u = u.data.data
-    let users = []
-    users.push({
-      label: 'Select User',
-      code: '',
-    })
-    u.forEach((user) => {
-      users.push({
-        label: user.first_name + ' ' + user.middle_name + ' ' + user.last_name,
-        code: user.id,
-      })
-    })
-    let p = await $axios.get(`/products`)
-    p = p.data.data
-    let products = []
-    products.push({
-      label: 'Select Product',
-      code: '',
-    })
-    p.forEach((product) => {
-      let price = product.product_prices.find(price => price.is_default  == true)
-      if(price)
-        products.push({
-          code: product.id,
-          label: product.name + '(' + price.product_pack.value + ' ' + price.product_pack.unit.name + ')',
-          price: price.offer_price || price.price,
-          unit: price.product_pack.unit.name,
-          unit_id: price.product_pack.unit.id,
-          product_pack: price.product_pack.value + ' ' + price.product_pack.unit.name
-        })
-    })
-    return {
-      users: users,
-      products: products,
-    }
-  },
-  data: () => ({
-    form: {
-      user_id: '',
-      details: '',
-      order_cost: 0,
-      source: '',
-      state: '',
-      city: '',
-      order_details: []
-    },
-    user: {
-
-    },
-    userid: '',
-    loading: false
-  }),
   components: {
     BackButton,
-  },
-  computed: {
-    cost() {
-      let cost = 0
-      this.form.order_details.forEach(detail =>  {
-        cost += parseInt(detail.order_detail_cost)
-      })
-      return cost
-    }
-  },
-  components: {
     Countries
+  
   },
   mounted() {
     this.addOrderDetail()

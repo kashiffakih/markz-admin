@@ -7,11 +7,10 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">
-                <back-button
-                  :link="`/offers`"
-                >
-                </back-button>
+                
                 Offers</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
@@ -147,18 +146,20 @@
         </div>
       </section>
       <!-- /.content -->
-
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
+import BackButton from "@/components/BackButton.vue";
 import moment from 'moment'
 
 export default {
   name: 'Offers',
+  components: {
+    BackButton
+  },
   async asyncData({$axios, params}) {
     let offer = await $axios.get(`/offers/${params.id}`)
     return {
@@ -175,9 +176,7 @@ export default {
   }),
   mounted() {
   },
-  components: {
-    BackButton,
-  },
+  
   methods: {
     customStartDateFormatter(date) {
       this.form.start_date = moment(date).format('DD-MM-YYYY');

@@ -1,5 +1,11 @@
 <template>
   <section>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Back Button -->
+      <div class="container-fluid" style="padding: 10px 0;">
+        <back-button />
+      </div>
     <GChart
       type="ColumnChart"
       :data="chartData"
@@ -20,11 +26,17 @@
       :data="barChartData"
       :options="chartOptions"
     />
+    </div>
+  <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
+import BackButton from "@/components/BackButton.vue";
 export default {
+  components: {
+    BackButton
+  },
   data () {
     return {
       // Array will be automatically processed with visualization.arrayToDataTable function

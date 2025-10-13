@@ -7,6 +7,8 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">Details</h1>
             </div>
             <!-- /.col -->
@@ -214,7 +216,7 @@
                           >
                             <td>{{ i + 1 }}</td>
 
-                            <td>{{ image.unit.name }}</td>
+                            <td>{{ image.unit ? image.unit.name : "N/A" }}</td>
                             <td>
                               <img
                                 :src="
@@ -356,10 +358,15 @@
 </template>
 
 <script type="text/javascript">
+import BackButton from "@/components/BackButton.vue";
 import ProductPack from "./pack.vue";
 
 export default {
   name: "ManageDetails",
+  components: {
+    BackButton,
+    ProductPack,
+  },
   async asyncData({ $axios, params }) {
     let org = await $axios.get(`/companies/${params.organizationId}`);
     org = org.data.data;
@@ -404,9 +411,7 @@ export default {
       imagepath4: 0,
     },
   }),
-  components: {
-    ProductPack,
-  },
+
   mounted() {
     this.getData();
   },

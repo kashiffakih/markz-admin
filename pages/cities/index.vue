@@ -7,6 +7,8 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">Locations</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
@@ -79,14 +81,18 @@
         </div>
       </section>
       <!-- /.content -->
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
+import BackButton from "@/components/BackButton.vue";
 export default {
   name: 'Managecities',
+  components: {
+    BackButton
+  },
   data:() =>  ({
     searchData: '',
     items: [],

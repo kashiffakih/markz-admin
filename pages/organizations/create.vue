@@ -7,6 +7,8 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">Organizations</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
@@ -509,19 +511,21 @@
         </div>
       </section>
       <!-- /.content -->
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
-
+import BackButton from "@/components/BackButton.vue";
 import moment from 'moment'
 import moment_timezone from 'moment-timezone'
 
 export default {
   name: 'CreateOrganization',
+  components: {
+    BackButton
+  },
   async asyncData({$axios, params}) {
     let categories = await $axios.get(`/categories`)
     let cities = await $axios.get(`/cities`)
@@ -547,9 +551,7 @@ export default {
     },
     time_zones: []
   }),
-  components: {
-    BackButton
-  },
+  
   mounted() {
     var timezones = moment.tz.names();
     for (var i = 0; i < timezones.length; i++) {

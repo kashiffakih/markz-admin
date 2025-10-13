@@ -7,6 +7,8 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">Settings</h1>
             </div>
             <!-- /.col -->
@@ -539,8 +541,45 @@
                         </div>
                       </div>
                     </div>
+                    <hr />
+                    <h5>Gulf Contact Details</h5>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Gulf Contact no</label>
+                          <input
+                            type="number"
+                            class="form-control"
+                            placeholder="Enter Gulf Contact no"
+                            v-model="form.gulf_contact_no"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Gulf WhatsApp no</label>
+                          <input
+                            type="number"
+                            class="form-control"
+                            placeholder="Enter Gulf WhatsApp no"
+                            v-model="form.gulf_whatsapp_no"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Gulf Email</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter Gulf Email"
+                            v-model="form.gulf_email"
+                          />
+                        </div>
+                      </div>
+                    </div>
 
-                    <h5>Delivery Riders</h5>
+                    <!-- <h5>Delivery Riders</h5>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
@@ -555,7 +594,7 @@
                           />
                         </div>
                       </div>
-                    </div>
+                    </div> -->
 
                     <button
                       class="btn btn-primary btn-block"
@@ -580,11 +619,14 @@
 </template>
 
 <script type="text/javascript">
-import BackButton from "@/components/back-button.vue";
+import BackButton from "@/components/BackButton.vue";
 import "vue-select/dist/vue-select.css";
 
 export default {
   name: "AdminSettings",
+  components: {
+    BackButton,
+  },
   async asyncData({ $axios }) {
     let organizations = await $axios.get("/companies");
     organizations = organizations.data.data.map((organization) => ({

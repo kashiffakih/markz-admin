@@ -1,5 +1,11 @@
 <template>
   <section>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Back Button -->
+      <div class="container-fluid" style="padding: 10px 0;">
+        <back-button />
+      </div>
     <no-ssr>
       <download-excel
         class   = "btn btn-default"
@@ -12,14 +18,20 @@
       </download-excel>
     </no-ssr>
     
+    </div>
+  <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
+import BackButton from "@/components/BackButton.vue";
 
 import Vue from 'vue'
 
 export default {
+  components: {
+    BackButton
+  },
   data: () => ({
     json_fields: {
         'Complete name': 'name',

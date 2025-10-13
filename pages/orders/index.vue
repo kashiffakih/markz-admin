@@ -7,6 +7,8 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">Orders</h1>
             </div>
             <!-- /.col -->
@@ -50,6 +52,16 @@
                         :reduce="(category) => category.code"
                         :options="categories"
                         @input="filter"
+                        placeholder="Select Category"
+                      ></v-select>
+                    </div>
+                    <div class="col-sm-3">
+                      <v-select
+                        v-model="order_status_id"
+                        :reduce="(status) => status.code"
+                        :options="order_statuses"
+                        @input="filter"
+                        placeholder="Select Order Status"
                       ></v-select>
                     </div>
                   </div>
@@ -58,12 +70,12 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Manage Orders</h3>
-                  &nbsp;&nbsp;
-                  <nuxt-link
+                  <!-- &nbsp;&nbsp; -->
+                  <!-- <nuxt-link
                     class="btn btn-sm btn-info float-sm-right"
                     :to="`/orders/create`"
                     >Add New</nuxt-link
-                  >
+                  > -->
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
@@ -73,10 +85,10 @@
                         <th>Sr. No.</th>
                         <!-- <th>Actions</th> -->
                         <th>Order Status</th>
-                        <th>Delivery Boy Details</th>
-                        <th>Store</th>
+                        <!-- <th>Delivery Boy Details</th>
+                        <th>Store</th> -->
                         <th>Order ID</th>
-                        <th>User</th>
+                        <th>Customer</th>
                         <th>Order Details</th>
                         <th>Order Cost</th>
                         <th>Order Payment</th>
@@ -109,7 +121,7 @@
                           <table>
                             <tbody>
                               <tr>
-                                <td>Order Received</td>
+                                <td>Order Placed</td>
                                 <td>
                                   {{ order.created_at }}
                                 </td>
@@ -141,15 +153,15 @@
                           >
                             Update Status
                           </nuxt-link>
-                          <nuxt-link
+                          <!-- <nuxt-link
                             v-if="order.is_approved_by_hotelier"
                             class="btn btn-sm btn-info"
                             :to="`/orders/${order.id}/delivery-boys/create`"
                           >
                             Assign Delivery Rider
                           </nuxt-link>
-                          <br /><br />
-                          <input
+                          <br /><br /> -->
+                          <!-- <input
                             type="radio"
                             @change="approveOrder(order, 0)"
                             value="0"
@@ -171,9 +183,9 @@
                             value="2"
                             v-model="order.is_approved_by_hotelier"
                           />
-                          Is Rejected by Hotelier
+                          Is Rejected by Hotelier -->
                         </td>
-                        <td>
+                        <!-- <td>
                           {{
                             order.delivery_boy
                               ? order.delivery_boy.first_name
@@ -190,11 +202,9 @@
                             >Not Accepted</span
                           >
                         </td>
-                        <td>{{ order.company ? order.company.name : "" }}</td>
+                        <td>{{ order.company ? order.company.name : "" }}</td> -->
                         <td>
                           {{ order.id }}
-                          <br />
-                          {{ order.is_dinein == 1 ? "(Dine In)" : "" }}
                         </td>
                         <td>
                           {{
@@ -207,11 +217,17 @@
                               : ""
                           }}
                           <br />
-                          <b>Role: </b> {{ order.user.roles[0].name }}
-                          <br />
+                          <!-- <b>Role: </b>
+                          {{
+                            order.user.roles && order.user.roles.length > 0
+                              ? order.user.roles[0].name
+                              : "N/A"
+                          }}
+                          <br /> -->
                           <b>Phone: </b>
                           {{ order.user ? order.user.phone || "" : "" }}
                           <br />
+                          <b>Address: </b>
                           {{
                             order.address
                               ? (order.address.add_1 || "") +
@@ -237,15 +253,6 @@
                                 " " +
                                 (order.user.pincode || "")
                           }}
-                          <br />
-                          <b>Location: </b>
-                          {{
-                            order.user
-                              ? order.user.location
-                                ? order.user.location.name
-                                : ""
-                              : ""
-                          }}
                         </td>
                         <td>
                           <table>
@@ -253,7 +260,8 @@
                               <tr>
                                 <th>Sr No</th>
                                 <th>Name</th>
-                                <th>Pack</th>
+                                <th>Colour</th>
+                                <th>Size</th>
                                 <th>Quantity</th>
                                 <th>Price</th>
                               </tr>
@@ -269,6 +277,7 @@
                                     detail.product ? detail.product.name : ""
                                   }}
                                 </td>
+                                <td>{{ detail.flavour }}</td>
                                 <td>{{ detail.product_pack }}</td>
                                 <td>{{ detail.quantity }}</td>
                                 <td>{{ detail.order_detail_cost }} INR</td>
@@ -277,7 +286,82 @@
                           </table>
                         </td>
                         <td>
-                          <table>
+                          <table v-if="order.taxBreakdown">
+                            <thead>
+                              <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>Item total</td>
+                                <td>Rs. {{ order.taxBreakdown.itemTotal }}</td>
+                              </tr>
+                              <tr v-if="order.taxBreakdown.isMaharashtra">
+                                <td>CGST 2.5%</td>
+                                <td>Rs. {{ order.taxBreakdown.cgst }}</td>
+                              </tr>
+                              <tr v-if="order.taxBreakdown.isMaharashtra">
+                                <td>SGST 2.5%</td>
+                                <td>Rs. {{ order.taxBreakdown.sgst }}</td>
+                              </tr>
+                              <tr v-else>
+                                <td>IGST 5%</td>
+                                <td>Rs. {{ order.taxBreakdown.igst }}</td>
+                              </tr>
+                              <tr>
+                                <td>Delivery charge</td>
+                                <td>Rs. {{ order.delivery_amount || "0" }}</td>
+                              </tr>
+                              <tr>
+                                <td>Packing charge</td>
+                                <td>Rs. {{ order.packaging_amount || "0" }}</td>
+                              </tr>
+                              <tr>
+                                <td>Coupon Value</td>
+                                <td>- Rs. {{ order.coupon_amount || "0" }}</td>
+                              </tr>
+                              <tr>
+                                <td>Wallet Amount Used</td>
+                                <td>
+                                  - Rs. {{ order.wallet_amount_used || "0" }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td colspan="2">
+                                  <hr
+                                    style="
+                                      border-top: 1px solid #ccc;
+                                      margin: 5px 0;
+                                    "
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td style="font-weight: bold">Grand Total</td>
+                                <td style="font-weight: bold">
+                                  Rs.
+                                  {{
+                                    order.order_cost
+                                      ? parseFloat(order.order_cost).toFixed(2)
+                                      : "0.00"
+                                  }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td colspan="2">
+                                  <hr
+                                    style="
+                                      border-top: 1px solid #ccc;
+                                      margin: 5px 0;
+                                    "
+                                  />
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <table v-else>
                             <thead>
                               <tr>
                                 <th>Name</th>
@@ -297,10 +381,6 @@
                                 </td>
                               </tr>
                               <tr>
-                                <td>Coupon</td>
-                                <td>- Rs. {{ order.coupon_amount }}</td>
-                              </tr>
-                              <tr>
                                 <td>Tax</td>
                                 <td>Rs. {{ order.tax_amount }}</td>
                               </tr>
@@ -309,12 +389,16 @@
                                 <td>Rs. {{ order.delivery_amount }}</td>
                               </tr>
                               <tr>
-                                <td>Tip</td>
-                                <td>Rs. {{ order.tip_amount }}</td>
+                                <td>Packing Chaarge</td>
+                                <td>Rs. {{ order.packaging_amount }}</td>
                               </tr>
                               <tr>
                                 <td>Wallet Amount Used</td>
                                 <td>- Rs. {{ order.wallet_amount_used }}</td>
+                              </tr>
+                              <tr>
+                                <td>Coupon</td>
+                                <td>- Rs. {{ order.coupon_amount }}</td>
                               </tr>
                               <tr>
                                 <td>Total Payable</td>
@@ -334,32 +418,56 @@
                             <tbody>
                               <tr>
                                 <td>Payment Mode</td>
-                                <td>{{ order.payment_mode }}</td>
+                                <td>
+                                  {{
+                                    order.paymentmode != null
+                                      ? order.paymentmode
+                                          .split(" - Transaction ID: ")
+                                          .map((str) => str.trim())[0]
+                                      : "N/A"
+                                  }}
+                                </td>
                               </tr>
                               <tr>
                                 <td>Payment Status</td>
-                                <td>{{ order.rpy_payment_status }}</td>
+                                <td>
+                                  {{
+                                    order.paymentmode != null
+                                      ? order.paymentmode.includes("Cash")
+                                        ? "Pending"
+                                        : "Done"
+                                      : "N/A"
+                                  }}
+                                </td>
                               </tr>
                               <tr>
-                                <td>Payment ID</td>
-                                <td>{{ order.rpy_payment_id }}</td>
+                                <td>Transaction ID</td>
+                                <td>
+                                  {{
+                                    order.paymentmode != null
+                                      ? order.paymentmode
+                                          .split(" - Transaction ID: ")
+                                          .map((str) => str.trim())[1]
+                                      : "N/A"
+                                  }}
+                                </td>
                               </tr>
-                              <tr>
+                              <!-- <tr>
                                 <td>Order Id</td>
                                 <td>{{ order.rpy_order_id }}</td>
-                              </tr>
-                              <tr>
+                              </tr> -->
+                              <!-- <tr>
                                 <td>Signature</td>
                                 <td>{{ order.rpy_signature }}</td>
-                              </tr>
-                              <tr>
+                              </tr> -->
+                              <!-- <tr>
                                 <td>Code</td>
                                 <td>{{ order.rpy_code }}</td>
-                              </tr>
-                              <tr>
+                              </tr> -->
+                              <!-- <tr>
                                 <td>Description</td>
                                 <td>{{ order.rpy_message }}</td>
-                              </tr>
+                              </tr> -->
                             </tbody>
                           </table>
                         </td>
@@ -382,11 +490,15 @@
 </template>
 
 <script type="text/javascript">
+import BackButton from "@/components/BackButton.vue";
 import moment from "moment";
-import moment_timezone from "moment-timezone";
+// import moment_timezone from "moment-timezone";
 
 export default {
   name: "ManageOrders",
+  components: {
+    BackButton,
+  },
   async asyncData({ $axios, params }) {
     let c = await $axios.get(`/categories`);
     c = c.data.data;
@@ -403,8 +515,29 @@ export default {
         sub_categories: cat.sub_categories,
       });
     });
+
+    // Fetch order statuses
+    let os = await $axios.get(`/statuses`);
+    os = os.data.data;
+    let order_statuses = [];
+    order_statuses.push({
+      label: "Select Order Status",
+      code: "",
+    });
+    order_statuses.push({
+      label: "Order Placed",
+      code: 0,
+    });
+    os.forEach((status) => {
+      order_statuses.push({
+        label: status.name,
+        code: status.id,
+      });
+    });
+
     return {
       categories: categories,
+      order_statuses: order_statuses,
     };
   },
   data: () => ({
@@ -416,12 +549,19 @@ export default {
     searchData: "",
     allItems: [],
     category_id: "",
+    order_status_id: "",
     isApproved: [],
   }),
-  mounted() {
-    this.getData();
-  },
   methods: {
+    isMaharashtraOrder(order) {
+      // Check if order has address, otherwise use user's address
+      const state = order.address
+        ? order.address.state
+        : order.user
+        ? order.user.state
+        : null;
+      return state?.toString() === "Maharashtra";
+    },
     async getData() {
       this.items = [];
       this.loading = true;
@@ -498,6 +638,22 @@ export default {
             this.convertToDubaiTime(status.created_at)
           ).format("DD-MM-YYYY hh:mm:ss");
         });
+
+        // Add tax calculation breakdown to each order
+        if (item.order_cost) {
+          const isMaharashtra = this.isMaharashtraOrder(item);
+          // Calculate the original cost before tax (assuming 5% GST)
+          const originalCost = item.order_cost / 1.05;
+          const taxAmount = item.order_cost - originalCost;
+
+          item.taxBreakdown = {
+            itemTotal: originalCost.toFixed(2),
+            isMaharashtra: isMaharashtra,
+            cgst: isMaharashtra ? (taxAmount / 2).toFixed(2) : null,
+            sgst: isMaharashtra ? (taxAmount / 2).toFixed(2) : null,
+            igst: isMaharashtra ? null : taxAmount.toFixed(2),
+          };
+        }
       });
       this.items = items;
       this.allItems = items;
@@ -507,17 +663,142 @@ export default {
       if (this.searchData != "") {
         this.loading = true;
         let items = await this.$axios.get(`/orders?search=${this.searchData}`);
-        this.items = items.data.data;
+        // this.items = items.data.data;
+        // this.allItems = items;
+        items = items.data.data;
+        items.forEach((item) => {
+          if (item.user == null) item.user = {};
+          else {
+            item.user.bill_prefix = item.user.bill_prefix
+              ? item.user.bill_prefix + ", "
+              : "";
+            item.user.bill_first_name = item.user.bill_first_name
+              ? item.user.bill_first_name + " "
+              : "";
+            item.user.bill_last_name = item.user.bill_last_name
+              ? item.user.bill_last_name + ", "
+              : "";
+            item.user.bill_flat_no = item.user.bill_flat_no
+              ? item.user.bill_flat_no + ", "
+              : "";
+            item.user.bill_building_name = item.user.bill_building_name
+              ? item.user.bill_building_name + ", "
+              : "";
+            item.user.bill_email = item.user.bill_email
+              ? item.user.bill_email + ", "
+              : "";
+            item.user.bill_phone = item.user.bill_phone
+              ? item.user.bill_phone + ", "
+              : "";
+            item.user.bill_street_name = item.user.bill_street_name
+              ? item.user.bill_street_name + ", "
+              : "";
+            item.user.bill_address = item.user.bill_address
+              ? item.user.bill_address + ", "
+              : "";
+            item.user.bill_other_details = item.user.bill_other_details
+              ? item.user.bill_other_details + ", "
+              : "";
+            item.user.bill_nationality = item.user.bill_nationality
+              ? item.user.bill_nationality + ", "
+              : "";
+
+            item.user.prefix = item.user.prefix ? item.user.prefix + ", " : "";
+            item.user.first_name = item.user.first_name
+              ? item.user.first_name + " "
+              : "";
+            item.user.last_name = item.user.last_name
+              ? item.user.last_name + ", "
+              : "";
+            item.user.flat_no = item.user.flat_no
+              ? item.user.flat_no + ", "
+              : "";
+            item.user.building_name = item.user.building_name
+              ? item.user.building_name + ", "
+              : "";
+            item.user.email = item.user.email ? item.user.email + ", " : "";
+            item.user.phone = item.user.phone ? item.user.phone + ", " : "";
+            item.user.street_name = item.user.street_name
+              ? item.user.street_name + ", "
+              : "";
+            item.user.address = item.user.address
+              ? item.user.address + ", "
+              : "";
+            item.user.other_details = item.user.other_details
+              ? item.user.other_details + ", "
+              : "";
+            item.user.nationality = item.user.nationality
+              ? item.user.nationality + ", "
+              : "";
+          }
+          item.created_at = moment(
+            this.convertToDubaiTime(item.created_at)
+          ).format("DD-MM-YYYY hh:mm:ss");
+          item.order_statuses.forEach((status) => {
+            status.created_at = moment(
+              this.convertToDubaiTime(status.created_at)
+            ).format("DD-MM-YYYY hh:mm:ss");
+          });
+
+          // Add tax calculation breakdown to each order
+          if (item.order_cost) {
+            const isMaharashtra = this.isMaharashtraOrder(item);
+            // Calculate the original cost before tax (assuming 5% GST)
+            const originalCost = item.order_cost / 1.05;
+            const taxAmount = item.order_cost - originalCost;
+
+            item.taxBreakdown = {
+              itemTotal: originalCost.toFixed(2),
+              isMaharashtra: isMaharashtra,
+              cgst: isMaharashtra ? (taxAmount / 2).toFixed(2) : null,
+              sgst: isMaharashtra ? (taxAmount / 2).toFixed(2) : null,
+              igst: isMaharashtra ? null : taxAmount.toFixed(2),
+            };
+          }
+        });
+        this.items = items;
         this.allItems = items;
         this.loading = false;
       }
     },
+    // filter() {
+    //   if (this.category_id)
+    //     this.items = this.allItems.filter(
+    //       (item) => item.company.category_id == this.category_id
+    //     );
+    //   else this.items = this.allItems;
+    // },
+
     filter() {
-      if (this.category_id)
-        this.items = this.allItems.filter(
-          (item) => item.company.category_id == this.category_id
+      let filteredItems = this.allItems;
+
+      // Apply category filter if category is selected
+      if (this.category_id) {
+        filteredItems = filteredItems.filter(
+          (item) =>
+            item.order_details &&
+            item.order_details &&
+            item.order_details.some(
+              (detail) =>
+                detail.product &&
+                detail.product.category_id === this.category_id
+            )
         );
-      else this.items = this.allItems;
+      }
+
+      // Apply order status filter if status is selected
+      if (this.order_status_id) {
+        filteredItems = filteredItems.filter(
+          (item) =>
+            item.order_statuses &&
+            item.order_statuses.some(
+              (status) =>
+                status.status && status.status.id === this.order_status_id
+            )
+        );
+      }
+
+      this.items = filteredItems;
     },
     async del(id) {
       let r = confirm("Are you sure you want to delete the data?");
@@ -525,10 +806,19 @@ export default {
       this.getData();
     },
     convertToDubaiTime(time) {
-      // construct a moment object
-      var m = moment.tz(time, this.fmt, this.time_zone);
+      // construct a moment object - handle multiple possible input formats
+      var m = moment(
+        time,
+        ["YYYY-MM-DD hh:mm:ss A", "YYYY-MM-DD HH:mm:ss", moment.ISO_8601],
+        true
+      );
 
-      // convert it to utc
+      if (!m.isValid()) {
+        // If the input format is invalid, return the original value
+        return time;
+      }
+
+      // convert to target timezone
       m.tz("Asia/Dubai");
 
       // format it for output
@@ -549,7 +839,7 @@ export default {
         } else {
           order.is_approved_by_hotelier = 0;
           order.delivery_boy_id = null;
-          order.is_delivery_boy_accepted = 0;
+          order.is.delivery_boy_accepted = 0;
         }
         await this.$axios.patch(`/orders/${order.id}`, order);
         alert("Done");
@@ -559,6 +849,9 @@ export default {
       //   order.is_approved_by_hotelier = !order.is_approved_by_hotelier
       // }
     },
+  },
+  mounted() {
+    this.getData();
   },
 };
 </script>

@@ -7,12 +7,10 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">
-                <back-button
-                  :link="`/delivery-users`"
-                  title="Hi"
-                >
-                </back-button>
+                
                 Delivery Rider Details</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
@@ -325,19 +323,22 @@
         </div>
       </section>
       <!-- /.content -->
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
+import BackButton from "@/components/BackButton.vue";
 import CountryCodes from '@/components/country-codes.vue'
 import 'vue-select/dist/vue-select.css';
 import moment from 'moment'
 
 export default {
   name: 'CreateUser',
+  components: {
+    BackButton
+  },
   async asyncData({$axios, params}) {
     let r = await $axios.get(`/roles`)
     r = r.data.data
@@ -376,10 +377,7 @@ export default {
     this.form.role_id = 5
     this.form.dob = moment().format('DD-MM-YYYY')
   },
-  components: {
-    BackButton,
-    CountryCodes
-  },
+  
   methods: {
     async store() {
       this.loading = true

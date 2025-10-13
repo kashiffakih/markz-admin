@@ -104,8 +104,6 @@
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
-
 export default {
   name: 'Reset Password',
   async asyncData({$axios, params}) { 
@@ -131,9 +129,7 @@ export default {
   }),
   mounted() {
   },
-  components: {
-    BackButton
-  },
+  components: {},
   methods: {
     async store() {
       try {

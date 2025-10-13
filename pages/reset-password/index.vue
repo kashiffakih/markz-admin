@@ -1,5 +1,9 @@
 <template>
   <section class="hold-transition login-page">
+    <!-- Back Button -->
+    <div style="padding: 10px;">
+      <back-button />
+    </div>
     <div class="login-box">
       <div class="login-logo">
         <nuxt-link to="/"><b>A</b>ETHON</nuxt-link>
@@ -74,7 +78,11 @@
 </template>
 
 <script type="text/javascript">
+import BackButton from "@/components/BackButton.vue";
 export default {
+  components: {
+    BackButton
+  },
   name: 'ResetPassword',
   middleware: 'guest',
   auth: false,

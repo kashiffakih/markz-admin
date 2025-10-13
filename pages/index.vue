@@ -1,7 +1,5 @@
 <template>
   <section>
-    
-    
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
@@ -108,8 +106,7 @@
           <!-- /.row -->
         </div>
       </section>
-
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>

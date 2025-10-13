@@ -19,8 +19,6 @@
 </template>
 
 <script type="text/javascript">
-import BackButton from "@/components/back-button.vue";
-
 export default {
   name: "AdminSettings",
   data: () => ({

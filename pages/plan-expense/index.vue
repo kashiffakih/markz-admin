@@ -1,5 +1,11 @@
 <template>
   <section>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Back Button -->
+      <div class="container-fluid" style="padding: 10px 0;">
+        <back-button />
+      </div>
     <span class="title">Plan and Expenses</span>
     <v-layout row wrap>
       <v-flex md3>
@@ -55,14 +61,20 @@
         <td>{{ props.item.battery }}</td>
       </template>
     </v-data-table>
+    </div>
+  <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
+import BackButton from "@/components/BackButton.vue";
 
 import Vue from 'vue'
 
 export default {
+  components: {
+    BackButton
+  },
   name: 'PlanAndExpenses',
   async asyncData({$axios}) { 
     let users = await $axios.get('/users?search=all');

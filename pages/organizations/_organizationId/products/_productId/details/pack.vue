@@ -1,5 +1,7 @@
 <template>
   <section class="content">
+    <!-- Back Button -->
+
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
@@ -216,7 +218,7 @@
                   >
                     <td>{{ i + 1 }}</td>
                     <td>{{ pack.value }}</td>
-                    <td>{{ pack.unit.name }}</td>
+                    <td>{{ pack.unit ? pack.unit.name : "N/A" }}</td>
                     <td>{{ product.name }}</td>
                     <td>{{ pack.points }}</td>
                     <td>
@@ -285,7 +287,11 @@
 </template>
 
 <script type="text/javascript">
+import BackButton from "@/components/BackButton.vue";
 export default {
+  components: {
+    BackButton,
+  },
   name: "ProductPack",
   data: () => ({
     packs: [],
@@ -398,15 +404,23 @@ export default {
           await this.$axios.delete(
             `/products/${this.product.id}/product_packs/${id}`
           );
+          alert("Pack deleted successfully");
           this.getData();
         } catch (e) {
           console.error("Error deleting pack:", e);
+          const message =
+            e.response?.data?.message ||
+            "An error occurred while deleting the pack";
+          alert(message);
         }
       }
     },
     emptyForm() {
+      // Preserve the selected unit_id to maintain dropdown selection
+      const preservedUnitId = this.form.unit_id;
+      
       this.form = {
-        unit_id: "",
+        unit_id: preservedUnitId, // Keep the selected unit
         is_default: false,
         value: "",
         points: "",

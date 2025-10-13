@@ -7,6 +7,8 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">Admin Details</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
@@ -78,16 +80,18 @@
         </div>
       </section>
       <!-- /.content -->
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
-
+import BackButton from "@/components/BackButton.vue";
 export default {
   name: 'CreateAdmin',
+  components: {
+    BackButton
+  },
   async asyncData({$axios, params}) {
     let organization = await $axios.get(`/companies/${params.organizationId}`)
     let company_designations = await $axios.get(`/companies/${params.organizationId}/company_designations`)
@@ -114,9 +118,7 @@ export default {
   mounted() {
     this.form.role_id = 2;
   },
-  components: {
-    BackButton
-  },
+  
   methods: {
     async store() {
       try {

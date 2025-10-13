@@ -7,13 +7,9 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-dark">
-                <back-button
-                  :link="`/organizations/${organization.value}/products`"
-                >
-                </back-button>
-                Product
-              </h1>
+              <back-button />
+
+              <h1 class="m-0 text-dark">Product</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -100,7 +96,7 @@
                       errors.sub_category_id[0]
                     }}</span>
                   </div>
-                  <!-- <div class="form-group">
+                  <div class="form-group">
                     <label class="form-label">Sub 2 Category</label>
                     <v-select
                       v-model="form.sub_2_category_id"
@@ -117,7 +113,7 @@
                     <span class="help-block" v-if="errors.sub_2_category_id">{{
                       errors.sub_2_category_id[0]
                     }}</span>
-                  </div> -->
+                  </div>
                   <!-- <div class="form-group">
                     <label class="form-label">Sub 3 Category</label>
                     <v-select
@@ -139,6 +135,30 @@
                     />
                     <span class="help-block" v-if="errors.name">{{
                       errors.name[0]
+                    }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Product Name (From Tally)</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Enter Product name (From Tally)"
+                      v-model="form.tally_product_name"
+                    />
+                    <span class="help-block" v-if="errors.tally_product_name">{{
+                      errors.tally_product_name[0]
+                    }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Return days</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      placeholder="Enter Return days"
+                      v-model="form.return_days"
+                    />
+                    <span class="help-block" v-if="errors.return_days">{{
+                      errors.return_days[0]
                     }}</span>
                   </div>
                   <div class="form-group">
@@ -254,12 +274,16 @@
 </template>
 
 <script type="text/javascript">
-import BackButton from "@/components/back-button.vue";
+import BackButton from "@/components/BackButton.vue";
 import "vue-select/dist/vue-select.css";
 import Countries from "@/components/countries.vue";
 import { VueEditor } from "vue2-editor";
 export default {
   name: "CreateProduct",
+  components: {
+    BackButton,
+    VueEditor,
+  },
   async asyncData({ $axios, params }) {
     let i = await $axios.get(`/inventories`);
     i = i.data.data;
@@ -328,11 +352,7 @@ export default {
   mounted() {
     this.form.user_id = this.user.id;
   },
-  components: {
-    BackButton,
-    Countries,
-    VueEditor,
-  },
+
   methods: {
     getSubCategories(categoryId) {
       this.sub_categories = [];

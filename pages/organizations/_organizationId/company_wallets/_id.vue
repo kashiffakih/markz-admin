@@ -7,11 +7,10 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">
-                <back-button
-                  :link="`/organizations/${organization.value}/company_wallets`"
-                >
-                </back-button>
+                
                 Company Wallet</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
@@ -79,17 +78,18 @@
         </div>
       </section>
       <!-- /.content -->
-
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
-
+import BackButton from "@/components/BackButton.vue";
 export default {
   name: 'UpdateCompanyWallet',
+  components: {
+    BackButton
+  },
   async asyncData({$axios, params}) {
     let user = await $axios.get(`/company_wallets/${params.id}`)
     return {
@@ -101,9 +101,7 @@ export default {
   }),
   mounted() {
   },
-  components: {
-    BackButton,
-  },
+  
   methods: {
     async store() {
       this.loading = true

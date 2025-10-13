@@ -7,6 +7,8 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">Products</h1>
             </div>
             <!-- /.col -->
@@ -189,16 +191,20 @@
         </div>
       </section>
       <!-- /.content -->
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
+import BackButton from "@/components/BackButton.vue";
 import "vue-select/dist/vue-select.css";
 
 export default {
   name: "Manageproducts",
+  components: {
+    BackButton
+  },
   async asyncData({ $axios, params }) {
     let c = await $axios.get(`/categories`);
     c = c.data.data;

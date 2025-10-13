@@ -7,11 +7,10 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">
-                <back-button
-                  :link="`/organizations/${organization.value}/slots`"
-                >
-                </back-button>
+                
                 Delivery Time Slot Dates</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
@@ -98,18 +97,20 @@
         </div>
       </section>
       <!-- /.content -->
-
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
+import BackButton from "@/components/BackButton.vue";
 import moment from 'moment'
 
 export default {
   name: 'CreateTag',
+  components: {
+    BackButton
+  },
   async asyncData({$axios, params}) {
     let slots = await $axios.get(`/delivery_time_slots`)
     return {
@@ -127,9 +128,7 @@ export default {
   }),
   mounted() {
   },
-  components: {
-    BackButton,
-  },
+  
   methods: {
     customFormatter(date) {
       this.form.date = moment(date).format('DD-MM-YYYY');

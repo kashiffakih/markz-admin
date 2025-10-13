@@ -1,9 +1,9 @@
 <template>
   <v-container fluid fill-height>
-    <back-button 
-      title="Go Back To Staffs"
-      link="/logins"
-    ></back-button>
+    <!-- Back Button -->
+    <div style="padding: 10px;">
+      <back-button />
+    </div>
     <v-layout align-center justify-center>
       <v-flex xs12 sm8 md6>
         <v-card class="elevation-12">
@@ -53,9 +53,11 @@
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
-
+import BackButton from "@/components/BackButton.vue";
 export default {
+  components: {
+    BackButton
+  },
   name: 'EditStaff',
   async asyncData({$axios, params}) {
     let staff = await $axios.get(`/users/${params.id}`)
@@ -77,9 +79,7 @@ export default {
       {text: 'Not Approved', value: '0'}
     ]
   }),
-  components: {
-    BackButton
-  },
+  
   methods: {
     async store() {
       let staff = await this.$axios.patch(`/users/${this.$route.params.id}`, this.form)

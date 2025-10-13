@@ -7,11 +7,10 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">
-                <back-button
-                  :link="`/categories`"
-                >
-                </back-button>
+                
                 {{ category.name }} / Sub Categories</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
@@ -87,16 +86,18 @@
         </div>
       </section>
       <!-- /.content -->
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
-
+import BackButton from "@/components/BackButton.vue";
 export default {
   name: 'ManageSubCategories',
+  components: {
+    BackButton
+  },
   // async asyncData({$axios, params}) {
   //   let category = await $axios.get(`/categories/${params.categoryId}`)
   //   return {
@@ -111,9 +112,7 @@ export default {
   mounted() {
     this.getData()
   },
-  components: {
-    BackButton,
-  },
+  
   methods: {
     async getData() {
       this.category = {}

@@ -1,5 +1,11 @@
 <template>
   <section>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Back Button -->
+      <div class="container-fluid" style="padding: 10px 0;">
+        <back-button />
+      </div>
     <span class="title">Manage Logins</span>
     <br><br>
     <v-data-table
@@ -26,11 +32,17 @@
         </td>
       </template>
     </v-data-table>
+    </div>
+  <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
+import BackButton from "@/components/BackButton.vue";
 export default {
+  components: {
+    BackButton
+  },
   name: 'ManageLogins',
   async asyncData({$axios}) { 
     let users = await $axios.get('/users?search=all');

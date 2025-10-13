@@ -3,8 +3,6 @@
     class="hold-transition sidebar-mini layout-fixed"
     v-if="authenticated"
   >
-
-  
     <!-- Site wrapper -->
     <div class="wrapper">
       <!-- Navbar -->
@@ -41,7 +39,7 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" data-toggle="dropdown" href="#">
-              <h3><b style="color:black">Aadab</b></h3>
+              <h3><b style="color: black">Aadab</b></h3>
             </a>
           </li>
           <!-- <li class="nav-item">
@@ -149,6 +147,7 @@
         <!-- /.sidebar -->
       </aside>
 
+      <!-- Page Content -->
       <nuxt></nuxt>
 
       <footer class="main-footer">
@@ -235,18 +234,18 @@ export default {
             link: "/organizations",
             permission: this.permissions.indexOf(5) != -1 ? true : false,
           },
-          {
-            name: "Permissions",
-            icon: "fas fa-shield-alt",
-            link: `/permissions`,
-            permission: this.permissions.indexOf(2) != -1 ? true : false,
-          },
-          {
-            name: "Pages",
-            icon: "fas fa-wrench",
-            link: `/details`,
-            permission: this.permissions.indexOf(2) != -1 ? true : false,
-          },
+          // {
+          //   name: "Permissions",
+          //   icon: "fas fa-shield-alt",
+          //   link: `/permissions`,
+          //   permission: this.permissions.indexOf(2) != -1 ? true : false,
+          // },
+          // {
+          //   name: "Pages",
+          //   icon: "fas fa-wrench",
+          //   link: `/details`,
+          //   permission: this.permissions.indexOf(2) != -1 ? true : false,
+          // },
           {
             name: "Statuses",
             icon: "fas fa-thermometer-half",
@@ -283,18 +282,18 @@ export default {
             link: `/cities`,
             permission: this.permissions.indexOf(3) != -1 ? true : false,
           },
-          {
-            name: "Offers",
-            icon: "fas fa-tags",
-            link: `/offers`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          {
-            name: "Delivery Riders",
-            icon: "fas fa-user-friends",
-            link: `/delivery-users`,
-            permission: this.permissions.indexOf(4) != -1 ? true : false,
-          },
+          // {
+          //   name: "Offers",
+          //   icon: "fas fa-tags",
+          //   link: `/offers`,
+          //   permission: this.permissions.indexOf(3) != -1 ? true : false,
+          // },
+          // {
+          //   name: "Delivery Riders",
+          //   icon: "fas fa-user-friends",
+          //   link: `/delivery-users`,
+          //   permission: this.permissions.indexOf(4) != -1 ? true : false,
+          // },
           {
             name: "Customers",
             icon: "fas fa-user-friends",
@@ -322,24 +321,24 @@ export default {
             //   { name: 'D2', link: '/b' }
             // ]
           },
-          {
-            name: "Users",
-            icon: "fas fa-user-friends",
-            link: `/organizations/${this.organizationId}/users`,
-            permission: this.permissions.indexOf(4) != -1 ? true : false,
-          },
-          {
-            name: "Reset Password",
-            icon: "fas fa-unlock-alt",
-            link: `/auth/reset-password`,
-            permission: this.permissions.indexOf(4) != -1 ? true : false,
-          },
-          {
-            name: "My CWallet",
-            icon: "fas fa-shield-alt",
-            link: `/organizations/${this.organizationId}/company_wallets`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
+          // {
+          //   name: "Users",
+          //   icon: "fas fa-user-friends",
+          //   link: `/organizations/${this.organizationId}/users`,
+          //   permission: this.permissions.indexOf(4) != -1 ? true : false,
+          // },
+          // {
+          //   name: "Reset Password",
+          //   icon: "fas fa-unlock-alt",
+          //   link: `/auth/reset-password`,
+          //   permission: this.permissions.indexOf(4) != -1 ? true : false,
+          // },
+          // {
+          //   name: "My CWallet",
+          //   icon: "fas fa-shield-alt",
+          //   link: `/organizations/${this.organizationId}/company_wallets`,
+          //   permission: this.permissions.indexOf(3) != -1 ? true : false,
+          // },
           {
             name: "Coupons",
             icon: "fas fa-shield-alt",
@@ -362,17 +361,17 @@ export default {
           },
         ],
       });
-      categories.push({
-        title: "Orders",
-        items: [
-          {
-            name: "Orders",
-            icon: "fas fa-credit-card",
-            link: `/organizations/${this.organizationId}/orders`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-        ],
-      });
+      // categories.push({
+      //   title: "Orders",
+      //   items: [
+      //     {
+      //       name: "Orders",
+      //       icon: "fas fa-credit-card",
+      //       link: `/organizations/${this.organizationId}/orders`,
+      //       permission: this.permissions.indexOf(3) != -1 ? true : false,
+      //     },
+      //   ],
+      // });
       categories.push({
         title: "Reports",
         items: [
@@ -465,5 +464,4 @@ table {
 .d-block {
   color: white !important;
 }
-</style>
 </style>

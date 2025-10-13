@@ -7,6 +7,8 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">Orders</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
@@ -169,17 +171,21 @@
         </div>
       </section>
       <!-- /.content -->
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
+import BackButton from "@/components/BackButton.vue";
 import moment from 'moment'
 import moment_timezone from 'moment-timezone'
 
 export default {
   name: 'ManageOrders',
+  components: {
+    BackButton
+  },
   data:() =>  ({
     searchData: '',
     items: [],

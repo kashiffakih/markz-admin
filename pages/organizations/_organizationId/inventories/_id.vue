@@ -7,11 +7,10 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">
-                <back-button
-                  :link="`/organizations/${organization.value}/inventories`"
-                >
-                </back-button>
+                
                 Inventory</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
@@ -79,18 +78,20 @@
         </div>
       </section>
       <!-- /.content -->
-
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
+import BackButton from "@/components/BackButton.vue";
 import 'vue-select/dist/vue-select.css';
 
 export default {
   name: 'CreateInventory',
+  components: {
+    BackButton
+  },
   async asyncData({$axios, params}) {
     let u = await $axios.get(`/units`)
     u = u.data.data
@@ -117,9 +118,7 @@ export default {
   mounted() {
     this.form.unit_id = parseInt(this.form.unit_id)
   },
-  components: {
-    BackButton,
-  },
+  
   methods: {
     async store() {
       this.loading = true

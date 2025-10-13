@@ -1,5 +1,9 @@
 <template>
   <div class="container">
+    <!-- Back Button -->
+    <div style="padding: 10px;">
+      <back-button />
+    </div>
     <div class="row justify-content-center">
       <div class="col-md-6">
         <div class="card">
@@ -56,9 +60,11 @@
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
-
+import BackButton from "@/components/BackButton.vue";
 export default {
+  components: {
+    BackButton
+  },
   name: 'MyProfile',
   async asyncData({$axios, store}) {
     let user = await $axios.get(`/users/${store.getters['auth/user'].id}`);
@@ -71,9 +77,7 @@ export default {
     imageName: '',
     imageFile: ''
   }),
-  components: {
-    BackButton
-  },
+  
   mounted() {
     this.form.role_id = this.form.roles[0].id
   },

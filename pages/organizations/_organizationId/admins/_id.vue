@@ -7,6 +7,8 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <back-button />
+
               <h1 class="m-0 text-dark">Admin Details</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
@@ -78,17 +80,18 @@
         </div>
       </section>
       <!-- /.content -->
-
-    </div>
+      </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
-import BackButton from '@/components/back-button.vue'
-
+import BackButton from "@/components/BackButton.vue";
 export default {
   name: 'UpdateAdmin',
+  components: {
+    BackButton
+  },
   async asyncData({$axios, params}) {
     let admin = await $axios.get(`/users/${params.id}`)
     admin = admin.data.data
@@ -116,9 +119,7 @@ export default {
       active: 1,
     },
   }),
-  components: {
-    BackButton
-  },
+  
   created() {
     this.form.active = 1
   },
