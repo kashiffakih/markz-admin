@@ -476,6 +476,48 @@
                   </table>
                 </div>
                 <!-- /.card-body -->
+                <div
+                  class="card-footer clearfix"
+                  v-if="meta && meta.last_page > 1"
+                >
+                  <ul class="pagination pagination-sm m-0 float-right">
+                    <li
+                      class="page-item"
+                      :class="{ disabled: meta.current_page <= 1 }"
+                    >
+                      <a
+                        class="page-link"
+                        href="#"
+                        @click.prevent="changePage(meta.current_page - 1)"
+                        >«</a
+                      >
+                    </li>
+                    <li
+                      class="page-item"
+                      v-for="n in getPaginationRange()"
+                      :key="n"
+                      :class="{ active: meta.current_page === n }"
+                    >
+                      <a
+                        class="page-link"
+                        href="#"
+                        @click.prevent="changePage(n)"
+                        >{{ n }}</a
+                      >
+                    </li>
+                    <li
+                      class="page-item"
+                      :class="{ disabled: meta.current_page >= meta.last_page }"
+                    >
+                      <a
+                        class="page-link"
+                        href="#"
+                        @click.prevent="changePage(meta.current_page + 1)"
+                        >»</a
+                      >
+                    </li>
+                  </ul>
+                </div>
               </div>
               <!-- /.card -->
             </div>
@@ -551,6 +593,9 @@ export default {
     category_id: "",
     order_status_id: "",
     isApproved: [],
+    meta: {}, // For storing pagination data
+    current_page: 1,
+    per_page: 10, // Default items per page
   }),
   methods: {
     isMaharashtraOrder(order) {
@@ -562,14 +607,43 @@ export default {
         : null;
       return state?.toString() === "Maharashtra";
     },
-    async getData() {
+    async getData(page = 1) {
       this.items = [];
       this.loading = true;
-      let items = await this.$axios.get(
-        `/orders?search=all&cityId=${this.city.id}`
-      );
-      items = items.data.data;
-      items.forEach((item) => {
+
+      // Build query parameters - using backend's expected format that triggers pagination
+      // The backend only applies pagination in the condition: ($request->page && $request->rowsPerPage != -1)
+      // which happens at the end of the if-else chain, so we need to avoid other conditions
+      let query = `/orders?page=${page}&rowsPerPage=${this.per_page}`;
+
+      // Add cityId as a separate parameter (if needed)
+      if (this.city && this.city.id) {
+        query += `&cityId=${this.city.id}`;
+      }
+
+      let response = await this.$axios.get(query);
+
+      // Handle response based on whether it includes pagination metadata
+      let data, meta;
+      if (response.data.data && response.data.meta) {
+        // Use Laravel's paginate response format
+        data = response.data.data;
+        meta = response.data.meta;
+      } else {
+        // Handle the old format without pagination
+        data = response.data.data;
+        // Create a basic meta object if backend doesn't provide it
+        meta = {
+          current_page: page,
+          last_page: 1, // This will be incorrect but prevents errors
+          per_page: this.per_page,
+          total: data.length,
+        };
+      }
+
+      this.meta = meta;
+
+      data.forEach((item) => {
         if (item.user == null) item.user = {};
         else {
           item.user.bill_prefix = item.user.bill_prefix
@@ -655,18 +729,22 @@ export default {
           };
         }
       });
-      this.items = items;
-      this.allItems = items;
+      this.items = data;
+      this.current_page = meta.current_page;
       this.loading = false;
     },
-    async search() {
+    async search(page = 1) {
       if (this.searchData != "") {
         this.loading = true;
-        let items = await this.$axios.get(`/orders?search=${this.searchData}`);
-        // this.items = items.data.data;
-        // this.allItems = items;
-        items = items.data.data;
-        items.forEach((item) => {
+        // Build query parameters for search - using backend's expected format
+        let query = `/orders?page=${page}&rowsPerPage=${this.per_page}&search=${this.searchData}`;
+        let response = await this.$axios.get(query);
+
+        // Extract items and pagination data
+        const { data, meta } = response.data;
+        this.meta = meta;
+
+        data.forEach((item) => {
           if (item.user == null) item.user = {};
           else {
             item.user.bill_prefix = item.user.bill_prefix
@@ -756,8 +834,8 @@ export default {
             };
           }
         });
-        this.items = items;
-        this.allItems = items;
+        this.items = data;
+        this.current_page = meta.current_page;
         this.loading = false;
       }
     },
@@ -835,7 +913,7 @@ export default {
         else if (approvedStatus == 2) {
           order.is_approved_by_hotelier = 2;
           order.delivery_boy_id = null;
-          order.is_delivery_boy_accepted = 0;
+          order.is.delivery_boy_accepted = 0;
         } else {
           order.is_approved_by_hotelier = 0;
           order.delivery_boy_id = null;
@@ -848,6 +926,35 @@ export default {
       // else {
       //   order.is_approved_by_hotelier = !order.is_approved_by_hotelier
       // }
+    },
+    async changePage(page) {
+      // Prevent changing to an invalid page
+      if (
+        page < 1 ||
+        page > this.meta.last_page ||
+        page === this.current_page
+      ) {
+        return;
+      }
+
+      // Determine whether to use search or regular data load
+      if (this.searchData) {
+        await this.search(page);
+      } else {
+        await this.getData(page);
+      }
+    },
+    getPaginationRange() {
+      // Create pagination range for display
+      const range = [];
+      const start = Math.max(1, this.current_page - 2);
+      const end = Math.min(this.meta.last_page, this.current_page + 2);
+
+      for (let i = start; i <= end; i++) {
+        range.push(i);
+      }
+
+      return range;
     },
   },
   mounted() {
