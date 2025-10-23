@@ -359,6 +359,12 @@ export default {
             link: `/organizations/${this.organizationId}/products`,
             permission: this.permissions.indexOf(3) != -1 ? true : false,
           },
+          {
+            name: "Bulk Upload",
+            icon: "fas fa-upload",
+            link: `/organizations/${this.organizationId}/products/bulk-upload`,
+            permission: this.permissions.indexOf(3) != -1 ? true : false,
+          },
         ],
       });
       // categories.push({
