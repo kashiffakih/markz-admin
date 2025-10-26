@@ -195,6 +195,7 @@
                     <th>Unit</th>
                     <th>Product</th>
                     <th>Points</th>
+                    <th>Qty</th>
                     <th>Customer Price</th>
                     <th>Customer Offer Price</th>
                     <th>Vendor Price</th>
@@ -221,6 +222,7 @@
                     <td>{{ pack.unit ? pack.unit.name : "N/A" }}</td>
                     <td>{{ product.name }}</td>
                     <td>{{ pack.points }}</td>
+                    <td>{{ pack.qty }}</td>
                     <td>
                       {{
                         pack.product_prices?.length &&
@@ -418,7 +420,7 @@ export default {
     emptyForm() {
       // Preserve the selected unit_id to maintain dropdown selection
       const preservedUnitId = this.form.unit_id;
-      
+
       this.form = {
         unit_id: preservedUnitId, // Keep the selected unit
         is_default: false,

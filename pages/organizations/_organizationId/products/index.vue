@@ -151,7 +151,7 @@
                         </td>
                         <td>{{ product.name }}</td>
                         <td>
-                          {{ product.inventory ? product.inventory.name : "" }}
+                          {{ product.qty ? product.qty : "0" }}
                         </td>
                         <td>
                           {{ product.category ? product.category.name : "" }}
@@ -191,7 +191,7 @@
         </div>
       </section>
       <!-- /.content -->
-      </div>
+    </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
@@ -203,7 +203,7 @@ import "vue-select/dist/vue-select.css";
 export default {
   name: "Manageproducts",
   components: {
-    BackButton
+    BackButton,
   },
   async asyncData({ $axios, params }) {
     let c = await $axios.get(`/categories`);
