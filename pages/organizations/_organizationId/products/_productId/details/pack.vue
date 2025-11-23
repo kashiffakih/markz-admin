@@ -191,6 +191,7 @@
                 <thead>
                   <tr>
                     <th>Sr</th>
+                    <th>Tally Product Name</th>
                     <th>Size</th>
                     <th>Unit</th>
                     <th>Product</th>
@@ -218,6 +219,7 @@
                     :key="`pack${i}`"
                   >
                     <td>{{ i + 1 }}</td>
+                    <td>{{ pack.tally_product_name ?? "N/A" }}</td>
                     <td>{{ pack.value }}</td>
                     <td>{{ pack.unit ? pack.unit.name : "N/A" }}</td>
                     <td>{{ product.name }}</td>

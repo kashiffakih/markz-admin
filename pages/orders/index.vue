@@ -278,7 +278,7 @@
                                   }}
                                 </td>
                                 <td>{{ detail.flavour }}</td>
-                                <td>{{ detail.product_pack }}</td>
+                                <td>{{ detail.product_pack.value }}</td>
                                 <td>{{ detail.quantity }}</td>
                                 <td>{{ detail.order_detail_cost }} INR</td>
                               </tr>
