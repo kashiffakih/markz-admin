@@ -66,8 +66,8 @@
                       <tr v-if="loading">
                         <td colspan="13">Loading...</td>
                       </tr>
-                      <tr v-for="(unit, i) in items" :key="`unit${i}`">
-                        <td>{{ i + 1 }}</td>
+                      <tr v-for="(unit, i) in paginatedItems" :key="`unit${i}`">
+                        <td>{{ (currentPage - 1) * perPage + i + 1 }}</td>
                         <td class="w-1">
                           <nuxt-link
                             title="Edit Details"
@@ -88,6 +88,14 @@
                   </table>
                 </div>
                 <!-- /.card-body -->
+                <Pagination
+                  v-if="items.length > 0"
+                  :total-items="items.length"
+                  :per-page="perPage"
+                  :current-page="currentPage"
+                  @page-changed="onPageChanged"
+                  @per-page-changed="onPerPageChanged"
+                />
               </div>
               <!-- /.card -->
             </div>
@@ -103,20 +111,38 @@
 
 <script type="text/javascript">
 import BackButton from "@/components/BackButton.vue";
+import Pagination from "@/components/Pagination.vue";
 export default {
   name: "ManageUnits",
   components: {
     BackButton,
+    Pagination,
   },
   data: () => ({
     searchData: "",
     items: [],
     loading: true,
+    currentPage: 1,
+    perPage: 10,
   }),
   mounted() {
     this.getData();
   },
+  computed: {
+    paginatedItems() {
+      const start = (this.currentPage - 1) * this.perPage;
+      const end = start + this.perPage;
+      return this.items.slice(start, end);
+    },
+  },
   methods: {
+    onPageChanged(page) {
+      this.currentPage = page;
+    },
+    onPerPageChanged(perPage) {
+      this.perPage = perPage;
+      this.currentPage = 1;
+    },
     async getData() {
       this.items = [];
       this.loading = true;

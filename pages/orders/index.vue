@@ -98,8 +98,11 @@
                       <tr v-if="loading">
                         <td colspan="13">Loading...</td>
                       </tr>
-                      <tr v-for="(order, i) in items" :key="`order${i}`">
-                        <td>{{ i + 1 }}</td>
+                      <tr
+                        v-for="(order, i) in paginatedItems"
+                        :key="`order${i}`"
+                      >
+                        <td>{{ (currentPage - 1) * perPage + i + 1 }}</td>
                         <!-- <td class="w-1"> -->
                         <!-- <a target="_blank" :href="`${baseUrl}/orders/${order.id}/invoice`">
                             Invoice
@@ -476,48 +479,14 @@
                   </table>
                 </div>
                 <!-- /.card-body -->
-                <div
-                  class="card-footer clearfix"
-                  v-if="meta && meta.last_page > 1"
-                >
-                  <ul class="pagination pagination-sm m-0 float-right">
-                    <li
-                      class="page-item"
-                      :class="{ disabled: meta.current_page <= 1 }"
-                    >
-                      <a
-                        class="page-link"
-                        href="#"
-                        @click.prevent="changePage(meta.current_page - 1)"
-                        >«</a
-                      >
-                    </li>
-                    <li
-                      class="page-item"
-                      v-for="n in getPaginationRange()"
-                      :key="n"
-                      :class="{ active: meta.current_page === n }"
-                    >
-                      <a
-                        class="page-link"
-                        href="#"
-                        @click.prevent="changePage(n)"
-                        >{{ n }}</a
-                      >
-                    </li>
-                    <li
-                      class="page-item"
-                      :class="{ disabled: meta.current_page >= meta.last_page }"
-                    >
-                      <a
-                        class="page-link"
-                        href="#"
-                        @click.prevent="changePage(meta.current_page + 1)"
-                        >»</a
-                      >
-                    </li>
-                  </ul>
-                </div>
+                <Pagination
+                  v-if="items.length > 0"
+                  :total-items="items.length"
+                  :per-page="perPage"
+                  :current-page="currentPage"
+                  @page-changed="onPageChanged"
+                  @per-page-changed="onPerPageChanged"
+                />
               </div>
               <!-- /.card -->
             </div>
@@ -533,6 +502,7 @@
 
 <script type="text/javascript">
 import BackButton from "@/components/BackButton.vue";
+import Pagination from "@/components/Pagination.vue";
 import moment from "moment";
 // import moment_timezone from "moment-timezone";
 
@@ -540,6 +510,7 @@ export default {
   name: "ManageOrders",
   components: {
     BackButton,
+    Pagination,
   },
   async asyncData({ $axios, params }) {
     let c = await $axios.get(`/categories`);
@@ -596,8 +567,24 @@ export default {
     meta: {}, // For storing pagination data
     current_page: 1,
     per_page: 10, // Default items per page
+    currentPage: 1,
+    perPage: 10,
   }),
+  computed: {
+    paginatedItems() {
+      const start = (this.currentPage - 1) * this.perPage;
+      const end = start + this.perPage;
+      return this.items.slice(start, end);
+    },
+  },
   methods: {
+    onPageChanged(page) {
+      this.currentPage = page;
+    },
+    onPerPageChanged(perPage) {
+      this.perPage = perPage;
+      this.currentPage = 1;
+    },
     isMaharashtraOrder(order) {
       // Check if order has address, otherwise use user's address
       const state = order.address
@@ -611,14 +598,23 @@ export default {
       this.items = [];
       this.loading = true;
 
-      // Build query parameters - using backend's expected format that triggers pagination
-      // The backend only applies pagination in the condition: ($request->page && $request->rowsPerPage != -1)
-      // which happens at the end of the if-else chain, so we need to avoid other conditions
-      let query = `/orders?page=${page}&rowsPerPage=${this.per_page}`;
+      // Build query parameters - get ALL orders for client-side pagination
+      // Use a large rowsPerPage value to get all records (backend doesn't support -1)
+      let query = `/orders?rowsPerPage=10000`;
 
       // Add cityId as a separate parameter (if needed)
       if (this.city && this.city.id) {
         query += `&cityId=${this.city.id}`;
+      }
+
+      // Add category filter to server-side query if selected
+      if (this.category_id) {
+        query += `&category_id=${this.category_id}`;
+      }
+
+      // Add order status filter to server-side query if selected
+      if (this.order_status_id) {
+        query += `&order_status_id=${this.order_status_id}`;
       }
 
       let response = await this.$axios.get(query);
@@ -730,6 +726,7 @@ export default {
         }
       });
       this.items = data;
+      this.allItems = data; // Store all items for filtering
       this.current_page = meta.current_page;
       this.loading = false;
     },
@@ -848,35 +845,10 @@ export default {
     // },
 
     filter() {
-      let filteredItems = this.allItems;
-
-      // Apply category filter if category is selected
-      if (this.category_id) {
-        filteredItems = filteredItems.filter(
-          (item) =>
-            item.order_details &&
-            item.order_details &&
-            item.order_details.some(
-              (detail) =>
-                detail.product &&
-                detail.product.category_id === this.category_id
-            )
-        );
-      }
-
-      // Apply order status filter if status is selected
-      if (this.order_status_id) {
-        filteredItems = filteredItems.filter(
-          (item) =>
-            item.order_statuses &&
-            item.order_statuses.some(
-              (status) =>
-                status.status && status.status.id === this.order_status_id
-            )
-        );
-      }
-
-      this.items = filteredItems;
+      // Reload data from server with the selected filters
+      // The getData method will include category_id and order_status_id in the API call
+      this.currentPage = 1; // Reset to first page when filtering
+      this.getData();
     },
     async del(id) {
       let r = confirm("Are you sure you want to delete the data?");
@@ -946,9 +918,12 @@ export default {
     },
     getPaginationRange() {
       // Create pagination range for display
+      if (!this.meta || !this.meta.last_page) return [];
       const range = [];
-      const start = Math.max(1, this.current_page - 2);
-      const end = Math.min(this.meta.last_page, this.current_page + 2);
+      const currentPage = this.meta.current_page || 1;
+      const lastPage = this.meta.last_page || 1;
+      const start = Math.max(1, currentPage - 2);
+      const end = Math.min(lastPage, currentPage + 2);
 
       for (let i = start; i <= end; i++) {
         range.push(i);

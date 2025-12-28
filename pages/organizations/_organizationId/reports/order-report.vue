@@ -11,17 +11,6 @@
 
               <h1 class="m-0 text-dark">Order Report ({{ date }})</h1>
               <br />
-              <client-only>
-                <download-excel
-                  class="btn btn-default"
-                  :data="excel_items"
-                  :fields="excel_fields"
-                  worksheet="Order Repoort"
-                  name="OrderReport.xls"
-                >
-                  <a href="#" class="download">export to excel</a>
-                </download-excel>
-              </client-only>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -45,51 +34,45 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
-              <div class="row">
-                <div
-                  class="col-md-2"
-                  style="
-                    background-color: white;
-                    border-radius: 5px;
-                    padding: 10px;
-                    margin: 10px;
-                  "
-                >
-                  <client-only>
-                    <date-picker
-                      placeholder="YYYY-MM-DD"
-                      :format="customDateFormatter"
-                      value="date"
-                    />
-                  </client-only>
-                </div>
-                <div
-                  class="col-md-2"
-                  style="
-                    background-color: white;
-                    border-radius: 5px;
-                    padding: 10px;
-                    margin: 10px;
-                  "
-                >
-                  <v-select
-                    v-model="status_id"
-                    :reduce="(status) => status.code"
-                    :options="statuses"
-                  ></v-select>
-                </div>
-                <div
-                  class="col-md-2"
-                  style="
-                    background-color: white;
-                    border-radius: 5px;
-                    padding: 10px;
-                    margin: 10px;
-                  "
-                >
-                  <button class="btn btn-sm btn-info btn-block" @click="search">
-                    Search
-                  </button>
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <client-only>
+                        <date-picker
+                          placeholder="YYYY-MM-DD"
+                          :format="customDateFormatter"
+                          value="date"
+                        />
+                      </client-only>
+                    </div>
+                    <div class="col-md-3">
+                      <v-select
+                        v-model="status_id"
+                        :reduce="(status) => status.code"
+                        :options="statuses"
+                      ></v-select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                      <button class="btn btn-primary btn-block" @click="search">
+                        Search
+                      </button>
+                    </div>
+                    <!-- Premium Export Button -->
+                    <div class="col-md-2 d-flex align-items-end">
+                      <client-only>
+                        <download-excel
+                          class="btn btn-excel btn-block"
+                          :data="excel_items"
+                          :fields="excel_fields"
+                          worksheet="Order Report"
+                          name="OrderReport.xls"
+                        >
+                          <i class="fas fa-file-excel mr-2"></i> Export
+                        </download-excel>
+                      </client-only>
+                    </div>
+                  </div>
                 </div>
               </div>
               <br />
@@ -97,7 +80,7 @@
                 <div class="card-header">
                   <h3 class="card-title">Order Report</h3>
                   <h3 class="card-title float-sm-right">
-                    Total Earnings: {{ totalEarnings }} AED
+                    Total Earnings: {{ totalEarnings }} Rupees
                   </h3>
                 </div>
                 <!-- /.card-header -->
@@ -145,14 +128,14 @@
                                   }}
                                 </td>
                                 <td>{{ detail.quantity }}</td>
-                                <td>{{ detail.order_detail_cost }} AED</td>
+                                <td>{{ detail.order_detail_cost }} ₹</td>
                               </tr>
                             </tbody>
                           </table>
                         </td>
                         <td>{{ order.details }}</td>
                         <td>{{ order.created_at }}</td>
-                        <td>{{ order.order_cost }} AED</td>
+                        <td>{{ order.order_cost }} ₹</td>
                         <td>
                           {{
                             order.order_statuses.length == 0
@@ -166,7 +149,9 @@
                                 :key="`status${d}`"
                               >
                                 <td>
-                                  {{ status.status ? status.status.name : 'N/A' }}
+                                  {{
+                                    status.status ? status.status.name : "N/A"
+                                  }}
                                 </td>
                               </tr>
                             </tbody>
@@ -285,11 +270,11 @@ export default {
           order_details: `
             ${order.order_details.map((detail) => {
               return (
-                (detail.product ? detail.product.name : 'N/A') +
+                (detail.product ? detail.product.name : "N/A") +
                 "( " +
                 detail.quantity +
                 " " +
-                (detail.unit ? detail.unit.name : 'N/A') +
+                (detail.unit ? detail.unit.name : "N/A") +
                 ")<br>"
               );
             })}
@@ -299,7 +284,7 @@ export default {
           order_cost: order.order_cost,
           order_status: `
             ${order.order_statuses.map((status) => {
-              return (status.status ? status.status.name : 'N/A') + "<br>";
+              return (status.status ? status.status.name : "N/A") + "<br>";
             })}
           `,
         });
@@ -307,8 +292,12 @@ export default {
     },
     convertToDubaiTime(time) {
       // construct a moment object - handle multiple possible input formats
-      var m = moment(time, ["YYYY-MM-DD hh:mm:ss A", "YYYY-MM-DD HH:mm:ss", moment.ISO_8601], true);
-      
+      var m = moment(
+        time,
+        ["YYYY-MM-DD hh:mm:ss A", "YYYY-MM-DD HH:mm:ss", moment.ISO_8601],
+        true
+      );
+
       if (!m.isValid()) {
         // If the input format is invalid, return the original value
         return time;

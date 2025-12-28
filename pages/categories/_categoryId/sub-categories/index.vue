@@ -62,10 +62,10 @@
                         <td colspan="13">Loading...</td>
                       </tr>
                       <tr
-                        v-for="(sub_category, i) in category.sub_categories"
+                        v-for="(sub_category, i) in paginatedItems"
                         :key="`sub_category${i}`"
                       >
-                        <td>{{ i + 1 }}</td>
+                        <td>{{ (currentPage - 1) * perPage + i + 1 }}</td>
                         <td class="w-1">
                           <nuxt-link
                             title="Edit Details"
@@ -104,6 +104,17 @@
                   </table>
                 </div>
                 <!-- /.card-body -->
+                <Pagination
+                  v-if="
+                    category.sub_categories &&
+                    category.sub_categories.length > 0
+                  "
+                  :total-items="category.sub_categories.length"
+                  :per-page="perPage"
+                  :current-page="currentPage"
+                  @page-changed="onPageChanged"
+                  @per-page-changed="onPerPageChanged"
+                />
               </div>
               <!-- /.card -->
             </div>
@@ -119,10 +130,12 @@
 
 <script type="text/javascript">
 import BackButton from "@/components/BackButton.vue";
+import Pagination from "@/components/Pagination.vue";
 export default {
   name: "ManageSubCategories",
   components: {
     BackButton,
+    Pagination,
   },
   // async asyncData({$axios, params}) {
   //   let category = await $axios.get(`/categories/${params.categoryId}`)
@@ -134,12 +147,29 @@ export default {
     searchData: "",
     category: {},
     loading: true,
+    currentPage: 1,
+    perPage: 10,
   }),
   mounted() {
     this.getData();
   },
 
+  computed: {
+    paginatedItems() {
+      if (!this.category.sub_categories) return [];
+      const start = (this.currentPage - 1) * this.perPage;
+      const end = start + this.perPage;
+      return this.category.sub_categories.slice(start, end);
+    },
+  },
   methods: {
+    onPageChanged(page) {
+      this.currentPage = page;
+    },
+    onPerPageChanged(perPage) {
+      this.perPage = perPage;
+      this.currentPage = 1;
+    },
     async getData() {
       this.category = {};
       this.loading = true;

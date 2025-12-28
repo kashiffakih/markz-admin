@@ -79,8 +79,8 @@
                       <tr v-if="loading">
                         <td colspan="13">Loading...</td>
                       </tr>
-                      <tr v-for="(emp, i) in sorteditems" :key="`emp${i}`">
-                        <td>{{ i + 1 }}</td>
+                      <tr v-for="(emp, i) in paginatedItems" :key="`emp${i}`">
+                        <td>{{ (currentPage - 1) * perPage + i + 1 }}</td>
                         <td class="w-1">
                           <nuxt-link
                             title="View Rewards"
@@ -126,6 +126,14 @@
                   </table>
                 </div>
                 <!-- /.card-body -->
+                <Pagination
+                  v-if="items.length > 0"
+                  :total-items="items.length"
+                  :per-page="perPage"
+                  :current-page="currentPage"
+                  @page-changed="onPageChanged"
+                  @per-page-changed="onPerPageChanged"
+                />
               </div>
               <!-- /.card -->
             </div>
@@ -141,10 +149,12 @@
 
 <script type="text/javascript">
 import BackButton from "@/components/BackButton.vue";
+import Pagination from "@/components/Pagination.vue";
 export default {
   name: "ManageUsers",
   components: {
     BackButton,
+    Pagination,
   },
   data: () => ({
     searchData: "",
@@ -152,6 +162,8 @@ export default {
     loading: true,
     currentSort: "name",
     currentSortDir: "asc",
+    currentPage: 1,
+    perPage: 10,
   }),
   mounted() {
     this.getData();
@@ -166,8 +178,20 @@ export default {
         return 0;
       });
     },
+    paginatedItems() {
+      const start = (this.currentPage - 1) * this.perPage;
+      const end = start + this.perPage;
+      return this.sorteditems.slice(start, end);
+    },
   },
   methods: {
+    onPageChanged(page) {
+      this.currentPage = page;
+    },
+    onPerPageChanged(perPage) {
+      this.perPage = perPage;
+      this.currentPage = 1;
+    },
     async getData() {
       this.items = [];
       this.loading = true;

@@ -74,6 +74,19 @@
                 </div> -->
               </div>
             </div>
+            <!-- <div class="col-md-12 text-right pb-3 pr-4">
+              <client-only>
+                <download-excel
+                  class="btn btn-excel d-inline-block"
+                  :data="excel_items"
+                  :fields="excel_fields"
+                  worksheet="Products"
+                  name="Products.xls"
+                >
+                  <i class="fas fa-file-excel mr-2"></i> Export Products
+                </download-excel>
+              </client-only>
+            </div> -->
           </div>
           <div class="row">
             <div class="col-12">
@@ -105,15 +118,17 @@
                         <th>Sub Category</th>
                         <th>Sub 2 Category</th>
                         <th>Sub 3 Category</th>
-                        <th>Veg / Non Veg</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-if="loading">
                         <td colspan="13">Loading...</td>
                       </tr>
-                      <tr v-for="(product, i) in items" :key="`product${i}`">
-                        <td>{{ i + 1 }}</td>
+                      <tr
+                        v-for="(product, i) in paginatedItems"
+                        :key="`product${i}`"
+                      >
+                        <td>{{ (currentPage - 1) * perPage + i + 1 }}</td>
                         <td class="w-1">
                           <nuxt-link
                             title="Edit Details"
@@ -177,12 +192,19 @@
                               : ""
                           }}
                         </td>
-                        <td>{{ product.veg_nonveg }}</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
                 <!-- /.card-body -->
+                <Pagination
+                  v-if="items.length > 0"
+                  :total-items="items.length"
+                  :per-page="perPage"
+                  :current-page="currentPage"
+                  @page-changed="onPageChanged"
+                  @per-page-changed="onPerPageChanged"
+                />
               </div>
               <!-- /.card -->
             </div>
@@ -198,12 +220,14 @@
 
 <script type="text/javascript">
 import BackButton from "@/components/BackButton.vue";
+import Pagination from "@/components/Pagination.vue";
 import "vue-select/dist/vue-select.css";
 
 export default {
   name: "Manageproducts",
   components: {
     BackButton,
+    Pagination,
   },
   async asyncData({ $axios, params }) {
     let c = await $axios.get(`/categories`);
@@ -229,6 +253,8 @@ export default {
     searchData: "",
     items: [],
     loading: true,
+    currentPage: 1,
+    perPage: 10,
     category_id: "",
     sub_category_id: "",
     sub_2_category_id: "",
@@ -251,19 +277,59 @@ export default {
         code: "",
       },
     ],
+    sub_3_categories: [
+      {
+        label: "Select Sub 3 Category",
+        code: "",
+      },
+    ],
     allItems: [],
+    excel_fields: {
+      Photo: "image",
+      Name: "name",
+      Inventory: "qty",
+      Category: "category_name",
+      "Sub Category": "sub_category_name",
+    },
+    excel_items: [],
   }),
   mounted() {
     this.getData();
   },
+  computed: {
+    paginatedItems() {
+      const start = (this.currentPage - 1) * this.perPage;
+      const end = start + this.perPage;
+      return this.items.slice(start, end);
+    },
+  },
   methods: {
+    onPageChanged(page) {
+      this.currentPage = page;
+    },
+    onPerPageChanged(perPage) {
+      this.perPage = perPage;
+      this.currentPage = 1;
+    },
     async getData() {
       this.items = [];
       this.loading = true;
       let items = await this.$axios.get(`/products`);
       this.items = items.data.data;
       this.allItems = this.items;
+      this.items = items.data.data;
+      this.allItems = this.items;
+      this.prepareExcelData();
       this.loading = false;
+    },
+    prepareExcelData() {
+      this.excel_items = this.items.map((item) => ({
+        image: item.imagepath1 ? this.mediaUrl + item.imagepath1 : "",
+        name: item.name,
+        qty: item.qty || 0,
+        category_name: item.category ? item.category.name : "",
+        sub_category_name: item.sub_category ? item.sub_category.name : "",
+      }));
     },
     async search() {
       if (this.searchData != "") {

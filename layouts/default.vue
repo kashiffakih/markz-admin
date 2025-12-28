@@ -72,20 +72,18 @@
         <!-- Sidebar -->
         <div class="sidebar">
           <!-- Sidebar user (optional) -->
-          <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
               <img
                 class="img-circle elevation-2"
                 alt="User Image"
-                :src="
-                  mediaUrl + (user.attachment ? user.attachment : 'user.png')
-                "
+                :src="mediaUrl + organization.logo_path"
               />
             </div>
             <div class="info">
               <a href="#" class="d-block">{{ user.name }}</a>
             </div>
-          </div>
+          </div> -->
 
           <!-- Sidebar Menu -->
           <nav class="mt-2">
@@ -112,7 +110,7 @@
                       $route.path == item.link ? 'active' : ''
                     }`"
                   >
-                    <i :class="`nav-icon far ${item.icon}`"></i>
+                    <i :class="`nav-icon ${item.icon}`"></i>
                     <p>
                       {{ item.name }}
                       <i
@@ -254,7 +252,7 @@ export default {
           },
           {
             name: "Units",
-            icon: "fas fa-flag",
+            icon: "fas fa-balance-scale",
             link: `/units`,
             permission: this.permissions.indexOf(3) != -1 ? true : false,
           },
@@ -272,13 +270,13 @@ export default {
           },
           {
             name: "Notifications",
-            icon: "fas fa-tags",
+            icon: "fas fa-bell",
             link: `/notifications`,
             permission: this.permissions.indexOf(3) != -1 ? true : false,
           },
           {
             name: "Locations",
-            icon: "fas fa-tags",
+            icon: "fas fa-map-marker-alt",
             link: `/cities`,
             permission: this.permissions.indexOf(3) != -1 ? true : false,
           },
@@ -296,13 +294,13 @@ export default {
           // },
           {
             name: "Customers",
-            icon: "fas fa-user-friends",
+            icon: "fas fa-users",
             link: `/customers`,
             permission: this.permissions.indexOf(4) != -1 ? true : false,
           },
           {
             name: "Orders",
-            icon: "fas fa-credit-card",
+            icon: "fas fa-shopping-cart",
             link: `/orders`,
             permission: this.permissions.indexOf(3) != -1 ? true : false,
           },
@@ -313,7 +311,7 @@ export default {
         items: [
           {
             name: "Home",
-            icon: "fa-envelope",
+            icon: "fas fa-home",
             link: "/",
             permission: this.permissions.indexOf(3) != -1 ? true : false,
             // sub1Items: [
@@ -341,7 +339,7 @@ export default {
           // },
           {
             name: "Coupons",
-            icon: "fas fa-shield-alt",
+            icon: "fas fa-ticket-alt",
             link: `/organizations/${this.organizationId}/coupons`,
             permission: this.permissions.indexOf(3) != -1 ? true : false,
           },
@@ -355,7 +353,7 @@ export default {
         items: [
           {
             name: "Products",
-            icon: "fas fa-shopping-cart",
+            icon: "fas fa-box",
             link: `/organizations/${this.organizationId}/products`,
             permission: this.permissions.indexOf(3) != -1 ? true : false,
           },
@@ -383,8 +381,44 @@ export default {
         items: [
           {
             name: "Order Report",
-            icon: "far fa-window-restore",
+            icon: "fas fa-file-alt",
             link: `/organizations/${this.organizationId}/reports/order-report`,
+            permission: this.permissions.indexOf(3) != -1 ? true : false,
+          },
+          {
+            name: "Sales Report",
+            icon: "fas fa-chart-line",
+            link: `/organizations/${this.organizationId}/reports/sales-report`,
+            permission: this.permissions.indexOf(3) != -1 ? true : false,
+          },
+          {
+            name: "Payment Methods",
+            icon: "fas fa-credit-card",
+            link: `/organizations/${this.organizationId}/reports/payment-methods`,
+            permission: this.permissions.indexOf(3) != -1 ? true : false,
+          },
+          {
+            name: "Top Customers",
+            icon: "fas fa-users",
+            link: `/organizations/${this.organizationId}/reports/top-customers`,
+            permission: this.permissions.indexOf(3) != -1 ? true : false,
+          },
+          {
+            name: "Sales by City",
+            icon: "fas fa-map-marker-alt",
+            link: `/organizations/${this.organizationId}/reports/sales-by-city`,
+            permission: this.permissions.indexOf(3) != -1 ? true : false,
+          },
+          {
+            name: "Product Performance",
+            icon: "fas fa-box-open",
+            link: `/organizations/${this.organizationId}/reports/product-performance`,
+            permission: this.permissions.indexOf(3) != -1 ? true : false,
+          },
+          {
+            name: "Low Stock Products",
+            icon: "fas fa-exclamation-triangle",
+            link: `/organizations/${this.organizationId}/reports/low-stock`,
             permission: this.permissions.indexOf(3) != -1 ? true : false,
           },
           // {
@@ -434,7 +468,7 @@ export default {
 
 .content-wrapper,
 .login-page {
-  background: url("/background.jpg") !important;
+  /* background: url("/background.jpg") !important; */
   background-repeat: no-repeat !important;
   background-size: cover !important;
 }
@@ -462,7 +496,7 @@ table {
 }
 
 .main-sidebar {
-  background-color: #f7c40b !important;
+  background-color: rgb(9, 8, 13) !important;
 }
 
 .nav-link,
