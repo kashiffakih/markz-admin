@@ -79,7 +79,10 @@
                         <th>Third Category</th>
                         <th>Colour</th>
                         <th>Size</th>
-                        <th>Price</th>
+                        <th>Retail Price</th>
+                        <th>Retail Offer Price</th>
+                        <th>Wholesale Price</th>
+                        <th>Wholesale Offer Price</th>
                         <th>Qty</th>
                         <th>UOM</th>
                         <th>Is Active</th>
@@ -118,6 +121,9 @@
                           {{ product.size }}
                         </td>
                         <td>{{ product.price }}</td>
+                        <td>{{ product.retail_offer_price }}</td>
+                        <td>{{ product.wholesale_price }}</td>
+                        <td>{{ product.wholesale_offer_price }}</td>
                         <td>{{ product.qty }}</td>
                         <td>{{ product.uom }}</td>
                         <td>{{ product.is_active }}</td>
