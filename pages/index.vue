@@ -359,6 +359,9 @@
                     <thead>
                       <tr>
                         <th>Product</th>
+                        <th>Tally Name</th>
+                        <th>Size</th>
+                        <th>Color</th>
                         <th>Quantity Sold</th>
                       </tr>
                     </thead>
@@ -368,7 +371,16 @@
                         :key="index"
                       >
                         <td>
-                          {{ product.name }}
+                          {{ product.product_name }}
+                        </td>
+                        <td>
+                          {{ product.tally_product_name }}
+                        </td>
+                        <td>
+                          {{ product.size }}
+                        </td>
+                        <td>
+                          {{ product.color }}
                         </td>
                         <td>
                           {{ product.total_qty }}
@@ -476,22 +488,42 @@
                     <thead>
                       <tr>
                         <th>Sr. No.</th>
+                        <th>App Display Name</th>
                         <th>Product Name</th>
-                        <th>Category</th>
-                        <th>Current Stock</th>
+                        <th>Points</th>
+                        <th>Main Category</th>
+                        <th>Second Category</th>
+                        <th>Third Category</th>
+                        <th>Colour</th>
+                        <th>Size</th>
+                        <th>Retail Price</th>
+                        <th>Retail Offer Price</th>
+                        <th>Wholesale Price</th>
+                        <th>Wholesale Offer Price</th>
+                        <th>Qty</th>
+                        <!-- <th>UOM</th> -->
+                        <th>Is Active</th>
                         <th>Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr
                         v-for="(product, index) in lowStockProducts"
-                        :key="product.id"
+                        :key="index"
                       >
                         <td>{{ index + 1 }}</td>
-                        <td>{{ product.name }}</td>
-                        <td>
-                          {{ product.category ? product.category.name : "N/A" }}
-                        </td>
+                        <td>{{ product.app_display_name }}</td>
+                        <td>{{ product.product_tally_name }}</td>
+                        <td>{{ product.points }}</td>
+                        <td>{{ product.main_category }}</td>
+                        <td>{{ product.second_category }}</td>
+                        <td>{{ product.third_category }}</td>
+                        <td>{{ product.color }}</td>
+                        <td>{{ product.size }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>{{ product.retail_offer_price }}</td>
+                        <td>{{ product.wholesale_price }}</td>
+                        <td>{{ product.wholesale_offer_price }}</td>
                         <td>
                           <span
                             class="font-weight-bold"
@@ -502,9 +534,11 @@
                             {{ product.qty }}
                           </span>
                         </td>
+                        <!-- <td>{{ product.uom }}</td> -->
+                        <td>{{ product.is_active }}</td>
                         <td>
                           <span
-                            v-if="product.qty < 5"
+                            v-if="parseInt(product.qty) < 5"
                             class="badge badge-danger"
                             >Critical</span
                           >
@@ -936,26 +970,21 @@ export default {
     // Fetch Low Stock Products
     async fetchLowStockProducts() {
       try {
-        // Fetch all products and filter those with stock below threshold
-        const response = await this.$axios.get("/products", {
-          params: { rowsPerPage: 10000 },
-        });
+        const response = await this.$axios.get(
+          "/analytics/low_stock_products",
+          {
+            params: { threshold: this.lowStockThreshold },
+          }
+        );
 
         let products = [];
         if (response.data.data && Array.isArray(response.data.data)) {
-          // Handle paginated response
           products = response.data.data.data || response.data.data;
         } else if (Array.isArray(response.data)) {
           products = response.data;
         }
 
-        // Filter products with stock equal to or below threshold
-        this.lowStockProducts = products
-          .filter((product) => {
-            const qty = parseInt(product.qty) || 0;
-            return qty <= this.lowStockThreshold;
-          })
-          .sort((a, b) => (parseInt(a.qty) || 0) - (parseInt(b.qty) || 0));
+        this.lowStockProducts = products;
       } catch (error) {
         console.error("Error fetching low stock products:", error);
         this.lowStockProducts = [];

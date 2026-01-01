@@ -120,27 +120,45 @@
                 <thead>
                   <tr>
                     <th>Sr. No.</th>
+                    <th>App Display Name</th>
                     <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Current Stock</th>
+                    <th>Points</th>
+                    <th>Main Category</th>
+                    <th>Second Category</th>
+                    <th>Third Category</th>
+                    <th>Colour</th>
+                    <th>Size</th>
+                    <th>Retail Price</th>
+                    <th>Retail Offer Price</th>
+                    <th>Wholesale Price</th>
+                    <th>Wholesale Offer Price</th>
+                    <th>Qty</th>
+                    <!-- <th>UOM</th> -->
+                    <th>Is Active</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-if="loading">
-                    <td colspan="6">Loading...</td>
+                    <td colspan="17">Loading...</td>
                   </tr>
                   <tr
                     v-for="(product, index) in paginatedProducts"
-                    :key="product.id"
+                    :key="index"
                   >
                     <td>{{ (currentPage - 1) * perPage + index + 1 }}</td>
-                    <td>{{ product.name }}</td>
-                    <td>
-                      {{ product.category ? product.category.name : "N/A" }}
-                    </td>
-                    <td>{{ product.price || 0 }}</td>
+                    <td>{{ product.app_display_name }}</td>
+                    <td>{{ product.product_tally_name }}</td>
+                    <td>{{ product.points }}</td>
+                    <td>{{ product.main_category }}</td>
+                    <td>{{ product.second_category }}</td>
+                    <td>{{ product.third_category }}</td>
+                    <td>{{ product.color }}</td>
+                    <td>{{ product.size }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.retail_offer_price }}</td>
+                    <td>{{ product.wholesale_price }}</td>
+                    <td>{{ product.wholesale_offer_price }}</td>
                     <td>
                       <span
                         class="font-weight-bold"
@@ -151,15 +169,19 @@
                         {{ product.qty }}
                       </span>
                     </td>
+                    <!-- <td>{{ product.uom }}</td> -->
+                    <td>{{ product.is_active }}</td>
                     <td>
-                      <span v-if="product.qty < 5" class="badge badge-danger"
+                      <span
+                        v-if="parseInt(product.qty) < 5"
+                        class="badge badge-danger"
                         >Critical</span
                       >
                       <span v-else class="badge badge-warning">Low</span>
                     </td>
                   </tr>
                   <tr v-if="!loading && !products.length">
-                    <td colspan="6" class="text-center p-4">
+                    <td colspan="17" class="text-center p-4">
                       <i
                         class="fas fa-check-circle text-success fa-2x mb-2"
                       ></i>
@@ -206,10 +228,21 @@ export default {
       excel_items: [],
       excel_fields: {
         "Sr. No.": "sr_no",
-        "Product Name": "name",
-        Category: "category",
-        Price: "price",
-        "Current Stock": "qty",
+        "App Display Name": "app_display_name", // Added
+        "Product Name": "product_tally_name", // Changed mapping
+        Points: "points",
+        "Main Category": "main_category",
+        "Second Category": "second_category",
+        "Third Category": "third_category",
+        Colour: "color",
+        Size: "size",
+        "Retail Price": "price",
+        "Retail Offer Price": "retail_offer_price",
+        "Wholesale Price": "wholesale_price",
+        "Wholesale Offer Price": "wholesale_offer_price",
+        Qty: "qty",
+        UOM: "uom",
+        "Is Active": "is_active",
         Status: "status",
       },
     };
@@ -236,9 +269,12 @@ export default {
     async fetchData() {
       this.loading = true;
       try {
-        const response = await this.$axios.get("/products", {
-          params: { rowsPerPage: 10000 },
-        });
+        const response = await this.$axios.get(
+          "/analytics/low_stock_products",
+          {
+            params: { threshold: this.stockThreshold },
+          }
+        );
 
         let allProducts = [];
         if (response.data.data && Array.isArray(response.data.data)) {
@@ -247,14 +283,7 @@ export default {
           allProducts = response.data;
         }
 
-        // Filter products with stock equal to or below threshold
-        this.products = allProducts
-          .filter((product) => {
-            const qty = parseInt(product.qty) || 0;
-            return qty <= this.stockThreshold;
-          })
-          .sort((a, b) => (parseInt(a.qty) || 0) - (parseInt(b.qty) || 0));
-
+        this.products = allProducts;
         this.prepareExcelData();
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -266,10 +295,22 @@ export default {
     prepareExcelData() {
       this.excel_items = this.products.map((item, index) => ({
         sr_no: index + 1,
-        name: item.name,
-        category: item.category ? item.category.name : "N/A",
-        price: item.price || 0,
+        app_display_name: item.app_display_name,
+        product_name: item.product_name,
+        product_tally_name: item.product_tally_name,
+        points: item.points,
+        main_category: item.main_category,
+        second_category: item.second_category,
+        third_category: item.third_category,
+        color: item.color,
+        size: item.size,
+        price: item.price,
+        retail_offer_price: item.retail_offer_price,
+        wholesale_price: item.wholesale_price,
+        wholesale_offer_price: item.wholesale_offer_price,
         qty: item.qty,
+        uom: item.uom,
+        is_active: item.is_active,
         status: parseInt(item.qty) < 5 ? "Critical" : "Low",
       }));
     },

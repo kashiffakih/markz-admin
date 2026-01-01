@@ -100,22 +100,28 @@
                   <table class="table table-striped table-valign-middle">
                     <thead>
                       <tr>
-                        <th>Product</th>
+                        <th>Product Name</th>
+                        <th>Tally Name</th>
+                        <th>Size</th>
+                        <th>Color</th>
                         <th>Qty Sold</th>
                         <th>Revenue</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-if="loading">
-                        <td colspan="3">Loading...</td>
+                        <td colspan="6">Loading...</td>
                       </tr>
                       <tr v-for="(prod, i) in topProducts" :key="i">
-                        <td>{{ prod.name }}</td>
+                        <td>{{ prod.product_name }}</td>
+                        <td>{{ prod.tally_product_name }}</td>
+                        <td>{{ prod.size }}</td>
+                        <td>{{ prod.color }}</td>
                         <td>{{ prod.total_qty }}</td>
                         <td>{{ prod.total_revenue || 0 }}</td>
                       </tr>
                       <tr v-if="!loading && !topProducts.length">
-                        <td colspan="3" class="text-center">
+                        <td colspan="6" class="text-center">
                           No data available.
                         </td>
                       </tr>
@@ -135,22 +141,28 @@
                   <table class="table table-striped table-valign-middle">
                     <thead>
                       <tr>
-                        <th>Product</th>
+                        <th>Product Name</th>
+                        <th>Tally Name</th>
+                        <th>Size</th>
+                        <th>Color</th>
                         <th>Qty Sold</th>
                         <th>Revenue</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-if="loading">
-                        <td colspan="3">Loading...</td>
+                        <td colspan="6">Loading...</td>
                       </tr>
                       <tr v-for="(prod, i) in leastProducts" :key="i">
-                        <td>{{ prod.name }}</td>
+                        <td>{{ prod.product_name }}</td>
+                        <td>{{ prod.tally_product_name }}</td>
+                        <td>{{ prod.size }}</td>
+                        <td>{{ prod.color }}</td>
                         <td>{{ prod.total_qty }}</td>
                         <td>{{ prod.total_revenue || 0 }}</td>
                       </tr>
                       <tr v-if="!loading && !leastProducts.length">
-                        <td colspan="3" class="text-center">
+                        <td colspan="6" class="text-center">
                           No data available.
                         </td>
                       </tr>
@@ -186,7 +198,10 @@ export default {
       excel_items_top: [],
       excel_items_least: [],
       excel_fields: {
-        Product: "name",
+        "Product Name": "product_name",
+        "Tally Name": "tally_product_name",
+        Size: "size",
+        Color: "color",
         "Quantity Sold": "total_qty",
         Revenue: "total_revenue",
       },
@@ -231,12 +246,18 @@ export default {
     },
     prepareExcelData() {
       this.excel_items_top = this.topProducts.map((item) => ({
-        name: item.name,
+        product_name: item.product_name,
+        tally_product_name: item.tally_product_name,
+        size: item.size,
+        color: item.color,
         total_qty: item.total_qty,
         total_revenue: item.total_revenue || 0,
       }));
       this.excel_items_least = this.leastProducts.map((item) => ({
-        name: item.name,
+        product_name: item.product_name,
+        tally_product_name: item.tally_product_name,
+        size: item.size,
+        color: item.color,
         total_qty: item.total_qty,
         total_revenue: item.total_revenue || 0,
       }));
