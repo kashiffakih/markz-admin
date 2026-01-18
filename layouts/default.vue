@@ -1,78 +1,87 @@
 <template>
-  <section
-    class="hold-transition sidebar-mini layout-fixed"
-    v-if="authenticated"
-  >
-    <!-- Site wrapper -->
-    <div class="wrapper">
-      <!-- Navbar -->
-      <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <!-- Left navbar links -->
-        <ul class="navbar-nav">
-          <li class="nav-item d-none d-sm-inline-block">
-            <button
-              class="btn btn-link nav-link"
-              @click="logout"
-              style="color: black !important"
-            >
-              Logout
-            </button>
-          </li>
-          <li>
-            {{
-              user.companies.length > 0
-                ? user.companies[0].is_enabled == 0
-                  ? "Your account is not enabled"
+  <div id="app-root">
+    <section
+      class="hold-transition sidebar-mini layout-fixed"
+      v-if="authenticated"
+    >
+      <!-- Site wrapper -->
+      <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+          <!-- Left navbar links -->
+          <ul class="navbar-nav">
+            <li class="nav-item d-none d-sm-inline-block">
+              <button
+                class="btn btn-link nav-link"
+                @click="logout"
+                style="color: black !important"
+              >
+                Logout
+              </button>
+            </li>
+            <li>
+              {{
+                user.companies.length > 0
+                  ? user.companies[0].is_enabled == 0
+                    ? "Your account is not enabled"
+                    : ""
                   : ""
-                : ""
-            }}
-          </li>
-          <li v-if="permissions.indexOf(1) != -1">
-            <select-city :cities="cities"></select-city>
-          </li>
-          <li v-if="permissions.indexOf(1) != -1">
-            <select-organization></select-organization>
-          </li>
-        </ul>
+              }}
+            </li>
+            <li
+              v-if="
+                permissions.indexOf(1) != -1 || permissions.indexOf(2) != -1
+              "
+            >
+              <select-city :cities="cities"></select-city>
+            </li>
+            <li
+              v-if="
+                permissions.indexOf(1) != -1 || permissions.indexOf(2) != -1
+              "
+            >
+              <select-organization></select-organization>
+            </li>
+          </ul>
 
-        <!-- Right navbar links -->
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-              <h3><b style="color: black">Aadab</b></h3>
-            </a>
-          </li>
-          <!-- <li class="nav-item">
+          <!-- Right navbar links -->
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="dropdown" href="#">
+                <h3><b style="color: black">Aadab</b></h3>
+              </a>
+            </li>
+            <!-- <li class="nav-item">
             <nuxt-link :to="`/organizations/${organization.value}/whistle-blowers/create`">
               <button class="btn btn-danger">Send Message</button>
             </nuxt-link>
           </li> -->
-        </ul>
-      </nav>
-      <!-- /.navbar -->
+          </ul>
+        </nav>
+        <!-- /.navbar -->
 
-      <!-- Main Sidebar Container -->
-      <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <!-- Brand Logo -->
-        <nuxt-link to="/" class="brand-link" style="background-color: white">
-          <img
-            :src="
-              organization
-                ? organization.logo_path
-                  ? mediaUrl + organization.logo_path
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+          <!-- Brand Logo -->
+          <nuxt-link to="/" class="brand-link" style="background-color: white">
+            <img
+              :src="
+                organization
+                  ? organization.logo_path
+                    ? mediaUrl + organization.logo_path
+                    : mediaUrl + 'company.png'
                   : mediaUrl + 'company.png'
-                : mediaUrl + 'company.png'
-            "
-            alt="Logo"
-            style="opacity: 0.8; height: 50px"
-          />
-          <!-- <span class="brand-text font-weight-light">{{ organization.text ? organization.text : 'Not Selected' }}</span> -->
-        </nuxt-link>
+              "
+              alt="Logo"
+              style="opacity: 0.8; height: 50px"
+            />
+            <!-- <span class="brand-text font-weight-light">{{ organization.text ? organization.text : 'Not Selected' }}</span> -->
+          </nuxt-link>
 
-        <!-- Sidebar -->
-        <div class="sidebar">
-          <!-- Sidebar user (optional) -->
-          <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <!-- Sidebar -->
+          <div class="sidebar">
+            <!-- Sidebar user (optional) -->
+            <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
               <img
                 class="img-circle elevation-2"
@@ -85,98 +94,110 @@
             </div>
           </div> -->
 
-          <!-- Sidebar Menu -->
-          <nav class="mt-2">
-            <ul
-              class="nav nav-pills nav-sidebar flex-column"
-              data-widget="treeview"
-              role="menu"
-              data-accordion="false"
-            >
-              <template v-for="(category, i) in categories">
-                <li class="nav-header" v-if="category.title">
-                  {{ category.title }}
-                </li>
-                <li
-                  class="nav-item has-treeview"
-                  v-for="(item, j) in category.items"
-                  :key="item.id"
-                  v-if="item.permission"
-                >
-                  <nuxt-link
-                    :target="item.target"
-                    :to="item.link"
-                    :class="`nav-link ${
-                      $route.path == item.link ? 'active' : ''
-                    }`"
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+              <ul
+                class="nav nav-pills nav-sidebar flex-column"
+                data-widget="treeview"
+                role="menu"
+                data-accordion="false"
+              >
+                <template v-for="(category, i) in categories">
+                  <li
+                    class="nav-header"
+                    v-if="category.title"
+                    :key="`header-${i}`"
                   >
-                    <i :class="`nav-icon ${item.icon}`"></i>
-                    <p>
-                      {{ item.name }}
-                      <i
-                        class="fas fa-angle-left right"
-                        v-if="item.sub1Items"
-                      ></i>
-                    </p>
-                  </nuxt-link>
-                  <ul class="nav nav-treeview">
-                    <li
-                      class="nav-item"
-                      v-for="(sub1Item, k) in item.sub1Items"
-                      :key="`sub1Item${k}`"
+                    {{ category.title }}
+                  </li>
+                  <li
+                    class="nav-item has-treeview"
+                    v-for="(item, j) in category.items"
+                    :key="item.id"
+                    v-if="item.permission"
+                  >
+                    <nuxt-link
+                      :target="item.target"
+                      :to="item.link"
+                      :class="`nav-link ${
+                        $route.path == item.link ? 'active' : ''
+                      }`"
                     >
-                      <nuxt-link
-                        :to="sub1Item.link"
-                        :class="`nav-link ${
-                          $route.path == sub1Item.link ? 'active' : ''
-                        }`"
+                      <i :class="`nav-icon ${item.icon}`"></i>
+                      <p>
+                        {{ item.name }}
+                        <i
+                          class="fas fa-angle-left right"
+                          v-if="item.sub1Items"
+                        ></i>
+                      </p>
+                    </nuxt-link>
+                    <ul class="nav nav-treeview">
+                      <li
+                        class="nav-item"
+                        v-for="(sub1Item, k) in item.sub1Items"
+                        :key="`sub1Item${k}`"
                       >
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>{{ sub1Item.name }}</p>
-                      </nuxt-link>
-                    </li>
-                  </ul>
-                </li>
-              </template>
-            </ul>
-          </nav>
-          <!-- /.sidebar-menu -->
-        </div>
-        <!-- /.sidebar -->
-      </aside>
+                        <nuxt-link
+                          :to="sub1Item.link"
+                          :class="`nav-link ${
+                            $route.path == sub1Item.link ? 'active' : ''
+                          }`"
+                        >
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>{{ sub1Item.name }}</p>
+                        </nuxt-link>
+                      </li>
+                    </ul>
+                  </li>
+                </template>
+              </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+          </div>
+          <!-- /.sidebar -->
+        </aside>
 
-      <!-- Page Content -->
-      <nuxt></nuxt>
+        <!-- Page Content -->
+        <nuxt></nuxt>
 
-      <footer class="main-footer">
-        <!-- <div class="float-right d-none d-sm-block">
+        <footer class="main-footer">
+          <!-- <div class="float-right d-none d-sm-block">
           <img :src="organization.logo_path ? (mediaUrl + organization.logo_path) : mediaUrl + 'company.png'" alt="Logo" style="width: 150px;">
         </div> -->
-        <!-- <strong>Copyright &copy; <a href="https://www.aaibuzz.com">LUSH FARMS</a></strong>
+          <!-- <strong>Copyright &copy; <a href="https://www.aaibuzz.com">LUSH FARMS</a></strong>
         | -->
-        <!-- <strong>Developed By <a href="https://www.aaibuzz.com">AaiBuzz</a>.</strong> -->
-        <b>Version</b> 1.0.0
-      </footer>
+          <!-- <strong>Developed By <a href="https://www.aaibuzz.com">AaiBuzz</a>.</strong> -->
+          <b>Version</b> 1.0.0
+        </footer>
 
-      <!-- Control Sidebar -->
-      <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-      </aside>
-      <!-- /.control-sidebar -->
-    </div>
-    <!-- ./wrapper -->
-  </section>
-  <section v-else>
-    <nuxt></nuxt>
-  </section>
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+          <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+      </div>
+      <!-- ./wrapper -->
+    </section>
+    <section v-else>
+      <nuxt></nuxt>
+    </section>
+    <confirm-modal ref="confirmModal" />
+  </div>
 </template>
 
 <script>
 import SelectOrganization from "@/components/select-organization.vue";
 import SelectCity from "@/components/select-city.vue";
+import ConfirmModal from "@/components/ConfirmModal.vue";
 
 export default {
   name: "Root",
+  components: {
+    SelectOrganization,
+    SelectCity,
+    ConfirmModal,
+  },
   data() {
     return {
       clipped: true,
@@ -185,25 +206,28 @@ export default {
     };
   },
   computed: {
+    authenticated() {
+      return this.$auth.loggedIn;
+    },
+    user() {
+      return this.$auth.user;
+    },
     drawer() {
       return this.authenticated;
     },
     title() {
-      return this.$auth.$state.user
-        ? this.$auth.$state.user.companies.length
-          ? this.$auth.$state.user.companies[0].name +
-            " [" +
-            this.$auth.$state.user.roles[0].name +
-            "]"
+      return this.user
+        ? this.user.companies.length
+          ? this.user.companies[0].name + " [" + this.user.roles[0].name + "]"
           : this.$store.getters["settings/organization"]
           ? this.$store.getters["settings/organization"].text
           : "" + " [By Super Admin]"
         : "";
     },
     organizationId() {
-      return this.$auth.$state.user
-        ? this.$auth.$state.user.companies.length
-          ? this.$auth.$state.user.companies[0].id
+      return this.user
+        ? this.user.companies.length
+          ? this.user.companies[0].id
           : this.$store.getters["settings/organization"]
           ? this.$store.getters["settings/organization"].value
           : ""
@@ -296,6 +320,18 @@ export default {
             name: "Customers",
             icon: "fas fa-users",
             link: `/customers`,
+            permission: this.permissions.indexOf(4) != -1 ? true : false,
+          },
+          {
+            name: "Wholesalers",
+            icon: "fas fa-store",
+            link: `/wholesalers`,
+            permission: this.permissions.indexOf(4) != -1 ? true : false,
+          },
+          {
+            name: "Favourite Wholesalers",
+            icon: "fas fa-star",
+            link: `/favourite-wholesalers`,
             permission: this.permissions.indexOf(4) != -1 ? true : false,
           },
           {
@@ -436,15 +472,36 @@ export default {
           },
         ],
       });
+
       return categories;
     },
   },
-  components: {
-    SelectOrganization,
-    SelectCity,
-  },
+
   mounted() {
     this.getCities();
+
+    // Register global confirm and alert methods
+    this.$root.confirm = (message, title = "Confirm") => {
+      if (this.$refs.confirmModal) {
+        return this.$refs.confirmModal.show({ message, title });
+      } else {
+        console.error("ConfirmModal ref not found");
+        return Promise.resolve(false);
+      }
+    };
+
+    this.$root.alert = (message, title = "Alert") => {
+      if (this.$refs.confirmModal) {
+        return this.$refs.confirmModal.show({
+          message,
+          title,
+          showCancelButton: false,
+        });
+      } else {
+        console.error("ConfirmModal ref not found");
+        return Promise.resolve(false);
+      }
+    };
   },
   methods: {
     async getCities() {

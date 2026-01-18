@@ -9,13 +9,16 @@
         <div class="card-body login-card-body">
           <p class="login-box-msg">Sign in to start your session</p>
 
-          <span style="color: red;"
-            v-if="errors.email"
-          >{{ errors.email[0] }}</span>
+          <span style="color: red" v-if="errors.email">{{
+            errors.email[0]
+          }}</span>
           <div class="input-group mb-3">
-            <input type="email" class="form-control" placeholder="Email"
+            <input
+              type="email"
+              class="form-control"
+              placeholder="Email"
               v-model="form.email"
-            >
+            />
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-envelope"></span>
@@ -23,13 +26,16 @@
             </div>
           </div>
 
-          <span style="color: red;"
-            v-if="errors.password"
-          >{{ errors.password[0] }}</span>
+          <span style="color: red" v-if="errors.password">{{
+            errors.password[0]
+          }}</span>
           <div class="input-group mb-3">
-            <input type="password" class="form-control" placeholder="Password"
+            <input
+              type="password"
+              class="form-control"
+              placeholder="Password"
               v-model="form.password"
-            >
+            />
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-lock"></span>
@@ -39,16 +45,22 @@
           <div class="row">
             <!-- /.col -->
             <div class="col-4">
-              <button type="submit" class="btn btn-primary btn-block"
+              <button
+                type="submit"
+                class="btn btn-primary btn-block"
                 @click="login"
-              >Sign In</button>
+              >
+                Sign In
+              </button>
             </div>
             <!-- /.col -->
           </div>
 
-          <br>
+          <br />
           <p class="mb-1">
-            <nuxt-link to="/auth/forgot-password">I forgot my password</nuxt-link>
+            <nuxt-link to="/auth/forgot-password"
+              >I forgot my password</nuxt-link
+            >
           </p>
         </div>
         <!-- /.login-card-body -->
@@ -60,24 +72,24 @@
 
 <script type="text/javascript">
 export default {
-  name: 'Login',
-  middleware: 'guest',
+  name: "Login",
+  middleware: "guest",
   auth: false,
   data: () => ({
     form: {
-      email: '',
-      password: ''
-    }
+      email: "",
+      password: "",
+    },
   }),
   methods: {
     async login() {
       try {
-        await this.$axios.post('/login', this.form)
-        await this.$auth.login({ data: this.form })
-        this.$router.push('/')
-      }
-      catch(e) {}
-    }
-  }
-}
+        await this.$axios.post("/login", this.form);
+        await this.$auth.login({ data: this.form });
+
+        this.$router.push("/");
+      } catch (e) {}
+    },
+  },
+};
 </script>

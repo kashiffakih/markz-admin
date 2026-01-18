@@ -190,19 +190,20 @@ export default {
       }
     },
     async del(id) {
-      let r = confirm("Are you sure you want to delete the data?");
-      if (r == true) {
+      if (
+        await this.$root.confirm("Are you sure you want to delete the data?")
+      ) {
         try {
           await this.$axios.delete(
             `/categories/${this.category.id}/sub_categories/${id}`
           );
-          alert("Sub Category deleted successfully");
+          await this.$root.alert("Sub Category deleted successfully");
         } catch (error) {
           console.error("Error deleting sub category:", error);
           const message =
             error.response?.data?.message ||
             "An error occurred while deleting the sub category";
-          alert(message);
+          await this.$root.alert(message);
         }
         this.getData();
       }

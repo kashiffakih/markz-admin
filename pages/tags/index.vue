@@ -147,17 +147,18 @@ export default {
       }
     },
     async del(id) {
-      let r = confirm("Are you sure you want to delete the data?");
-      if (r == true) {
+      if (
+        await this.$root.confirm("Are you sure you want to delete the data?")
+      ) {
         try {
           await this.$axios.delete(`/tags/${id}`);
-          alert("Tag deleted successfully");
+          await this.$root.alert("Tag deleted successfully");
         } catch (error) {
           console.error("Error deleting tag:", error);
           const message =
             error.response?.data?.message ||
             "An error occurred while deleting the tag";
-          alert(message);
+          await this.$root.alert(message);
         }
         this.getData();
       }

@@ -348,7 +348,7 @@ export default {
         this.crude_products = [];
         this.isProcessing = false;
         this.is_Processed = true;
-        alert("Processed Successfully");
+        await this.$root.alert("Processed Successfully");
       } catch (e) {
         console.log(e);
       }
@@ -357,7 +357,7 @@ export default {
       await this.$axios.get("bulk_product/clear");
       this.is_Truncated = true;
 
-      alert("Truncated Successfully");
+      await this.$root.alert("Truncated Successfully");
       this.getData();
       this.crude_products = [];
     },

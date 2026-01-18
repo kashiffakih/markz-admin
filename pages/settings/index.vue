@@ -684,17 +684,17 @@ export default {
     });
   },
   methods: {
-    updateDetails() {
+    async updateDetails() {
       if (this.organizationId) {
         let organization = this.organizations.filter(
           (o) => o.value == this.organizationId
         );
         if (organization.length) {
           this.$store.dispatch("settings/setOrganization", organization[0]);
-          alert("Details Updated");
+          await this.$root.alert("Details Updated");
         }
       } else {
-        alert("Please select the organization");
+        await this.$root.alert("Please select the organization");
       }
     },
     async updateSettings() {
@@ -702,7 +702,7 @@ export default {
       try {
         let admin = await this.$axios.post(`/settings`, this.form);
         this.handleFileUpload();
-        alert("Details Updated");
+        await this.$root.alert("Details Updated");
         this.loading = false;
       } catch (e) {
         this.loading = false;

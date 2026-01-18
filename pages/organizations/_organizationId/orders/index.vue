@@ -415,9 +415,12 @@ export default {
       }
     },
     async del(id) {
-      let r = confirm("Are you sure you want to delete the data?");
-      if (r == true) await this.$axios.delete(`/orders/${id}`);
-      this.getData();
+      if (
+        await this.$root.confirm("Are you sure you want to delete the data?")
+      ) {
+        await this.$axios.delete(`/orders/${id}`);
+        this.getData();
+      }
     },
     convertToDubaiTime(time) {
       // construct a moment object

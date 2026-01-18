@@ -10,17 +10,21 @@
               <back-button />
 
               <h1 class="m-0 text-dark">User Documents</h1>
-            </div><!-- /.col -->
+            </div>
+            <!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item">
-                    <nuxt-link to="/">Home</nuxt-link>
+                  <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item active">User Documents</li>
               </ol>
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
       </div>
       <!-- /.content-header -->
 
@@ -31,20 +35,38 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Manage Documents</h3> &nbsp;
-                  <nuxt-link class="btn btn-sm btn-info" :to="`/delivery-users/${$route.params.userId}/documents/create`">Add New</nuxt-link>
+                  <h3 class="card-title">Manage Documents</h3>
+                  &nbsp;
+                  <nuxt-link
+                    class="btn btn-sm btn-info"
+                    :to="`/delivery-users/${$route.params.userId}/documents/create`"
+                    >Add New</nuxt-link
+                  >
                   <div class="card-tools">
-                    <div class="input-group input-group-sm" style="width: 150px;">
-                      <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                    <div
+                      class="input-group input-group-sm"
+                      style="width: 150px"
+                    >
+                      <input
+                        type="text"
+                        name="table_search"
+                        class="form-control float-right"
+                        placeholder="Search"
+                      />
 
                       <div class="input-group-append">
-                        <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                        <button type="submit" class="btn btn-default">
+                          <i class="fas fa-search"></i>
+                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
                 <!-- /.card-header -->
-                <div class="card-body table-responsive p-0" style="height: 300px;">
+                <div
+                  class="card-body table-responsive p-0"
+                  style="height: 300px"
+                >
                   <table class="table table-head-fixed table-striped">
                     <thead>
                       <tr>
@@ -56,20 +78,29 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(doc, i) in items"
-                        :key="`doc{i}`"
-                      >
+                      <tr v-for="doc in items" :key="doc.id">
                         <td>{{ doc.id }}</td>
                         <td>
-                          <a target="_blank" :href="doc.imagepath ? (mediaUrl + doc.imagepath) : ''">{{ doc.imagepath }}</a>
+                          <a
+                            target="_blank"
+                            :href="
+                              doc.imagepath ? mediaUrl + doc.imagepath : ''
+                            "
+                            >{{ doc.imagepath }}</a
+                          >
+                        </td>
+
                         <td>
                           {{ doc.type }}
                         </td>
                         <td>{{ doc.value }}</td>
                         <td class="w-1">
-                          <nuxt-link class="icon" :to="`/delivery-users/${$route.params.userId}/documents/${doc.id}`">
-                            <i class="fa fa-edit"></i>
-                          </nuxt-link>&nbsp;&nbsp;
+                          <nuxt-link
+                            class="icon"
+                            :to="`/delivery-users/${$route.params.userId}/documents/${doc.id}`"
+                          >
+                            <i class="fa fa-edit"></i> </nuxt-link
+                          >&nbsp;&nbsp;
                           <nuxt-link title="Delete" class="icon" to="">
                             <span @click="del(doc.id)">
                               <i class="fa fa-trash"></i>
@@ -89,7 +120,7 @@
         </div>
       </section>
       <!-- /.content -->
-      </div>
+    </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
@@ -97,40 +128,44 @@
 <script type="text/javascript">
 import BackButton from "@/components/BackButton.vue";
 export default {
-  name: 'ManageUsers',
+  name: "ManageUsers",
   components: {
-    BackButton
+    BackButton,
   },
-  data:() =>  ({
+  data: () => ({
     headers: [
-      { text: 'Sr No', value: 'sr_no' },
+      { text: "Sr No", value: "sr_no" },
       {
-        text: 'User Name',
-        align: 'left',
+        text: "User Name",
+        align: "left",
         sortable: false,
-        value: 'name'
+        value: "name",
       },
-      { text: 'Admin Details', value: 'admin_details' },
-      { text: 'Action', value: '' }
+      { text: "Admin Details", value: "admin_details" },
+      { text: "Action", value: "" },
     ],
     loading: true,
-    items: []
+    items: [],
   }),
   mounted() {
-    this.loading = false
-    this.getData()
+    this.loading = false;
+    this.getData();
   },
   methods: {
     async getData() {
-      let documents = await this.$axios.get(`/user_documents?userId=${this.$route.params.userId}`)
-      this.items = documents.data.data
+      let documents = await this.$axios.get(
+        `/user_documents?userId=${this.$route.params.userId}`
+      );
+      this.items = documents.data.data;
     },
     async del(id) {
-      let r = confirm('Are you sure you want to delete the data?')
-      if(r == true)
-        await this.$axios.delete(`/user_documents/${id}`)
-      this.getData()
+      if (
+        await this.$root.confirm("Are you sure you want to delete the data?")
+      ) {
+        await this.$axios.delete(`/user_documents/${id}`);
+      }
+      this.getData();
     },
-  }
-}
+  },
+};
 </script>

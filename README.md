@@ -1,10 +1,10 @@
-# client1
+# Aadab
 
 > My excellent Nuxt.js project
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 $ npm install
 
@@ -20,6 +20,7 @@ $ npm run generate
 ```
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+
 # aadab-client
 
 ## Bulk Product Upload Feature
@@ -29,7 +30,7 @@ This project now includes a bulk product upload feature that allows users to upl
 ### How to Use
 
 1. Navigate to the Products section in the sidebar
-2. Click on "Bulk Upload" 
+2. Click on "Bulk Upload"
 3. Download the template file to see the required format
 4. Fill in your product data following the template structure
 5. Upload the completed file using the upload interface
@@ -39,6 +40,7 @@ This project now includes a bulk product upload feature that allows users to upl
 ### Template Structure
 
 The template file requires the following columns:
+
 - name: Product name
 - description: Product description
 - price: Product price
@@ -52,6 +54,7 @@ The template file requires the following columns:
 ### Backend Integration
 
 The frontend connects to the backend API endpoints:
+
 - `/organizations/{id}/crude_products` for retrieving products
 - `/organizations/{id}/upload_product` for file upload
 - `/organizations/{id}/process_product` for processing

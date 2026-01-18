@@ -851,9 +851,12 @@ export default {
       this.getData();
     },
     async del(id) {
-      let r = confirm("Are you sure you want to delete the data?");
-      if (r == true) await this.$axios.delete(`/orders/${id}`);
-      this.getData();
+      if (
+        await this.$root.confirm("Are you sure you want to delete the data?")
+      ) {
+        await this.$axios.delete(`/orders/${id}`);
+        this.getData();
+      }
     },
     convertToDubaiTime(time) {
       // construct a moment object - handle multiple possible input formats
@@ -877,10 +880,11 @@ export default {
       return s;
     },
     async approveOrder(order, approvedStatus) {
-      let r = confirm(
-        `Are you sure you want to change the status of order ${order.id}`
-      );
-      if (r) {
+      if (
+        await this.$root.confirm(
+          `Are you sure you want to change the status of order ${order.id}`
+        )
+      ) {
         if (approvedStatus == 1) order.is_approved_by_hotelier = 1;
         else if (approvedStatus == 2) {
           order.is_approved_by_hotelier = 2;
@@ -892,7 +896,7 @@ export default {
           order.is.delivery_boy_accepted = 0;
         }
         await this.$axios.patch(`/orders/${order.id}`, order);
-        alert("Done");
+        await this.$root.alert("Done");
         this.getData();
       }
       // else {

@@ -199,7 +199,7 @@ export default {
     },
     async getProducts() {
       if (!this.timeslot) {
-        alert("Please select time slot");
+        await this.$root.alert("Please select time slot");
       }
       this.products = [];
       let items = this.items.filter(

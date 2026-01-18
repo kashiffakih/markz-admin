@@ -8,17 +8,21 @@
           <div class="row mb-2">
             <div class="col-sm-6">
               <h1 class="m-0 text-dark">Reset Password</h1>
-            </div><!-- /.col -->
+            </div>
+            <!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item">
-                    <nuxt-link to="/">Home</nuxt-link>
+                  <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item active">Reset Password</li>
               </ol>
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
       </div>
       <!-- /.content-header -->
 
@@ -29,7 +33,8 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Reset Password</h3> &nbsp;
+                  <h3 class="card-title">Reset Password</h3>
+                  &nbsp;
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -37,9 +42,9 @@
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">Email</label>
-                        <v-select 
-                          v-model="form.email" 
-                          :reduce="email => email.code" 
+                        <v-select
+                          v-model="form.email"
+                          :reduce="(email) => email.code"
                           :options="emails"
                         ></v-select>
                       </div>
@@ -48,9 +53,12 @@
                       <div class="form-group">
                         <label class="form-label">Password</label>
                         <div class="input-group">
-                          <input type="password" class="form-control" placeholder="Password"
+                          <input
+                            type="password"
+                            class="form-control"
+                            placeholder="Password"
                             v-model="form.password"
-                          >
+                          />
                           <div class="input-group-append">
                             <div class="input-group-text">
                               <span class="fas fa-lock"></span>
@@ -58,17 +66,20 @@
                           </div>
                         </div>
                       </div>
-                      <span style="color: red;"
-                        v-if="errors.password"
-                      >{{ errors.password[0] }}</span>
+                      <span style="color: red" v-if="errors.password">{{
+                        errors.password[0]
+                      }}</span>
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">Password Confirmation</label>
                         <div class="input-group">
-                          <input type="password" class="form-control" placeholder="Password"
+                          <input
+                            type="password"
+                            class="form-control"
+                            placeholder="Password"
                             v-model="form.password_confirmation"
-                          >
+                          />
                           <div class="input-group-append">
                             <div class="input-group-text">
                               <span class="fas fa-lock"></span>
@@ -76,14 +87,14 @@
                           </div>
                         </div>
                       </div>
-                      <span style="color: red;"
+                      <span
+                        style="color: red"
                         v-if="errors.password_confirmation"
-                      >{{ errors.password_confirmation[0] }}</span>
+                        >{{ errors.password_confirmation[0] }}</span
+                      >
                     </div>
                     <div class="form-footer">
-                      <button class="btn btn-primary btn-block"
-                        @click="store"
-                      >
+                      <button class="btn btn-primary btn-block" @click="store">
                         Update Password
                       </button>
                     </div>
@@ -105,38 +116,40 @@
 
 <script type="text/javascript">
 export default {
-  name: 'Reset Password',
-  async asyncData({$axios, params}) { 
+  name: "Reset Password",
+  async asyncData({ $axios, params }) {
     let users = await $axios.get(`/users?search=all`);
-    let emails = []
-    users = users.data.data.forEach(user => {
+    let emails = [];
+    users = users.data.data.forEach((user) => {
       emails.push({
         label: user.email,
-        code: user.email
-      })
-    })
+        code: user.email,
+      });
+    });
     return {
-      emails: emails
-    }
+      emails: emails,
+    };
   },
   data: () => ({
-   form: {
-     email: '',
-     password: '',
-     password_confirmation: ''
-   }
-
+    form: {
+      email: "",
+      password: "",
+      password_confirmation: "",
+    },
   }),
-  mounted() {
-  },
+  mounted() {},
   components: {},
   methods: {
     async store() {
       try {
-        await this.$axios.post(`/reset_password`, this.form)
-        alert("Password Updated");
-      } catch(e) {}
-    }
-  }
-}
-</script> 
+        await this.$axios.post(`/reset_password`, this.form);
+        if (this.$root.alert) {
+          await this.$root.alert("Password Updated");
+        } else {
+          alert("Password Updated");
+        }
+      } catch (e) {}
+    },
+  },
+};
+</script>

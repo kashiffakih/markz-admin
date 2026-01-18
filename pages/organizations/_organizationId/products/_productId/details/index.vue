@@ -589,10 +589,13 @@ export default {
         this.loading = false;
       }
     },
-    deleteImage(product_image_id) {
-      let r = confirm("Are you sure you want to delete the data?");
-      if (r == true) this.$axios.patch(`/product_images/${product_image_id}`);
-      this.getData();
+    async deleteImage(product_image_id) {
+      if (
+        await this.$root.confirm("Are you sure you want to delete the data?")
+      ) {
+        await this.$axios.patch(`/product_images/${product_image_id}`);
+        this.getData();
+      }
     },
     updateFileCount() {
       this.fileCount.imagepath = this.$refs.imagepath?.files?.length || 0;

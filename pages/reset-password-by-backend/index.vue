@@ -10,17 +10,21 @@
               <back-button />
 
               <h1 class="m-0 text-dark">Reset Password</h1>
-            </div><!-- /.col -->
+            </div>
+            <!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item">
-                    <nuxt-link to="/">Home</nuxt-link>
+                  <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item active">Reset Password</li>
               </ol>
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
       </div>
       <!-- /.content-header -->
 
@@ -31,7 +35,8 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Reset Password</h3> &nbsp;
+                  <h3 class="card-title">Reset Password</h3>
+                  &nbsp;
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -39,9 +44,9 @@
                     <div class="col-md-4">
                       <div class="form-group">
                         <label class="form-label">Role</label>
-                        <v-select 
-                          v-model="form.role_id" 
-                          :reduce="role => role.code" 
+                        <v-select
+                          v-model="form.role_id"
+                          :reduce="(role) => role.code"
                           :options="roles"
                         ></v-select>
                       </div>
@@ -57,7 +62,7 @@
         </div>
       </section>
       <!-- /.content -->
-      </div>
+    </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
@@ -65,35 +70,35 @@
 <script type="text/javascript">
 import BackButton from "@/components/BackButton.vue";
 export default {
-  name: 'ResetPassword',
+  name: "ResetPassword",
   components: {
-    BackButton
+    BackButton,
   },
-  async asyncData({$axios, store}) {
-    let user = await $axios.get(`/users/${store.getters['auth/user'].id}`);
+  async asyncData({ $axios, store }) {
+    let user = await $axios.get(`/users/${store.getters["auth/user"].id}`);
     return {
-      form: user.data.data
-    }
+      form: user.data.data,
+    };
   },
   data: () => ({
     loading: false,
   }),
   mounted() {
-    this.form.role_id = this.form.roles[0].id
+    this.form.role_id = this.form.roles[0].id;
   },
-  
+
   methods: {
     async store() {
       try {
-        this.loading = true
-        await this.$axios.post(`/reset_password`, this.form)
-        alert("Password Updated");
+        this.loading = true;
+        await this.$axios.post(`/reset_password`, this.form);
+        await this.$root.alert("Password Updated");
         this.$auth.logout();
-        this.loading = false
-      } catch(ex) {
-        this.loading = false
+        this.loading = false;
+      } catch (ex) {
+        this.loading = false;
       }
-    }
-  }
-}
-</script> 
+    },
+  },
+};
+</script>

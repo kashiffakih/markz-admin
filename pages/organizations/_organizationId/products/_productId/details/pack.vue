@@ -402,20 +402,21 @@ export default {
       }
     },
     async del(id) {
-      let r = confirm("Are you sure you want to delete the data?");
-      if (r) {
+      if (
+        await this.$root.confirm("Are you sure you want to delete the data?")
+      ) {
         try {
           await this.$axios.delete(
             `/products/${this.product.id}/product_packs/${id}`
           );
-          alert("Pack deleted successfully");
+          await this.$root.alert("Pack deleted successfully");
           this.getData();
         } catch (e) {
           console.error("Error deleting pack:", e);
           const message =
             e.response?.data?.message ||
             "An error occurred while deleting the pack";
-          alert(message);
+          await this.$root.alert(message);
         }
       }
     },

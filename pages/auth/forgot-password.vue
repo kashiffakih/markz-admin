@@ -9,13 +9,16 @@
         <div class="card-body login-card-body">
           <p class="login-box-msg">Enter your registered Email ID</p>
 
-          <span style="color: red;"
-            v-if="errors.email"
-          >{{ errors.email[0] }}</span>
+          <span style="color: red" v-if="errors.email">{{
+            errors.email[0]
+          }}</span>
           <div class="input-group mb-3">
-            <input type="email" class="form-control" placeholder="Email"
+            <input
+              type="email"
+              class="form-control"
+              placeholder="Email"
               v-model="form.email"
-            >
+            />
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-envelope"></span>
@@ -25,9 +28,13 @@
           <div class="row">
             <!-- /.col -->
             <div class="col-12">
-              <button type="submit" class="btn btn-primary btn-block"
+              <button
+                type="submit"
+                class="btn btn-primary btn-block"
                 @click="sendEmail"
-              >Send Password Reset Email</button>
+              >
+                Send Password Reset Email
+              </button>
             </div>
             <!-- /.col -->
           </div>
@@ -41,24 +48,25 @@
 
 <script type="text/javascript">
 export default {
-  name: 'ForgotPassword',
-  middleware: 'guest',
+  name: "ForgotPassword",
+  middleware: "guest",
   auth: false,
   data: () => ({
     form: {
-      email: '',
-    }
+      email: "",
+    },
   }),
   methods: {
     async sendEmail() {
       try {
-        await this.$axios.post('/forgot_password', this.form)
-        alert('Email Sent')
-      }
-      catch(e) {
-
-      }
-    }
-  }
-}
+        await this.$axios.post("/forgot_password", this.form);
+        if (this.$root.alert) {
+          await this.$root.alert("Email Sent");
+        } else {
+          alert("Email Sent");
+        }
+      } catch (e) {}
+    },
+  },
+};
 </script>

@@ -195,11 +195,13 @@ export default {
       }
     },
     async del(id) {
-      let r = confirm("Are you sure you want to delete the data?");
-      if (r == true)
+      if (
+        await this.$root.confirm("Are you sure you want to delete the data?")
+      ) {
         await this.$axios.delete(
           `/sub_categories/${this.sub_category.id}/sub_2_categories/${id}`
         );
+      }
       this.getData();
     },
   },

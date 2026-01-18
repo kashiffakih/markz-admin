@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!-- Back Button -->
-    <div style="padding: 10px;">
+    <div style="padding: 10px">
       <back-button />
     </div>
     <div class="row justify-content-center">
@@ -15,40 +15,51 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <label class="form-label">Admin name</label>
-                  <input type="text" class="form-control" placeholder="Enter name"
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter name"
                     v-model="form.name"
-                  >
-                  <span class="help-block" 
-                    v-if="errors.name"
-                  >{{ errors.name[0] }}</span>
+                  />
+                  <span class="help-block" v-if="errors.name">{{
+                    errors.name[0]
+                  }}</span>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Email</label>
-                  <input type="email" class="form-control" placeholder="Enter email"
+                  <input
+                    type="email"
+                    class="form-control"
+                    placeholder="Enter email"
                     v-model="form.email"
-                  >
-                  <span class="help-block" 
-                    v-if="errors.email"
-                  >{{ errors.email[0] }}</span>
+                  />
+                  <span class="help-block" v-if="errors.email">{{
+                    errors.email[0]
+                  }}</span>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Phone</label>
-                  <input type="number" class="form-control" placeholder="Enter phone"
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Enter phone"
                     v-model="form.phone"
-                  >
-                  <span class="help-block" 
-                    v-if="errors.phone"
-                  >{{ errors.phone[0] }}</span>
+                  />
+                  <span class="help-block" v-if="errors.phone">{{
+                    errors.phone[0]
+                  }}</span>
                 </div>
                 <div class="form-footer">
-                  <nuxt-link class="btn btn-primary" to="/reset-password"
+                  <nuxt-link
+                    class="btn btn-primary"
+                    to="/reset-password"
                     @click="store"
                   >
                     Reset Password
                   </nuxt-link>
-                  <button class="btn btn-primary"
-                    @click="store"
-                  >Update Profile</button>
+                  <button class="btn btn-primary" @click="store">
+                    Update Profile
+                  </button>
                 </div>
               </div>
             </div>
@@ -63,64 +74,67 @@
 import BackButton from "@/components/BackButton.vue";
 export default {
   components: {
-    BackButton
+    BackButton,
   },
-  name: 'MyProfile',
-  async asyncData({$axios, store}) {
-    let user = await $axios.get(`/users/${store.getters['auth/user'].id}`);
+  name: "MyProfile",
+  async asyncData({ $axios, store }) {
+    let user = await $axios.get(`/users/${store.getters["auth/user"].id}`);
     return {
-      form: user.data.data
-    }
+      form: user.data.data,
+    };
   },
   data: () => ({
-    imageBase64: '',
-    imageName: '',
-    imageFile: ''
+    imageBase64: "",
+    imageName: "",
+    imageFile: "",
   }),
-  
+
   mounted() {
-    this.form.role_id = this.form.roles[0].id
+    this.form.role_id = this.form.roles[0].id;
   },
   methods: {
     async store() {
-      await this.$axios.patch(`/users/${this.user.id}`, this.form)
+      await this.$axios.patch(`/users/${this.user.id}`, this.form);
 
       // To upload a file
-      if(this.imageFile) {
-        let formImage = new FormData()
-        formImage.append('user_id', this.form.id)
-        formImage.append('profile_image', this.imageFile)
+      if (this.imageFile) {
+        let formImage = new FormData();
+        formImage.append("user_id", this.form.id);
+        formImage.append("profile_image", this.imageFile);
 
-        let response = await this.$axios.post(`/upload_profile_image`, formImage)
+        let response = await this.$axios.post(
+          `/upload_profile_image`,
+          formImage
+        );
       }
 
-      alert("Updated")
+      await this.$root.alert("Updated");
     },
-    forgotPassword() {
-      alert("Create functionality of forgot password")
+    async forgotPassword() {
+      await this.$root.alert("Create functionality of forgot password");
     },
-    pickFile () {
-      this.$refs.image.click()
+    pickFile() {
+      this.$refs.image.click();
     },
-    onFilePicked (e) {
-      const files = e.target.files
-      if(files[0] !== undefined) {
-        this.imageName = files[0].name
-        if(this.imageName.lastIndexOf('.') <= 0) {
-          return
+    onFilePicked(e) {
+      const files = e.target.files;
+      if (files[0] !== undefined) {
+        this.imageName = files[0].name;
+        if (this.imageName.lastIndexOf(".") <= 0) {
+          return;
         }
-        const fr = new FileReader ()
-        fr.readAsDataURL(files[0])
-        fr.addEventListener('load', () => {
-          this.imageBase64 = fr.result
-          this.imageFile = files[0] // this is an image file that can be sent to server...
-        })
+        const fr = new FileReader();
+        fr.readAsDataURL(files[0]);
+        fr.addEventListener("load", () => {
+          this.imageBase64 = fr.result;
+          this.imageFile = files[0]; // this is an image file that can be sent to server...
+        });
       } else {
-        this.imageName = ''
-        this.imageFile = ''
-        this.imageBase64 = ''
+        this.imageName = "";
+        this.imageFile = "";
+        this.imageBase64 = "";
       }
-    }
-  }
-}
-</script> 
+    },
+  },
+};
+</script>
