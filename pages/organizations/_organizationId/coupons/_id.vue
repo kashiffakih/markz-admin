@@ -9,23 +9,28 @@
             <div class="col-sm-6">
               <back-button />
 
-              <h1 class="m-0 text-dark">
-                
-                Coupon</h1>
-            </div><!-- /.col -->
+              <h1 class="m-0 text-dark">Coupon</h1>
+            </div>
+            <!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item">
-                    <nuxt-link to="/">Home</nuxt-link>
+                  <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li class="breadcrumb-item">
-                  <nuxt-link :to="`/organizations/${this.organization.value}/coupons`">Coupons</nuxt-link>
+                  <nuxt-link
+                    :to="`/organizations/${this.organization.value}/coupons`"
+                    >Coupons</nuxt-link
+                  >
                 </li>
                 <li class="breadcrumb-item active">Create</li>
               </ol>
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
       </div>
       <!-- /.content-header -->
 
@@ -45,34 +50,41 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label class="form-label">Coupon Name</label>
-                    <input type="text" class="form-control" placeholder="Enter coupon name"
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Enter coupon name"
                       v-model="form.name"
-                    >
-                    <span class="help-block" 
-                      v-if="errors.name"
-                    >{{ errors.name[0] }}</span>
+                    />
+                    <span class="help-block" v-if="errors.name">{{
+                      errors.name[0]
+                    }}</span>
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Start Date [{{ form.start_date }}]</label>
+                    <label class="form-label"
+                      >Start Date [{{ form.start_date }}]</label
+                    >
                     <date-picker
                       placeholder="DD-MM-YYYY"
                       :format="customStartDateFormatter"
                       value="form.start_date"
                     />
-                    <span class="help-block" 
-                      v-if="errors.start_date"
-                    >{{ errors.start_date[0] }}</span>
+                    <span class="help-block" v-if="errors.start_date">{{
+                      errors.start_date[0]
+                    }}</span>
                   </div>
                   <div class="form-group">
-                    <label class="form-label">End Date [{{ form.end_date }}]</label>
+                    <label class="form-label"
+                      >End Date [{{ form.end_date }}]</label
+                    >
                     <date-picker
                       placeholder="DD-MM-YYYY"
                       :format="customEndDateFormatter"
                       value="form.end_date"
                     />
-                    <span class="help-block" 
-                      v-if="errors.end_date"
-                    >{{ errors.end_date[0] }}</span>
+                    <span class="help-block" v-if="errors.end_date">{{
+                      errors.end_date[0]
+                    }}</span>
                   </div>
                   <div class="form-group">
                     <label class="form-label">Coupon Type</label>
@@ -81,98 +93,121 @@
                       <option value="Flat">Flat</option>
                       <option value="Percent">Percent</option>
                     </select>
-                    <span class="help-block" 
-                      v-if="errors.type"
-                    >{{ errors.type[0] }}</span>
+                    <span class="help-block" v-if="errors.type">{{
+                      errors.type[0]
+                    }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-control" v-model="form.type_role">
+                      <option value="All">All</option>
+                      <option value="User">User</option>
+                      <option value="Distributor">Distributor</option>
+                    </select>
+                    <span class="help-block" v-if="errors.type_role">{{
+                      errors.type_role[0]
+                    }}</span>
                   </div>
                   <div class="form-group">
                     <label class="form-label">Coupon Value</label>
-                    <input type="number" class="form-control" placeholder="Enter coupon value"
+                    <input
+                      type="number"
+                      class="form-control"
+                      placeholder="Enter coupon value"
                       v-model="form.value"
-                    >
-                    <span class="help-block" 
-                      v-if="errors.value"
-                    >{{ errors.value[0] }}</span>
+                    />
+                    <span class="help-block" v-if="errors.value">{{
+                      errors.value[0]
+                    }}</span>
                   </div>
                   <div class="form-group">
-                    <label class="form-label">No of times a Users can use Coupon</label>
-                    <input type="number" class="form-control" placeholder="Enter no"
-                      v-model="form.no_per_user"
+                    <label class="form-label"
+                      >No of times a Users can use Coupon</label
                     >
-                    <span class="help-block" 
-                      v-if="errors.no_per_user"
-                    >{{ errors.no_per_user[0] }}</span>
+                    <input
+                      type="number"
+                      class="form-control"
+                      placeholder="Enter no"
+                      v-model="form.no_per_user"
+                    />
+                    <span class="help-block" v-if="errors.no_per_user">{{
+                      errors.no_per_user[0]
+                    }}</span>
                   </div>
                   <div class="form-group">
                     <label class="form-label">Min. order value</label>
-                    <input type="number" class="form-control" placeholder="Enter min. order value"
+                    <input
+                      type="number"
+                      class="form-control"
+                      placeholder="Enter min. order value"
                       v-model="form.min_order_value"
-                    >
-                    <span class="help-block" 
-                      v-if="errors.min_order_value"
-                    >{{ errors.min_order_value[0] }}</span>
+                    />
+                    <span class="help-block" v-if="errors.min_order_value">{{
+                      errors.min_order_value[0]
+                    }}</span>
                   </div>
                   <div class="form-footer">
-                    <button class="btn btn-primary btn-block"
-                      @click="store"
-                    >{{ loading ? 'Saving...' : 'Update Coupon' }}</button>
+                    <button class="btn btn-primary btn-block" @click="store">
+                      {{ loading ? "Saving..." : "Update Coupon" }}
+                    </button>
                   </div>
                 </div>
               </div>
               <!-- /.card -->
-              </div>
+            </div>
             <!--/.col (left) -->
           </div>
           <!-- /.row -->
         </div>
       </section>
       <!-- /.content -->
-      </div>
+    </div>
     <!-- /.content-wrapper -->
   </section>
 </template>
 
 <script type="text/javascript">
 import BackButton from "@/components/BackButton.vue";
-import moment from 'moment'
+import moment from "moment";
 
 export default {
-  name: 'UpdateCoupon',
+  name: "UpdateCoupon",
   components: {
-    BackButton
+    BackButton,
   },
-  async asyncData({$axios, params}) {
-    let coupon = await $axios.get(`/company_coupons/${params.id}`)
+  async asyncData({ $axios, params }) {
+    let coupon = await $axios.get(`/company_coupons/${params.id}`);
     return {
-      form: coupon.data.data
-    }
+      form: coupon.data.data,
+    };
   },
   data: () => ({
-    loading: false
+    loading: false,
   }),
-  mounted() {
-  },
-  
+  mounted() {},
+
   methods: {
     customStartDateFormatter(date) {
-      this.form.start_date = moment(date).format('DD-MM-YYYY');
-      return moment(date).format('DD-MM-YYYY');
+      this.form.start_date = moment(date).format("DD-MM-YYYY");
+      return moment(date).format("DD-MM-YYYY");
     },
     customEndDateFormatter(date) {
-      this.form.end_date = moment(date).format('DD-MM-YYYY');
-      return moment(date).format('DD-MM-YYYY');
+      this.form.end_date = moment(date).format("DD-MM-YYYY");
+      return moment(date).format("DD-MM-YYYY");
     },
     async store() {
-      this.loading = true
+      this.loading = true;
       try {
-        let admin = await this.$axios.patch(`/company_coupons/${this.$route.params.id}`, this.form)
-        this.$router.push(`/organizations/${this.organization.value}/coupons`)
-        this.loading = false
-      }
-      catch(e) {
-        this.loading = false
+        let admin = await this.$axios.patch(
+          `/company_coupons/${this.$route.params.id}`,
+          this.form
+        );
+        this.$router.push(`/organizations/${this.organization.value}/coupons`);
+        this.loading = false;
+      } catch (e) {
+        this.loading = false;
       }
     },
-  }
-}
+  },
+};
 </script>

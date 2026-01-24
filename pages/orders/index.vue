@@ -44,6 +44,7 @@
               <br />
               <br />
               <div class="card">
+                <!-- Role Filter (New) -->
                 <div class="col-md-12" style="padding: 10px">
                   <div class="row">
                     <div class="col-sm-3">
@@ -62,6 +63,15 @@
                         :options="order_statuses"
                         @input="filter"
                         placeholder="Select Order Status"
+                      ></v-select>
+                    </div>
+                    <div class="col-sm-3">
+                      <v-select
+                        v-model="role"
+                        :reduce="(role) => role.code"
+                        :options="roles"
+                        @input="filter"
+                        placeholder="Select Role"
                       ></v-select>
                     </div>
                   </div>
@@ -281,7 +291,13 @@
                                   }}
                                 </td>
                                 <td>{{ detail.flavour }}</td>
-                                <td>{{ detail.product_pack.value }}</td>
+                                <td>
+                                  {{
+                                    detail.product_pack
+                                      ? detail.product_pack.value
+                                      : ""
+                                  }}
+                                </td>
                                 <td>{{ detail.quantity }}</td>
                                 <td>{{ detail.order_detail_cost }} INR</td>
                               </tr>
@@ -568,7 +584,14 @@ export default {
     current_page: 1,
     per_page: 10, // Default items per page
     currentPage: 1,
+
     perPage: 10,
+    role: "",
+    roles: [
+      { label: "All Roles", code: "" },
+      { label: "User", code: "User" },
+      { label: "Distributor", code: "Distributor" },
+    ],
   }),
   computed: {
     paginatedItems() {
@@ -615,6 +638,11 @@ export default {
       // Add order status filter to server-side query if selected
       if (this.order_status_id) {
         query += `&order_status_id=${this.order_status_id}`;
+      }
+
+      // Add role filter
+      if (this.role) {
+        query += `&role=${this.role}`;
       }
 
       let response = await this.$axios.get(query);

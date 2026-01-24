@@ -98,6 +98,17 @@
                     }}</span>
                   </div>
                   <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-control" v-model="form.type_role">
+                      <option value="All">All</option>
+                      <option value="User">User</option>
+                      <option value="Distributor">Distributor</option>
+                    </select>
+                    <span class="help-block" v-if="errors.type_role">{{
+                      errors.type_role[0]
+                    }}</span>
+                  </div>
+                  <div class="form-group">
                     <label class="form-label">Coupon Value</label>
                     <input
                       type="number"
@@ -162,7 +173,7 @@ import moment from "moment";
 export default {
   name: "CreateUnit",
   components: {
-    BackButton
+    BackButton,
   },
   data: () => ({
     form: {
@@ -170,11 +181,12 @@ export default {
       start_date: "",
       end_date: "",
       type: "",
+      type_role: "All",
     },
     loading: false,
   }),
   mounted() {},
-  
+
   methods: {
     customStartDateFormatter(date) {
       this.form.start_date = moment(date).format("DD-MM-YYYY");
