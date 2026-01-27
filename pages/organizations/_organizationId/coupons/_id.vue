@@ -115,10 +115,17 @@
                       class="form-control"
                       placeholder="Enter coupon value"
                       v-model="form.value"
+                      :max="form.type === 'Percent' ? 100 : null"
                     />
                     <span class="help-block" v-if="errors.value">{{
                       errors.value[0]
                     }}</span>
+                    <span
+                      class="help-block text-danger"
+                      v-if="form.type === 'Percent' && form.value > 100"
+                    >
+                      Percentage value cannot exceed 100
+                    </span>
                   </div>
                   <div class="form-group">
                     <label class="form-label"
@@ -196,6 +203,11 @@ export default {
       return moment(date).format("DD-MM-YYYY");
     },
     async store() {
+      // Validate percentage value
+      if (this.form.type === "Percent" && this.form.value > 100) {
+        this.$toast.error("Percentage value cannot exceed 100");
+        return;
+      }
       this.loading = true;
       try {
         let admin = await this.$axios.patch(
