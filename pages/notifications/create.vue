@@ -58,62 +58,36 @@
                     }}</span>
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Notification Text</label>
-                    <input
-                      type="text"
+                    <label class="form-label">Notification Message</label>
+                    <textarea
                       class="form-control"
-                      placeholder="Enter text"
-                      v-model="form.text"
-                    />
-                    <span class="help-block" v-if="errors.text">{{
-                      errors.text[0]
+                      placeholder="Enter notification message"
+                      v-model="form.body"
+                      rows="3"
+                    ></textarea>
+                    <span class="help-block" v-if="errors.body">{{
+                      errors.body[0]
                     }}</span>
                   </div>
                   <div class="form-group">
-                    <label class="form-label">To</label>
-                    <select class="form-control" v-model="form.to">
-                      <option value="">Select Store/User</option>
-                      <option value="Store">Store</option>
-                      <option value="User">User</option>
+                    <label class="form-label">Send To</label>
+                    <select class="form-control" v-model="form.type">
+                      <option value="">Select Target Audience</option>
+                      <option value="all">All (Users & Distributors)</option>
+                      <option value="users">Users Only</option>
+                      <option value="distributors">Distributors Only</option>
                     </select>
-                    <span class="help-block" v-if="errors.to">{{
-                      errors.to[0]
+                    <span class="help-block" v-if="errors.type">{{
+                      errors.type[0]
                     }}</span>
-                  </div>
-                  <div class="form-group">
-                    <span v-if="form.to == 'Store'">
-                      <input type="checkbox" v-model="form.s_all" />
-                      All&nbsp;&nbsp;
-                      <input type="checkbox" v-model="form.s_approved" /> To
-                      Approved Store&nbsp;&nbsp;
-                      <input type="checkbox" v-model="form.s_enabled" /> To
-                      Enabled Store&nbsp;&nbsp;
-                    </span>
-                    <span v-if="form.to == 'User'">
-                      <input type="checkbox" v-model="form.u_all" />
-                      All&nbsp;&nbsp;
-                      <input type="checkbox" v-model="form.u_delivery" /> To
-                      Delivery Rider&nbsp;&nbsp;
-                      <input type="checkbox" v-model="form.u_customer" /> To
-                      Customer
-                      <hr />
-                      <span v-if="form.u_delivery">
-                        <input type="checkbox" v-model="form.v_a" /> To
-                        Available Delivery Rider&nbsp;&nbsp;
-                        <input type="checkbox" v-model="form.v_na" /> To Not
-                        Available Delivery Rider&nbsp;&nbsp;
-                      </span>
-                      <span v-if="form.u_customer">
-                        <input type="checkbox" v-model="form.u_active" /> To
-                        Active User&nbsp;&nbsp;
-                        <input type="checkbox" v-model="form.u_inactive" /> To
-                        In Active User&nbsp;&nbsp;
-                      </span>
-                    </span>
                   </div>
                   <div class="form-footer">
-                    <button class="btn btn-primary btn-block" @click="store">
-                      {{ loading ? "Saving..." : "Create Notification" }}
+                    <button
+                      class="btn btn-primary btn-block"
+                      @click="store"
+                      :disabled="loading || !form.type"
+                    >
+                      {{ loading ? "Sending..." : "Send Notification" }}
                     </button>
                   </div>
                 </div>
@@ -141,44 +115,63 @@ export default {
   data: () => ({
     form: {
       title: "",
-      text: "",
-      to: "",
-      s_all: false,
-      s_approved: false,
-      s_enabled: false,
-      u_all: false,
-      u_delivery: false,
-      u_customer: false,
-      v_a: false,
-      v_na: false,
-      u_active: false,
-      u_inactive: false,
-      details: "Other Details",
+      body: "",
+      type: "",
     },
-    tagid: "",
+    errors: {},
     loading: false,
   }),
   mounted() {},
 
   methods: {
     async store() {
+      // Validate form
+      this.errors = {};
+      if (!this.form.title) {
+        this.errors.title = ["Title is required"];
+        return;
+      }
+      if (!this.form.body) {
+        this.errors.body = ["Message is required"];
+        return;
+      }
+      if (!this.form.type) {
+        this.errors.type = ["Please select target audience"];
+        return;
+      }
+
       if (
         await this.$root.confirm(
-          "Please recheck. Notifications once sent can't be undo"
+          "Please recheck. Notifications once sent can't be undone. Send to " +
+            this.getTargetLabel() +
+            "?"
         )
       ) {
         this.loading = true;
         try {
-          let notification = await this.$axios.post(
-            `/notifications`,
-            this.form
-          );
+          await this.$axios.post(`/notifications/send`, this.form);
           this.$router.push(`/notifications`);
-          this.loading = false;
         } catch (e) {
+          console.error("Notification error:", e);
+          if (e.response && e.response.data && e.response.data.errors) {
+            this.errors = e.response.data.errors;
+          } else if (e.response && e.response.data && e.response.data.message) {
+            alert(e.response.data.message);
+          } else {
+            alert("Failed to send notification. Please try again.");
+          }
+        } finally {
           this.loading = false;
         }
       }
+    },
+    getTargetLabel() {
+      const labels = {
+        all: "All Users & Distributors",
+        users: "Users Only",
+        distributors: "Distributors Only",
+      };
+      return labels[this.form.type] || "selected users";
     },
   },
 };

@@ -399,6 +399,12 @@ export default {
             link: `/organizations/${this.organizationId}/products/bulk-upload`,
             permission: this.permissions.indexOf(3) != -1 ? true : false,
           },
+          {
+            name: "Product Notify",
+            icon: "fas fa-bell",
+            link: `/organizations/${this.organizationId}/product-notifications`,
+            permission: this.permissions.indexOf(3) != -1 ? true : false,
+          },
         ],
       });
       // categories.push({
