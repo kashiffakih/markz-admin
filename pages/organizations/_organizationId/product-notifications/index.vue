@@ -87,7 +87,7 @@
                   <td>{{ item.user ? item.user.name : "N/A" }}</td>
                   <td>{{ item.qty }}</td>
                   <td>
-                    {{ $moment(item.created_at).format("DD MMM YYYY, h:mm a") }}
+                    {{ moment(item.created_at).format("DD MMM YYYY, h:mm a") }}
                   </td>
                   <!-- <td>
                     <button class="btn btn-danger btn-sm" @click="deleteItem(item.id)">
@@ -126,6 +126,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import BackButton from "@/components/BackButton.vue";
 import Pagination from "@/components/Pagination.vue";
 
@@ -151,6 +152,7 @@ export default {
     this.getNotifications();
   },
   methods: {
+    moment,
     async getNotifications(page = 1) {
       this.loading = true;
       try {

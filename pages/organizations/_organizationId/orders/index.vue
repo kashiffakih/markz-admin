@@ -378,11 +378,13 @@ export default {
             : "";
         }
         item.created_at = moment(
-          this.convertToDubaiTime(item.created_at)
+          this.convertToDubaiTime(item.created_at),
+          this.fmt
         ).format("DD-MM-YYYY hh:mm:ss");
         item.order_statuses.forEach((status) => {
           status.created_at = moment(
-            this.convertToDubaiTime(status.created_at)
+            this.convertToDubaiTime(status.created_at),
+            this.fmt
           ).format("DD-MM-YYYY hh:mm:ss");
         });
       });

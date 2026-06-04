@@ -111,7 +111,7 @@
                               (emp.imagepath ? emp.imagepath : 'user.png')
                             "
                           />
-                          <v-text v-else>No Profile</v-text>
+                          <span v-else>No Profile</span>
                           <br />
                           {{ emp.emp_code }}
                         </td>

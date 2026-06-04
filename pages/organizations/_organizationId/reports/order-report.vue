@@ -253,7 +253,8 @@ export default {
         this.totalEarnings = 0;
         this.items.forEach((item) => {
           item.created_at = moment(
-            this.convertToDubaiTime(item.created_at)
+            this.convertToDubaiTime(item.created_at),
+            this.fmt
           ).format("DD-MM-YYYY hh:mm:ss");
           this.totalEarnings += parseFloat(item.order_cost);
         });

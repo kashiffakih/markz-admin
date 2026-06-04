@@ -100,8 +100,6 @@
                         <th>Order ID</th>
                         <th>Customer</th>
                         <th>Order Details</th>
-                        <th>Order Cost</th>
-                        <th>Order Payment</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -268,227 +266,13 @@
                           }}
                         </td>
                         <td>
-                          <table>
-                            <thead>
-                              <tr>
-                                <th>Sr No</th>
-                                <th>Name</th>
-                                <th>Colour</th>
-                                <th>Size</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr
-                                v-for="(detail, d) in order.order_details"
-                                :key="`detail${d}`"
-                              >
-                                <td>{{ d + 1 }}</td>
-                                <td>
-                                  {{
-                                    detail.product ? detail.product.name : ""
-                                  }}
-                                </td>
-                                <td>{{ detail.flavour }}</td>
-                                <td>
-                                  {{
-                                    detail.product_pack
-                                      ? detail.product_pack.value
-                                      : ""
-                                  }}
-                                </td>
-                                <td>{{ detail.quantity }}</td>
-                                <td>{{ detail.order_detail_cost }} INR</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </td>
-                        <td>
-                          <table v-if="order.taxBreakdown">
-                            <thead>
-                              <tr>
-                                <th>Name</th>
-                                <th>Amount</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>Item total</td>
-                                <td>Rs. {{ order.taxBreakdown.itemTotal }}</td>
-                              </tr>
-                              <tr v-if="order.taxBreakdown.isMaharashtra">
-                                <td>CGST 2.5%</td>
-                                <td>Rs. {{ order.taxBreakdown.cgst }}</td>
-                              </tr>
-                              <tr v-if="order.taxBreakdown.isMaharashtra">
-                                <td>SGST 2.5%</td>
-                                <td>Rs. {{ order.taxBreakdown.sgst }}</td>
-                              </tr>
-                              <tr v-else>
-                                <td>IGST 5%</td>
-                                <td>Rs. {{ order.taxBreakdown.igst }}</td>
-                              </tr>
-                              <tr>
-                                <td>Delivery charge</td>
-                                <td>Rs. {{ order.delivery_amount || "0" }}</td>
-                              </tr>
-                              <tr>
-                                <td>Packing charge</td>
-                                <td>Rs. {{ order.packaging_amount || "0" }}</td>
-                              </tr>
-                              <tr>
-                                <td>Coupon Value</td>
-                                <td>- Rs. {{ order.coupon_amount || "0" }}</td>
-                              </tr>
-                              <tr>
-                                <td>Wallet Amount Used</td>
-                                <td>
-                                  - Rs. {{ order.wallet_amount_used || "0" }}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td colspan="2">
-                                  <hr
-                                    style="
-                                      border-top: 1px solid #ccc;
-                                      margin: 5px 0;
-                                    "
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td style="font-weight: bold">Grand Total</td>
-                                <td style="font-weight: bold">
-                                  Rs.
-                                  {{
-                                    order.order_cost
-                                      ? parseFloat(order.order_cost).toFixed(2)
-                                      : "0.00"
-                                  }}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td colspan="2">
-                                  <hr
-                                    style="
-                                      border-top: 1px solid #ccc;
-                                      margin: 5px 0;
-                                    "
-                                  />
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                          <table v-else>
-                            <thead>
-                              <tr>
-                                <th>Name</th>
-                                <th>Amount</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>Order Cost</td>
-                                <td>
-                                  Rs.
-                                  {{
-                                    order.order_cost
-                                      ? parseInt(order.order_cost).toFixed(2)
-                                      : "-"
-                                  }}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Tax</td>
-                                <td>Rs. {{ order.tax_amount }}</td>
-                              </tr>
-                              <tr>
-                                <td>Delivery Charges</td>
-                                <td>Rs. {{ order.delivery_amount }}</td>
-                              </tr>
-                              <tr>
-                                <td>Packing Chaarge</td>
-                                <td>Rs. {{ order.packaging_amount }}</td>
-                              </tr>
-                              <tr>
-                                <td>Wallet Amount Used</td>
-                                <td>- Rs. {{ order.wallet_amount_used }}</td>
-                              </tr>
-                              <tr>
-                                <td>Coupon</td>
-                                <td>- Rs. {{ order.coupon_amount }}</td>
-                              </tr>
-                              <tr>
-                                <td>Total Payable</td>
-                                <td>Rs. {{ order.total_amount }}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </td>
-                        <td>
-                          <table>
-                            <thead>
-                              <tr>
-                                <th>Details</th>
-                                <th>Description</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>Payment Mode</td>
-                                <td>
-                                  {{
-                                    order.paymentmode != null
-                                      ? order.paymentmode
-                                          .split(" - Transaction ID: ")
-                                          .map((str) => str.trim())[0]
-                                      : "N/A"
-                                  }}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Payment Status</td>
-                                <td>
-                                  {{
-                                    order.paymentmode != null
-                                      ? order.paymentmode.includes("Cash")
-                                        ? "Pending"
-                                        : "Done"
-                                      : "N/A"
-                                  }}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Transaction ID</td>
-                                <td>
-                                  {{
-                                    order.paymentmode != null
-                                      ? order.paymentmode
-                                          .split(" - Transaction ID: ")
-                                          .map((str) => str.trim())[1]
-                                      : "N/A"
-                                  }}
-                                </td>
-                              </tr>
-                              <!-- <tr>
-                                <td>Order Id</td>
-                                <td>{{ order.rpy_order_id }}</td>
-                              </tr> -->
-                              <!-- <tr>
-                                <td>Signature</td>
-                                <td>{{ order.rpy_signature }}</td>
-                              </tr> -->
-                              <!-- <tr>
-                                <td>Code</td>
-                                <td>{{ order.rpy_code }}</td>
-                              </tr> -->
-                              <!-- <tr>
-                                <td>Description</td>
-                                <td>{{ order.rpy_message }}</td>
-                              </tr> -->
-                            </tbody>
-                          </table>
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-info"
+                            @click="showOrderDetails(order)"
+                          >
+                            Order Details
+                          </button>
                         </td>
                       </tr>
                     </tbody>
@@ -511,6 +295,182 @@
         </div>
       </section>
       <!-- /.content -->
+      <!-- Order Details Modal -->
+      <div
+        class="modal fade"
+        id="orderDetailsModal"
+        tabindex="-1"
+        role="dialog"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content" v-if="selectedOrder">
+            <div class="modal-header">
+              <h5 class="modal-title">Order #{{ selectedOrder.id }} Details</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <h5>Items</h5>
+              <table class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>Sr No</th>
+                    <th>Name</th>
+                    <th>Colour</th>
+                    <th>Size</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="(detail, d) in selectedOrder.order_details"
+                    :key="`modal-detail${d}`"
+                  >
+                    <td>{{ d + 1 }}</td>
+                    <td>
+                      {{ detail.product ? detail.product.name : "" }}
+                    </td>
+                    <td>{{ detail.flavour || "N/A" }}</td>
+                    <td>
+                      {{
+                        detail.product_pack
+                          ? detail.product_pack.value
+                          : "N/A"
+                      }}
+                    </td>
+                    <td>{{ detail.quantity }}</td>
+                    <td>{{ detail.order_detail_cost }} INR</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="row mt-4">
+                <div class="col-md-6">
+                  <h5>Cost Breakdown</h5>
+                  <table class="table table-sm table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Item total</td>
+                        <td>
+                          Rs. {{ parseFloat(selectedOrder.order_cost || 0).toFixed(2) }}
+                        </td>
+                      </tr>
+                      <tr v-if="isMaharashtraOrder(selectedOrder)">
+                        <td>CGST 2.5%</td>
+                        <td>Rs. {{ (parseFloat(selectedOrder.tax_amount || 0) / 2).toFixed(2) }}</td>
+                      </tr>
+                      <tr v-if="isMaharashtraOrder(selectedOrder)">
+                        <td>SGST 2.5%</td>
+                        <td>Rs. {{ (parseFloat(selectedOrder.tax_amount || 0) / 2).toFixed(2) }}</td>
+                      </tr>
+                      <tr v-else>
+                        <td>IGST 5%</td>
+                        <td>Rs. {{ parseFloat(selectedOrder.tax_amount || 0).toFixed(2) }}</td>
+                      </tr>
+                      <tr>
+                        <td>Delivery charge</td>
+                        <td>Rs. {{ parseFloat(selectedOrder.delivery_amount || 0).toFixed(2) }}</td>
+                      </tr>
+                      <tr>
+                        <td>Packing charge</td>
+                        <td>Rs. {{ parseFloat(selectedOrder.packaging_amount || 0).toFixed(2) }}</td>
+                      </tr>
+                      <tr v-if="parseFloat(selectedOrder.platform_fee || 0) > 0">
+                        <td>Platform Fee</td>
+                        <td>Rs. {{ parseFloat(selectedOrder.platform_fee).toFixed(2) }}</td>
+                      </tr>
+                      <tr v-if="parseFloat(selectedOrder.coupon_amount || 0) > 0">
+                        <td>Coupon Value</td>
+                        <td>- Rs. {{ parseFloat(selectedOrder.coupon_amount).toFixed(2) }}</td>
+                      </tr>
+                      <tr v-if="selectedOrder.role !== 'Distributor' && parseFloat(selectedOrder.wallet_amount_used || 0) > 0">
+                        <td>Reward</td>
+                        <td>- Rs. {{ parseFloat(selectedOrder.wallet_amount_used).toFixed(2) }}</td>
+                      </tr>
+                      <tr style="font-weight: bold; border-top: 2px solid #ccc;">
+                        <td>Grand Total</td>
+                        <td>Rs. {{ parseFloat(selectedOrder.total_amount || 0).toFixed(2) }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="col-md-6">
+                  <h5>Payment Info</h5>
+                  <table class="table table-sm table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Details</th>
+                        <th>Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Payment Mode</td>
+                        <td>
+                          {{
+                            selectedOrder.paymentmode != null
+                              ? selectedOrder.paymentmode
+                                  .split(" - Transaction ID: ")
+                                  .map((str) => str.trim())[0]
+                              : "N/A"
+                          }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Payment Status</td>
+                        <td>
+                          {{
+                            selectedOrder.paymentmode != null
+                              ? selectedOrder.paymentmode.includes("Cash")
+                                ? "Pending"
+                                : "Done"
+                              : "N/A"
+                          }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Transaction ID</td>
+                        <td>
+                          {{
+                            selectedOrder.paymentmode != null
+                              ? selectedOrder.paymentmode
+                                  .split(" - Transaction ID: ")
+                                  .map((str) => str.trim())[1]
+                              : "N/A"
+                          }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- /.content-wrapper -->
   </section>
@@ -570,6 +530,7 @@ export default {
     };
   },
   data: () => ({
+    selectedOrder: null,
     searchData: "",
     items: [],
     loading: true,
@@ -601,6 +562,13 @@ export default {
     },
   },
   methods: {
+    showOrderDetails(order) {
+      this.selectedOrder = order;
+      const $ = window.jQuery || window.$ || (typeof $ !== "undefined" ? $ : null);
+      if ($) {
+        $("#orderDetailsModal").modal("show");
+      }
+    },
     onPageChanged(page) {
       this.currentPage = page;
     },
@@ -729,11 +697,13 @@ export default {
             : "";
         }
         item.created_at = moment(
-          this.convertToDubaiTime(item.created_at)
+          this.convertToDubaiTime(item.created_at),
+          this.fmt
         ).format("DD-MM-YYYY hh:mm:ss");
         item.order_statuses.forEach((status) => {
           status.created_at = moment(
-            this.convertToDubaiTime(status.created_at)
+            this.convertToDubaiTime(status.created_at),
+            this.fmt
           ).format("DD-MM-YYYY hh:mm:ss");
         });
 
@@ -835,11 +805,13 @@ export default {
               : "";
           }
           item.created_at = moment(
-            this.convertToDubaiTime(item.created_at)
+            this.convertToDubaiTime(item.created_at),
+            this.fmt
           ).format("DD-MM-YYYY hh:mm:ss");
           item.order_statuses.forEach((status) => {
             status.created_at = moment(
-              this.convertToDubaiTime(status.created_at)
+              this.convertToDubaiTime(status.created_at),
+              this.fmt
             ).format("DD-MM-YYYY hh:mm:ss");
           });
 

@@ -146,10 +146,13 @@
 </template>
 
 <script>
-// import axios from "axios";
+import BackButton from "@/components/BackButton.vue";
 
 export default {
   name: "BulkProductUpload",
+  components: {
+    BackButton,
+  },
   metaInfo: {
     title: "Upload Product Excel",
   },
