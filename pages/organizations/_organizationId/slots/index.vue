@@ -110,7 +110,6 @@ export default {
     BackButton,
   },
   data: () => ({
-    searchData: "",
     items: [],
     loading: true,
   }),
@@ -125,14 +124,7 @@ export default {
       this.items = items.data.data;
       this.loading = false;
     },
-    async search() {
-      if (this.searchData != "") {
-        this.loading = true;
-        let items = await this.$axios.get(`/tags?search=${this.searchData}`);
-        this.items = items.data.data;
-        this.loading = false;
-      }
-    },
+
     async del(id) {
       if (
         await this.$root.confirm("Are you sure you want to delete the data?")

@@ -33,46 +33,53 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
-              <input
-                type="text"
-                class="form-control"
-                v-model="searchData"
-                @keydown.enter="search"
-                placeholder="Search by order id"
-              />
-              <a class="refresh" href="#" @click="getData">Refresh</a>
-              <br />
-              <br />
-              <div class="card">
-                <!-- Role Filter (New) -->
-                <div class="col-md-12" style="padding: 10px">
-                  <div class="row">
-                    <div class="col-sm-3">
+              <div class="card mb-3">
+                <div class="card-body p-3">
+                  <div class="row align-items-center">
+                    <div class="col-12 col-md-3 mb-2 mb-md-0">
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="searchData"
+                        @input="search"
+                        placeholder="Search by order id"
+                        style="height: 44px;"
+                      />
+                    </div>
+                    <div class="col-12 col-sm-4 col-md-3 mb-2 mb-sm-0">
                       <v-select
                         v-model="category_id"
                         :reduce="(category) => category.code"
                         :options="categories"
                         @input="filter"
                         placeholder="Select Category"
+                        style="min-height: 44px;"
                       ></v-select>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-12 col-sm-4 col-md-3 mb-2 mb-sm-0">
                       <v-select
                         v-model="order_status_id"
                         :reduce="(status) => status.code"
                         :options="order_statuses"
                         @input="filter"
                         placeholder="Select Order Status"
+                        style="min-height: 44px;"
                       ></v-select>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-12 col-sm-4 col-md-2 mb-2 mb-sm-0">
                       <v-select
                         v-model="role"
                         :reduce="(role) => role.code"
                         :options="roles"
                         @input="filter"
                         placeholder="Select Role"
+                        style="min-height: 44px;"
                       ></v-select>
+                    </div>
+                    <div class="col-12 col-md-1 text-center text-md-right mt-2 mt-md-0">
+                      <a class="btn btn-secondary w-100 d-inline-flex align-items-center justify-content-center" href="#" @click.prevent="getData" style="height: 44px;">
+                        <i class="fas fa-sync mr-1"></i> Refresh
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -318,144 +325,152 @@
             </div>
             <div class="modal-body">
               <h5>Items</h5>
-              <table class="table table-striped table-bordered">
-                <thead>
-                  <tr>
-                    <th>Sr No</th>
-                    <th>Name</th>
-                    <th>Colour</th>
-                    <th>Size</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="(detail, d) in selectedOrder.order_details"
-                    :key="`modal-detail${d}`"
-                  >
-                    <td>{{ d + 1 }}</td>
-                    <td>
-                      {{ detail.product ? detail.product.name : "" }}
-                    </td>
-                    <td>{{ detail.flavour || "N/A" }}</td>
-                    <td>
-                      {{
-                        detail.product_pack
-                          ? detail.product_pack.value
-                          : "N/A"
-                      }}
-                    </td>
-                    <td>{{ detail.quantity }}</td>
-                    <td>{{ detail.order_detail_cost }} INR</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Sr No</th>
+                      <th>Name</th>
+                      <th>Colour</th>
+                      <th>Size</th>
+                      <th>Quantity</th>
+                      <th>Unit Price</th>
+                      <th>Total Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="(detail, d) in selectedOrder.order_details"
+                      :key="`modal-detail${d}`"
+                    >
+                      <td>{{ d + 1 }}</td>
+                      <td>
+                        {{ detail.product ? detail.product.name : "" }}
+                      </td>
+                      <td>{{ detail.flavour || "N/A" }}</td>
+                      <td>
+                        {{
+                          detail.product_pack
+                            ? detail.product_pack.value
+                            : "N/A"
+                        }}
+                      </td>
+                      <td>{{ detail.quantity }}</td>
+                      <td>Rs. {{ (parseFloat(detail.order_detail_cost || 0) / (detail.quantity || 1)).toFixed(2) }}</td>
+                      <td>Rs. {{ parseFloat(detail.order_detail_cost || 0).toFixed(2) }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
               <div class="row mt-4">
-                <div class="col-md-6">
+                <div class="col-md-6 mb-4 mb-md-0">
                   <h5>Cost Breakdown</h5>
-                  <table class="table table-sm table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Amount</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Item total</td>
-                        <td>
-                          Rs. {{ parseFloat(selectedOrder.order_cost || 0).toFixed(2) }}
-                        </td>
-                      </tr>
-                      <tr v-if="isMaharashtraOrder(selectedOrder)">
-                        <td>CGST 2.5%</td>
-                        <td>Rs. {{ (parseFloat(selectedOrder.tax_amount || 0) / 2).toFixed(2) }}</td>
-                      </tr>
-                      <tr v-if="isMaharashtraOrder(selectedOrder)">
-                        <td>SGST 2.5%</td>
-                        <td>Rs. {{ (parseFloat(selectedOrder.tax_amount || 0) / 2).toFixed(2) }}</td>
-                      </tr>
-                      <tr v-else>
-                        <td>IGST 5%</td>
-                        <td>Rs. {{ parseFloat(selectedOrder.tax_amount || 0).toFixed(2) }}</td>
-                      </tr>
-                      <tr>
-                        <td>Delivery charge</td>
-                        <td>Rs. {{ parseFloat(selectedOrder.delivery_amount || 0).toFixed(2) }}</td>
-                      </tr>
-                      <tr>
-                        <td>Packing charge</td>
-                        <td>Rs. {{ parseFloat(selectedOrder.packaging_amount || 0).toFixed(2) }}</td>
-                      </tr>
-                      <tr v-if="parseFloat(selectedOrder.platform_fee || 0) > 0">
-                        <td>Platform Fee</td>
-                        <td>Rs. {{ parseFloat(selectedOrder.platform_fee).toFixed(2) }}</td>
-                      </tr>
-                      <tr v-if="parseFloat(selectedOrder.coupon_amount || 0) > 0">
-                        <td>Coupon Value</td>
-                        <td>- Rs. {{ parseFloat(selectedOrder.coupon_amount).toFixed(2) }}</td>
-                      </tr>
-                      <tr v-if="selectedOrder.role !== 'Distributor' && parseFloat(selectedOrder.wallet_amount_used || 0) > 0">
-                        <td>Reward</td>
-                        <td>- Rs. {{ parseFloat(selectedOrder.wallet_amount_used).toFixed(2) }}</td>
-                      </tr>
-                      <tr style="font-weight: bold; border-top: 2px solid #ccc;">
-                        <td>Grand Total</td>
-                        <td>Rs. {{ parseFloat(selectedOrder.total_amount || 0).toFixed(2) }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Item total</td>
+                          <td>
+                            Rs. {{ parseFloat(selectedOrder.order_cost || 0).toFixed(2) }}
+                          </td>
+                        </tr>
+                        <tr v-if="isMaharashtraOrder(selectedOrder)">
+                          <td>CGST 2.5%</td>
+                          <td>Rs. {{ (parseFloat(selectedOrder.tax_amount || 0) / 2).toFixed(2) }}</td>
+                        </tr>
+                        <tr v-if="isMaharashtraOrder(selectedOrder)">
+                          <td>SGST 2.5%</td>
+                          <td>Rs. {{ (parseFloat(selectedOrder.tax_amount || 0) / 2).toFixed(2) }}</td>
+                        </tr>
+                        <tr v-else>
+                          <td>IGST 5%</td>
+                          <td>Rs. {{ parseFloat(selectedOrder.tax_amount || 0).toFixed(2) }}</td>
+                        </tr>
+                        <tr>
+                          <td>Delivery charge</td>
+                          <td>Rs. {{ parseFloat(selectedOrder.delivery_amount || 0).toFixed(2) }}</td>
+                        </tr>
+                        <tr>
+                          <td>Packing charge</td>
+                          <td>Rs. {{ parseFloat(selectedOrder.packaging_amount || 0).toFixed(2) }}</td>
+                        </tr>
+                        <tr v-if="parseFloat(selectedOrder.platform_fee || 0) > 0">
+                          <td>Platform Fee</td>
+                          <td>Rs. {{ parseFloat(selectedOrder.platform_fee).toFixed(2) }}</td>
+                        </tr>
+                        <tr>
+                          <td>Coupon Value</td>
+                          <td>- Rs. {{ parseFloat(selectedOrder.coupon_amount || 0).toFixed(2) }}</td>
+                        </tr>
+                        <tr v-if="selectedOrder.role !== 'Distributor'">
+                          <td>Reward</td>
+                          <td>- Rs. {{ parseFloat(selectedOrder.wallet_amount_used || 0).toFixed(2) }}</td>
+                        </tr>
+                        <tr style="font-weight: bold; border-top: 2px solid #ccc;">
+                          <td>Grand Total</td>
+                          <td>Rs. {{ parseFloat(selectedOrder.total_amount || 0).toFixed(2) }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 <div class="col-md-6">
                   <h5>Payment Info</h5>
-                  <table class="table table-sm table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Details</th>
-                        <th>Description</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Payment Mode</td>
-                        <td>
-                          {{
-                            selectedOrder.paymentmode != null
-                              ? selectedOrder.paymentmode
-                                  .split(" - Transaction ID: ")
-                                  .map((str) => str.trim())[0]
-                              : "N/A"
-                          }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Payment Status</td>
-                        <td>
-                          {{
-                            selectedOrder.paymentmode != null
-                              ? selectedOrder.paymentmode.includes("Cash")
-                                ? "Pending"
-                                : "Done"
-                              : "N/A"
-                          }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Transaction ID</td>
-                        <td>
-                          {{
-                            selectedOrder.paymentmode != null
-                              ? selectedOrder.paymentmode
-                                  .split(" - Transaction ID: ")
-                                  .map((str) => str.trim())[1]
-                              : "N/A"
-                          }}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Details</th>
+                          <th>Description</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Payment Mode</td>
+                          <td>
+                            {{
+                              selectedOrder.paymentmode != null
+                                ? selectedOrder.paymentmode
+                                    .split(" - Transaction ID: ")
+                                    .map((str) => str.trim())[0]
+                                : "N/A"
+                            }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Payment Status</td>
+                          <td>
+                            {{
+                              selectedOrder.paymentmode != null
+                                ? selectedOrder.paymentmode.includes("Cash")
+                                  ? "Pending"
+                                  : "Done"
+                                : "N/A"
+                            }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Transaction ID</td>
+                          <td>
+                            {{
+                              selectedOrder.paymentmode != null
+                                ? selectedOrder.paymentmode
+                                    .split(" - Transaction ID: ")
+                                    .map((str) => str.trim())[1]
+                                : "N/A"
+                            }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -536,7 +551,6 @@ export default {
     loading: true,
     fmt: "YYYY-MM-DD hh:mm:ss A",
     time_zone: "Asia/Kolkata",
-    searchData: "",
     allItems: [],
     category_id: "",
     order_status_id: "",
@@ -553,6 +567,7 @@ export default {
       { label: "User", code: "User" },
       { label: "Distributor", code: "Distributor" },
     ],
+    searchTimeout: null,
   }),
   computed: {
     paginatedItems() {
@@ -583,7 +598,7 @@ export default {
         : order.user
         ? order.user.state
         : null;
-      return state?.toString() === "Maharashtra";
+      return state?.toString().trim().toLowerCase() === "maharashtra";
     },
     async getData(page = 1) {
       this.items = [];
@@ -728,113 +743,118 @@ export default {
       this.current_page = meta.current_page;
       this.loading = false;
     },
-    async search(page = 1) {
-      if (this.searchData != "") {
-        this.loading = true;
-        // Build query parameters for search - using backend's expected format
-        let query = `/orders?page=${page}&rowsPerPage=${this.per_page}&search=${this.searchData}`;
-        let response = await this.$axios.get(query);
+    search(page = 1) {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = setTimeout(async () => {
+        if (this.searchData.length >= 1) {
+          this.loading = true;
+          // Build query parameters for search - using backend's expected format
+          let query = `/orders?page=${page}&rowsPerPage=${this.per_page}&search=${this.searchData}`;
+          let response = await this.$axios.get(query);
 
-        // Extract items and pagination data
-        const { data, meta } = response.data;
-        this.meta = meta;
+          // Extract items and pagination data
+          const { data, meta } = response.data;
+          this.meta = meta;
 
-        data.forEach((item) => {
-          if (item.user == null) item.user = {};
-          else {
-            item.user.bill_prefix = item.user.bill_prefix
-              ? item.user.bill_prefix + ", "
-              : "";
-            item.user.bill_first_name = item.user.bill_first_name
-              ? item.user.bill_first_name + " "
-              : "";
-            item.user.bill_last_name = item.user.bill_last_name
-              ? item.user.bill_last_name + ", "
-              : "";
-            item.user.bill_flat_no = item.user.bill_flat_no
-              ? item.user.bill_flat_no + ", "
-              : "";
-            item.user.bill_building_name = item.user.bill_building_name
-              ? item.user.bill_building_name + ", "
-              : "";
-            item.user.bill_email = item.user.bill_email
-              ? item.user.bill_email + ", "
-              : "";
-            item.user.bill_phone = item.user.bill_phone
-              ? item.user.bill_phone + ", "
-              : "";
-            item.user.bill_street_name = item.user.bill_street_name
-              ? item.user.bill_street_name + ", "
-              : "";
-            item.user.bill_address = item.user.bill_address
-              ? item.user.bill_address + ", "
-              : "";
-            item.user.bill_other_details = item.user.bill_other_details
-              ? item.user.bill_other_details + ", "
-              : "";
-            item.user.bill_nationality = item.user.bill_nationality
-              ? item.user.bill_nationality + ", "
-              : "";
+          data.forEach((item) => {
+            if (item.user == null) item.user = {};
+            else {
+              item.user.bill_prefix = item.user.bill_prefix
+                ? item.user.bill_prefix + ", "
+                : "";
+              item.user.bill_first_name = item.user.bill_first_name
+                ? item.user.bill_first_name + " "
+                : "";
+              item.user.bill_last_name = item.user.bill_last_name
+                ? item.user.bill_last_name + ", "
+                : "";
+              item.user.bill_flat_no = item.user.bill_flat_no
+                ? item.user.bill_flat_no + ", "
+                : "";
+              item.user.bill_building_name = item.user.bill_building_name
+                ? item.user.bill_building_name + ", "
+                : "";
+              item.user.bill_email = item.user.bill_email
+                ? item.user.bill_email + ", "
+                : "";
+              item.user.bill_phone = item.user.bill_phone
+                ? item.user.bill_phone + ", "
+                : "";
+              item.user.bill_street_name = item.user.bill_street_name
+                ? item.user.bill_street_name + ", "
+                : "";
+              item.user.bill_address = item.user.bill_address
+                ? item.user.bill_address + ", "
+                : "";
+              item.user.bill_other_details = item.user.bill_other_details
+                ? item.user.bill_other_details + ", "
+                : "";
+              item.user.bill_nationality = item.user.bill_nationality
+                ? item.user.bill_nationality + ", "
+                : "";
 
-            item.user.prefix = item.user.prefix ? item.user.prefix + ", " : "";
-            item.user.first_name = item.user.first_name
-              ? item.user.first_name + " "
-              : "";
-            item.user.last_name = item.user.last_name
-              ? item.user.last_name + ", "
-              : "";
-            item.user.flat_no = item.user.flat_no
-              ? item.user.flat_no + ", "
-              : "";
-            item.user.building_name = item.user.building_name
-              ? item.user.building_name + ", "
-              : "";
-            item.user.email = item.user.email ? item.user.email + ", " : "";
-            item.user.phone = item.user.phone ? item.user.phone + ", " : "";
-            item.user.street_name = item.user.street_name
-              ? item.user.street_name + ", "
-              : "";
-            item.user.address = item.user.address
-              ? item.user.address + ", "
-              : "";
-            item.user.other_details = item.user.other_details
-              ? item.user.other_details + ", "
-              : "";
-            item.user.nationality = item.user.nationality
-              ? item.user.nationality + ", "
-              : "";
-          }
-          item.created_at = moment(
-            this.convertToDubaiTime(item.created_at),
-            this.fmt
-          ).format("DD-MM-YYYY hh:mm:ss");
-          item.order_statuses.forEach((status) => {
-            status.created_at = moment(
-              this.convertToDubaiTime(status.created_at),
+              item.user.prefix = item.user.prefix ? item.user.prefix + ", " : "";
+              item.user.first_name = item.user.first_name
+                ? item.user.first_name + " "
+                : "";
+              item.user.last_name = item.user.last_name
+                ? item.user.last_name + ", "
+                : "";
+              item.user.flat_no = item.user.flat_no
+                ? item.user.flat_no + ", "
+                : "";
+              item.user.building_name = item.user.building_name
+                ? item.user.building_name + ", "
+                : "";
+              item.user.email = item.user.email ? item.user.email + ", " : "";
+              item.user.phone = item.user.phone ? item.user.phone + ", " : "";
+              item.user.street_name = item.user.street_name
+                ? item.user.street_name + ", "
+                : "";
+              item.user.address = item.user.address
+                ? item.user.address + ", "
+                : "";
+              item.user.other_details = item.user.other_details
+                ? item.user.other_details + ", "
+                : "";
+              item.user.nationality = item.user.nationality
+                ? item.user.nationality + ", "
+                : "";
+            }
+            item.created_at = moment(
+              this.convertToDubaiTime(item.created_at),
               this.fmt
             ).format("DD-MM-YYYY hh:mm:ss");
+            item.order_statuses.forEach((status) => {
+              status.created_at = moment(
+                this.convertToDubaiTime(status.created_at),
+                this.fmt
+              ).format("DD-MM-YYYY hh:mm:ss");
+            });
+
+            // Add tax calculation breakdown to each order
+            if (item.order_cost) {
+              const isMaharashtra = this.isMaharashtraOrder(item);
+              // Calculate the original cost before tax (assuming 5% GST)
+              const originalCost = item.order_cost / 1.05;
+              const taxAmount = item.order_cost - originalCost;
+
+              item.taxBreakdown = {
+                itemTotal: originalCost.toFixed(2),
+                isMaharashtra: isMaharashtra,
+                cgst: isMaharashtra ? (taxAmount / 2).toFixed(2) : null,
+                sgst: isMaharashtra ? (taxAmount / 2).toFixed(2) : null,
+                igst: isMaharashtra ? null : taxAmount.toFixed(2),
+              };
+            }
           });
-
-          // Add tax calculation breakdown to each order
-          if (item.order_cost) {
-            const isMaharashtra = this.isMaharashtraOrder(item);
-            // Calculate the original cost before tax (assuming 5% GST)
-            const originalCost = item.order_cost / 1.05;
-            const taxAmount = item.order_cost - originalCost;
-
-            item.taxBreakdown = {
-              itemTotal: originalCost.toFixed(2),
-              isMaharashtra: isMaharashtra,
-              cgst: isMaharashtra ? (taxAmount / 2).toFixed(2) : null,
-              sgst: isMaharashtra ? (taxAmount / 2).toFixed(2) : null,
-              igst: isMaharashtra ? null : taxAmount.toFixed(2),
-            };
-          }
-        });
-        this.items = data;
-        this.current_page = meta.current_page;
-        this.loading = false;
-      }
+          this.items = data;
+          this.current_page = meta.current_page;
+          this.loading = false;
+        } else if (this.searchData.length === 0) {
+          this.getData();
+        }
+      }, 300);
     },
     // filter() {
     //   if (this.category_id)

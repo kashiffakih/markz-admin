@@ -6,77 +6,114 @@
     >
       <!-- Site wrapper -->
       <div class="wrapper">
-        <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-          <!-- Left navbar links -->
-          <ul class="navbar-nav">
-            <li class="nav-item d-none d-sm-inline-block">
-              <button
-                class="btn btn-link nav-link"
-                @click="logout"
-                style="color: black !important"
-              >
-                Logout
-              </button>
-            </li>
-            <li>
-              {{
-                user.companies.length > 0
-                  ? user.companies[0].is_enabled == 0
-                    ? "Your account is not enabled"
-                    : ""
-                  : ""
-              }}
-            </li>
-            <li
-              v-if="
-                permissions.indexOf(1) != -1 || permissions.indexOf(2) != -1
-              "
-            >
-              <select-city :cities="cities"></select-city>
-            </li>
-            <li
-              v-if="
-                permissions.indexOf(1) != -1 || permissions.indexOf(2) != -1
-              "
-            >
-              <select-organization></select-organization>
-            </li>
-          </ul>
+        <!-- Drawer Backdrop Overlay -->
+        <div
+          class="drawer-overlay"
+          :class="{ show: isSidebarOpen }"
+          @click="closeSidebar"
+        ></div>
 
-          <!-- Right navbar links -->
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="dropdown" href="#">
-                <h3><b style="color: black">Aadab</b></h3>
-              </a>
-            </li>
-            <!-- <li class="nav-item">
-            <nuxt-link :to="`/organizations/${organization.value}/whistle-blowers/create`">
-              <button class="btn btn-danger">Send Message</button>
-            </nuxt-link>
-          </li> -->
-          </ul>
+        <!-- Navbar -->
+        <nav
+          class="main-header navbar navbar-white navbar-light d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between p-2"
+        >
+          <!-- Left side: Hamburger, logout, warning, and selects -->
+          <div
+            class="d-flex flex-grow-1 flex-wrap align-items-center"
+            style="gap: 8px"
+          >
+            <!-- Hamburger menu toggle -->
+            <a
+              class="nav-link px-2"
+              href="#"
+              role="button"
+              @click.prevent="toggleSidebar"
+            >
+              <i class="fas fa-bars" style="color: black; font-size: 20px"></i>
+            </a>
+
+            <!-- Logout Button -->
+            <button
+              class="btn btn-link nav-link px-2 mr-2"
+              @click="logout"
+              style="color: black !important"
+            >
+              Logout
+            </button>
+
+            <!-- Selection Status Warning -->
+            <span
+              v-if="selectionWarning"
+              class="mr-2"
+              style="font-size: 13px; color: #e65100; font-weight: 600;"
+            >
+              ⚠️ {{ selectionWarning }}
+            </span>
+
+            <!-- Selects (City & Organization) -->
+            <div
+              v-if="
+                permissions.indexOf(1) != -1 || permissions.indexOf(2) != -1
+              "
+              class="d-flex flex-wrap align-items-center flex-grow-1 flex-md-grow-0"
+              style="gap: 8px"
+            >
+              <div
+                class="flex-grow-1 flex-md-grow-0"
+                style="min-width: 140px; max-width: 180px"
+              >
+                <select-city :cities="cities"></select-city>
+              </div>
+              <div
+                class="flex-grow-1 flex-md-grow-0"
+                style="min-width: 180px; max-width: 240px"
+              >
+                <select-organization></select-organization>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right side: Title (hidden on extra small screens) -->
+          <div class="d-none d-sm-block pl-2">
+            <h3 class="m-0"><b style="color: black">Aadab</b></h3>
+          </div>
         </nav>
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
           <!-- Brand Logo -->
-          <nuxt-link to="/" class="brand-link" style="background-color: white">
-            <img
-              :src="
-                organization
-                  ? organization.logo_path
-                    ? mediaUrl + organization.logo_path
+          <div
+            class="brand-link d-flex align-items-center justify-content-between"
+            style="
+              background-color: rgba(255, 255, 255, 0.4) !important;
+              padding: 0.8125rem 0.5rem;
+            "
+          >
+            <nuxt-link to="/" class="d-flex align-items-center">
+              <img
+                :src="
+                  organization
+                    ? organization.logo_path
+                      ? mediaUrl + organization.logo_path
+                      : mediaUrl + 'company.png'
                     : mediaUrl + 'company.png'
-                  : mediaUrl + 'company.png'
-              "
-              alt="Logo"
-              style="opacity: 0.8; height: 50px"
-            />
-            <!-- <span class="brand-text font-weight-light">{{ organization.text ? organization.text : 'Not Selected' }}</span> -->
-          </nuxt-link>
+                "
+                alt="Logo"
+                style="opacity: 0.8; height: 50px"
+              />
+            </nuxt-link>
+            <!-- Close Button for Mobile -->
+            <a
+              class="d-block d-lg-none px-3"
+              href="#"
+              role="button"
+              @click.prevent="toggleSidebar"
+              style="color: black !important; font-size: 22px"
+            >
+              <i class="fas fa-times"></i>
+            </a>
+          </div>
 
           <!-- Sidebar -->
           <div class="sidebar">
@@ -203,7 +240,13 @@ export default {
       clipped: true,
       fixed: false,
       cities: [],
+      isSidebarOpen: false,
     };
+  },
+  watch: {
+    $route() {
+      this.closeSidebar();
+    },
   },
   computed: {
     authenticated() {
@@ -225,19 +268,41 @@ export default {
         : "";
     },
     organizationId() {
-      return this.user
-        ? this.user.companies.length
-          ? this.user.companies[0].id
-          : this.$store.getters["settings/organization"]
-          ? this.$store.getters["settings/organization"].value
-          : ""
-        : "";
+      const organization = this.$store.state.settings.organization;
+      if (organization && organization.value) {
+        return organization.value;
+      }
+      if (this.user && this.user.companies && this.user.companies.length > 0) {
+        return this.user.companies[0].id;
+      }
+      return "";
+    },
+    selectionWarning() {
+      const city = this.$store.state.settings.city;
+      const organization = this.$store.state.settings.organization;
+      const citySelected = city && city.id;
+      const orgSelected = organization && organization.value;
+
+      if (!citySelected && !orgSelected) {
+        return "Please select location & organization";
+      }
+      if (!citySelected) {
+        return "Please select a location";
+      }
+      if (!orgSelected) {
+        return "Please select an organization";
+      }
+      // Both selected — no warning
+      return null;
     },
     role() {
       return this.user ? this.user.roles[0].name : "";
     },
     permissions() {
       return this.user ? this.user.roles[0].permissions.map((p) => p.id) : "";
+    },
+    organization() {
+      return this.$store.state.settings.organization;
     },
     categories() {
       let categories = [];
@@ -510,6 +575,33 @@ export default {
     };
   },
   methods: {
+    toggleSidebar() {
+      this.isSidebarOpen = !this.isSidebarOpen;
+      this.updateBodyClass();
+    },
+    closeSidebar() {
+      this.isSidebarOpen = false;
+      this.updateBodyClass();
+    },
+    updateBodyClass() {
+      const $ =
+        window.jQuery || window.$ || (typeof $ !== "undefined" ? $ : null);
+      if ($) {
+        if (window.innerWidth < 992) {
+          if (this.isSidebarOpen) {
+            $("body").addClass("sidebar-open");
+          } else {
+            $("body").removeClass("sidebar-open");
+          }
+        } else {
+          if (this.isSidebarOpen) {
+            $("body").addClass("sidebar-collapse");
+          } else {
+            $("body").removeClass("sidebar-collapse");
+          }
+        }
+      }
+    },
     async getCities() {
       let cities = await this.$axios.get("/cities");
       this.cities = cities.data.data;

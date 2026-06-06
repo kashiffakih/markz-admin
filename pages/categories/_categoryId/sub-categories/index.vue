@@ -144,7 +144,6 @@ export default {
   //   }
   // },
   data: () => ({
-    searchData: "",
     category: {},
     loading: true,
     currentPage: 1,
@@ -179,16 +178,7 @@ export default {
       this.category = category.data.data;
       this.loading = false;
     },
-    async search() {
-      if (this.searchData != "") {
-        this.loading = true;
-        let items = await this.$axios.get(
-          `/categories?search=${this.searchData}`
-        );
-        this.items = items.data.data;
-        this.loading = false;
-      }
-    },
+
     async del(id) {
       if (
         await this.$root.confirm("Are you sure you want to delete the data?")

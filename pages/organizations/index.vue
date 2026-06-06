@@ -27,7 +27,7 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
-          <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by organization name">
+          <input type="text" class="form-control" v-model="searchData" @input="search" placeholder="Search by organization name">
           <br>
           <div class="card">
             <div class="col-md-12" style="padding: 10px;">
@@ -194,11 +194,10 @@ export default {
     checkEnabled: '',
     searchData: '',
     organizations: [],
+    searchTimeout: null,
   }),
   async mounted()  {
-    let organizations = await this.$axios.get(`/companies?cityId=${this.city.id}`);
-    this.organizations = organizations.data.data
-    this.setItems()
+    this.getData()
   },
   methods: {
     setItems() {
@@ -237,14 +236,24 @@ export default {
       if(!this.category_id && !this.checkApproved && !this.checkEnabled) 
         this.items = this.allItems
     },
-    async search() {
-      if(this.searchData != "")
-      {
-        this.loading = true
-        let organizations = await this.$axios.get(`/companies?search=${this.searchData}`);
-        this.organizations = organizations.data.data
-        this.setItems()
-      }
+    async getData() {
+      this.loading = true
+      let organizations = await this.$axios.get(`/companies?cityId=${this.city.id}`);
+      this.organizations = organizations.data.data
+      this.setItems()
+    },
+    search() {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = setTimeout(async () => {
+        if (this.searchData.length >= 3) {
+          this.loading = true
+          let organizations = await this.$axios.get(`/companies?search=${this.searchData}`);
+          this.organizations = organizations.data.data
+          this.setItems()
+        } else if (this.searchData.length === 0) {
+          this.getData()
+        }
+      }, 300);
     }
   }
 }

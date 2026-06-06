@@ -37,7 +37,7 @@
                 type="text"
                 class="form-control"
                 v-model="searchData"
-                @keydown.enter="search"
+                @input="search"
                 placeholder="Search by unit"
               />
               <a class="refresh" href="#" @click="getData">Refresh</a>
@@ -124,6 +124,7 @@ export default {
     loading: true,
     currentPage: 1,
     perPage: 10,
+    searchTimeout: null,
   }),
   mounted() {
     this.getData();
@@ -150,13 +151,18 @@ export default {
       this.items = items.data.data;
       this.loading = false;
     },
-    async search() {
-      if (this.searchData != "") {
-        this.loading = true;
-        let items = await this.$axios.get(`/units?search=${this.searchData}`);
-        this.items = items.data.data;
-        this.loading = false;
-      }
+    search() {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = setTimeout(async () => {
+        if (this.searchData.length >= 3) {
+          this.loading = true;
+          let items = await this.$axios.get(`/units?search=${this.searchData}`);
+          this.items = items.data.data;
+          this.loading = false;
+        } else if (this.searchData.length === 0) {
+          this.getData();
+        }
+      }, 300);
     },
     async del(id) {
       if (

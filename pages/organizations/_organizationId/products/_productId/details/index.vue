@@ -389,7 +389,6 @@ export default {
     };
   },
   data: () => ({
-    searchData: "",
     loading: false,
     form: {},
     tags: [],

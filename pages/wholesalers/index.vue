@@ -32,59 +32,66 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
-              <input
-                type="text"
-                class="form-control"
-                v-model="searchData"
-                @keydown.enter="search"
-                placeholder="Search by name / email / phone / business name"
-              />
-              <a class="refresh" href="#" @click="getData">Refresh</a>
-              <br />
+              <div class="card mb-3">
+                <div class="card-body p-3">
+                  <div class="row align-items-center">
+                    <!-- Search Input -->
+                    <div class="col-12 col-md-4 mb-2 mb-md-0">
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="searchData"
+                        @input="search"
+                        placeholder="Search by name / email / phone / business name"
+                        style="height: 44px;"
+                      />
+                    </div>
 
-              <!-- Filter Tabs -->
-              <div class="mb-3">
-                <div class="btn-group" role="group">
-                  <button
-                    type="button"
-                    :class="`btn ${
-                      filter === 'all' ? 'btn-primary' : 'btn-outline-primary'
-                    }`"
-                    @click="setFilter('all')"
-                  >
-                    All ({{ counts.all }})
-                  </button>
-                  <button
-                    type="button"
-                    :class="`btn ${
-                      filter === 'pending'
-                        ? 'btn-warning'
-                        : 'btn-outline-warning'
-                    }`"
-                    @click="setFilter('pending')"
-                  >
-                    Pending ({{ counts.pending }})
-                  </button>
-                  <button
-                    type="button"
-                    :class="`btn ${
-                      filter === 'approved'
-                        ? 'btn-success'
-                        : 'btn-outline-success'
-                    }`"
-                    @click="setFilter('approved')"
-                  >
-                    Approved ({{ counts.approved }})
-                  </button>
-                  <button
-                    type="button"
-                    :class="`btn ${
-                      filter === 'blocked' ? 'btn-danger' : 'btn-outline-danger'
-                    }`"
-                    @click="setFilter('blocked')"
-                  >
-                    Blocked ({{ counts.blocked }})
-                  </button>
+                    <!-- Filter Tabs -->
+                    <div class="col-12 col-md-6 mb-2 mb-md-0">
+                      <div class="btn-group d-flex flex-wrap w-100" role="group" style="gap: 4px;">
+                        <button
+                          type="button"
+                          :class="`btn btn-sm flex-grow-1 ${filter === 'all' ? 'btn-primary' : 'btn-secondary'}`"
+                          @click="setFilter('all')"
+                          style="height: 44px;"
+                        >
+                          All ({{ counts.all }})
+                        </button>
+                        <button
+                          type="button"
+                          :class="`btn btn-sm flex-grow-1 ${filter === 'pending' ? 'btn-warning text-white' : 'btn-secondary'}`"
+                          @click="setFilter('pending')"
+                          style="height: 44px;"
+                        >
+                          Pending ({{ counts.pending }})
+                        </button>
+                        <button
+                          type="button"
+                          :class="`btn btn-sm flex-grow-1 ${filter === 'approved' ? 'btn-success' : 'btn-secondary'}`"
+                          @click="setFilter('approved')"
+                          style="height: 44px;"
+                        >
+                          Approved ({{ counts.approved }})
+                        </button>
+                        <button
+                          type="button"
+                          :class="`btn btn-sm flex-grow-1 ${filter === 'blocked' ? 'btn-danger' : 'btn-secondary'}`"
+                          @click="setFilter('blocked')"
+                          style="height: 44px;"
+                        >
+                          Blocked ({{ counts.blocked }})
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Refresh Button -->
+                    <div class="col-12 col-md-2 text-center text-md-right">
+                      <a class="btn btn-secondary w-100 d-inline-flex align-items-center justify-content-center" href="#" @click.prevent="getData" style="height: 44px;">
+                        <i class="fas fa-sync mr-1"></i> Refresh
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -307,6 +314,7 @@ export default {
     reasonText: "",
     reasonAction: "", // 'block' or 'reject'
     reasonId: null,
+    searchTimeout: null,
   }),
   mounted() {
     this.getData();
@@ -366,17 +374,20 @@ export default {
       this.items = items.data.data;
       this.loading = false;
     },
-    async search() {
-      if (this.searchData != "") {
-        this.loading = true;
-        let items = await this.$axios.get(
-          `/users?role_id=3&search=${this.searchData}`
-        );
-        this.items = items.data.data;
-        this.loading = false;
-      } else {
-        this.getData();
-      }
+    search() {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = setTimeout(async () => {
+        if (this.searchData.length >= 3) {
+          this.loading = true;
+          let items = await this.$axios.get(
+            `/users?role_id=3&search=${this.searchData}`
+          );
+          this.items = items.data.data;
+          this.loading = false;
+        } else if (this.searchData.length === 0) {
+          this.getData();
+        }
+      }, 300);
     },
     async approve(id) {
       console.log("Approve clicked for", id);

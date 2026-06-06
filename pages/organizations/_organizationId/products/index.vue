@@ -74,25 +74,40 @@
                 </div> -->
               </div>
             </div>
-            <!-- <div class="col-md-12 text-right pb-3 pr-4">
-              <client-only>
-                <download-excel
-                  class="btn btn-excel d-inline-block"
-                  :data="excel_items"
-                  :fields="excel_fields"
-                  worksheet="Products"
-                  name="Products.xls"
-                >
-                  <i class="fas fa-file-excel mr-2"></i> Export Products
-                </download-excel>
-              </client-only>
-            </div> -->
           </div>
           <div class="row">
             <div class="col-12">
-              <!-- <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by product name">
-              <a class="refresh" href="#" @click="getData">Refresh</a> -->
-              <br />
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <input
+                      type="text"
+                      class="form-control w-50"
+                      v-model="searchData"
+                      @input="search"
+                      placeholder="Search by product name"
+                    />
+                    <div class="d-flex align-items-center">
+                      <button class="btn btn-secondary mr-3" @click="getData">
+                        <i class="fas fa-sync-alt mr-1"></i> Refresh
+                      </button>
+                      <client-only>
+                        <download-excel
+                          class="btn btn-excel d-inline-block"
+                          :data="excel_items"
+                          :fields="excel_fields"
+                          worksheet="Products"
+                          name="Products.xls"
+                        >
+                          <i class="fas fa-file-excel mr-2"></i> Export Products
+                        </download-excel>
+                      </client-only>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Manage Products</h3>
@@ -253,6 +268,7 @@ export default {
     searchData: "",
     items: [],
     loading: true,
+    searchTimeout: null,
     currentPage: 1,
     perPage: 10,
     category_id: "",
@@ -331,16 +347,21 @@ export default {
         sub_category_name: item.sub_category ? item.sub_category.name : "",
       }));
     },
-    async search() {
-      if (this.searchData != "") {
-        this.loading = true;
-        let items = await this.$axios.get(
-          `/products?search=${this.searchData}`
-        );
-        this.items = items.data.data;
-        this.allItems = this.items;
-        this.loading = false;
-      }
+    search() {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = setTimeout(async () => {
+        if (this.searchData.length >= 3) {
+          this.loading = true;
+          let items = await this.$axios.get(
+            `/products?search=${this.searchData}`
+          );
+          this.items = items.data.data;
+          this.allItems = this.items;
+          this.loading = false;
+        } else if (this.searchData.length === 0) {
+          this.getData();
+        }
+      }, 300);
     },
     async del(id) {
       if (

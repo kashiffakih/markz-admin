@@ -197,7 +197,6 @@ export default {
     };
   },
   data: () => ({
-    searchData: "",
     items: [],
     loading: false,
     form: {

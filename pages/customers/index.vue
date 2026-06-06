@@ -33,15 +33,30 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
-              <input
-                type="text"
-                class="form-control"
-                v-model="searchData"
-                @keydown.enter="search"
-                placeholder="Search by name / email / phone"
-              />
-              <a class="refresh" href="#" @click="getData">Refresh</a>
-              <br />
+              <div class="card mb-3">
+                <div class="card-body p-3">
+                  <div class="row align-items-center">
+                    <!-- Search Input -->
+                    <div class="col-12 col-md-9 mb-2 mb-md-0">
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="searchData"
+                        @input="search"
+                        placeholder="Search by name / email / phone"
+                        style="height: 44px;"
+                      />
+                    </div>
+
+                    <!-- Refresh Button -->
+                    <div class="col-12 col-md-3 text-center text-md-right">
+                      <a class="btn btn-secondary w-100 d-inline-flex align-items-center justify-content-center" href="#" @click.prevent="getData" style="height: 44px;">
+                        <i class="fas fa-sync mr-1"></i> Refresh
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Manage Customers</h3>
@@ -164,6 +179,7 @@ export default {
     currentSortDir: "asc",
     currentPage: 1,
     perPage: 10,
+    searchTimeout: null,
   }),
   mounted() {
     this.getData();
@@ -200,14 +216,18 @@ export default {
       this.items = items.data.data;
       this.loading = false;
     },
-    async search() {
-      if (this.searchData != "") {
-        this.loading = true;
-        let items = await this.$axios.get(`/users?search=${this.searchData}`);
-        console.log(items);
-        this.items = items.data.data;
-        this.loading = false;
-      }
+    search() {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = setTimeout(async () => {
+        if (this.searchData.length >= 3) {
+          this.loading = true;
+          let items = await this.$axios.get(`/users?search=${this.searchData}`);
+          this.items = items.data.data;
+          this.loading = false;
+        } else if (this.searchData.length === 0) {
+          this.getData();
+        }
+      }, 300);
     },
     async del(id) {
       if (

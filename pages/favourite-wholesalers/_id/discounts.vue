@@ -109,15 +109,9 @@
                   type="text"
                   class="form-control"
                   v-model="productSearch"
-                  @keyup.enter="searchProducts"
+                  @input="searchProducts"
                   placeholder="Enter product name..."
                 />
-                <button
-                  class="btn btn-secondary mt-2 btn-sm"
-                  @click="searchProducts"
-                >
-                  Search
-                </button>
               </div>
 
               <div
@@ -210,6 +204,7 @@ export default {
       productResults: [],
       selectedProducts: [],
       discountValue: 0,
+      productSearchTimeout: null,
     };
   },
   async mounted() {
@@ -258,33 +253,39 @@ export default {
       this.discountValue = 0;
       if (typeof $ !== "undefined") $("#addDiscountModal").modal("show");
     },
-    async searchProducts() {
-      if (!this.productSearch) return;
-      try {
-        const response = await this.$axios.get(
-          `/products?search=${this.productSearch}`
-        );
-        // Handle pagination or direct array
-        let results = [];
-        if (response.data.data && Array.isArray(response.data.data)) {
-          // Direct array or paginated data
-          results = response.data.data;
-        } else if (
-          response.data.data &&
-          response.data.data.data &&
-          Array.isArray(response.data.data.data)
-        ) {
-          // Paginated response structure: { data: { data: [...] } }
-          results = response.data.data.data;
-        } else if (Array.isArray(response.data)) {
-          results = response.data;
-        }
+    searchProducts() {
+      clearTimeout(this.productSearchTimeout);
+      this.productSearchTimeout = setTimeout(async () => {
+        if (this.productSearch.length >= 3) {
+          try {
+            const response = await this.$axios.get(
+              `/products?search=${this.productSearch}`
+            );
+            // Handle pagination or direct array
+            let results = [];
+            if (response.data.data && Array.isArray(response.data.data)) {
+              // Direct array or paginated data
+              results = response.data.data;
+            } else if (
+              response.data.data &&
+              response.data.data.data &&
+              Array.isArray(response.data.data.data)
+            ) {
+              // Paginated response structure: { data: { data: [...] } }
+              results = response.data.data.data;
+            } else if (Array.isArray(response.data)) {
+              results = response.data;
+            }
 
-        this.productResults = results || [];
-      } catch (error) {
-        console.error("Product search error:", error);
-        this.productResults = [];
-      }
+            this.productResults = results || [];
+          } catch (error) {
+            console.error("Product search error:", error);
+            this.productResults = [];
+          }
+        } else if (this.productSearch.length === 0) {
+          this.productResults = [];
+        }
+      }, 300);
     },
     toggleProductSelection(product) {
       const index = this.selectedProducts.findIndex((p) => p.id === product.id);

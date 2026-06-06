@@ -77,24 +77,27 @@ export default function({ store, redirect, route }) {
     return;
 
   let user = store.getters["auth/user"];
-  let organizations = user ? user.companies : "";
-  let id = organizations.length ? organizations[0].id : "";
-  let name = organizations.length ? organizations[0].name : "";
-  let logo_path = organizations.length ? organizations[0].logo_path : "";
-  let time_zone = organizations.length
-    ? organizations[0].time_zone
-    : "Asia/Calcutta";
-  if (!id)
-    id = store.getters["settings/organization"]
-      ? store.getters["settings/organization"].value
-      : "";
-  else
+  let organizations = user ? user.companies : [];
+  
+  let selectedOrg = store.getters["settings/organization"];
+  let id = selectedOrg && selectedOrg.value ? selectedOrg.value : (organizations.length ? organizations[0].id : "");
+  
+  let matchedOrg = organizations.length ? organizations.find(o => o.id == id) : null;
+  let name = matchedOrg ? matchedOrg.name : (selectedOrg ? selectedOrg.text : "");
+  let logo_path = matchedOrg ? matchedOrg.logo_path : (selectedOrg ? selectedOrg.logo_path : "");
+  let time_zone = matchedOrg ? matchedOrg.time_zone : (selectedOrg ? selectedOrg.time_zone : "Asia/Calcutta");
+  let is_enabled = matchedOrg ? (matchedOrg.is_enabled !== undefined ? matchedOrg.is_enabled : 1) : (selectedOrg && selectedOrg.is_enabled !== undefined ? selectedOrg.is_enabled : 1);
+
+  if (id) {
     store.dispatch("settings/setOrganization", {
       text: name,
       value: id,
       time_zone: time_zone,
-      logo_path: logo_path
+      logo_path: logo_path,
+      is_enabled: is_enabled
     });
+  }
+
   if (!id) {
     redirect("/settings");
   }

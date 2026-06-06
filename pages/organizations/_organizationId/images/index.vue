@@ -37,7 +37,7 @@
                 type="text"
                 class="form-control"
                 v-model="searchData"
-                @keydown.enter="search"
+                @input="search"
                 placeholder="Search by unit"
               />
               <a class="refresh" href="#" @click="getData">Refresh</a>
@@ -532,6 +532,7 @@ export default {
     searchData: "",
     item: {},
     loading: true,
+    searchTimeout: null,
   }),
   created() {
     this.getData();
@@ -549,6 +550,12 @@ export default {
       } catch (ex) {
         this.loading = false;
       }
+    },
+    search() {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = setTimeout(() => {
+        // Search is not active for web images page
+      }, 300);
     },
     async del(id) {
       if (

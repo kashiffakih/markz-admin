@@ -46,6 +46,7 @@ export default {
           ? organization.time_zone
           : "Asia/Calcutta",
         logo_path: organization.logo_path,
+        is_enabled: organization.is_enabled,
       }));
       return organizations;
     },

@@ -33,29 +33,35 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
-              <div
-                class="d-flex justify-content-between align-items-center mb-2"
-              >
-                <input
-                  type="text"
-                  class="form-control w-50"
-                  v-model="searchData"
-                  @keydown.enter="search"
-                  placeholder="Search by order id"
-                />
-                <div>
-                  <a class="refresh mr-3" href="#" @click="getData">Refresh</a>
-                  <client-only>
-                    <download-excel
-                      class="btn btn-excel d-inline-block"
-                      :data="excel_items"
-                      :fields="excel_fields"
-                      worksheet="Orders"
-                      name="Orders.xls"
-                    >
-                      <i class="fas fa-file-excel mr-2"></i> Export
-                    </download-excel>
-                  </client-only>
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <input
+                      type="text"
+                      class="form-control w-50"
+                      v-model="searchData"
+                      @input="search"
+                      placeholder="Search by order id"
+                    />
+                    <div class="d-flex align-items-center">
+                      <button class="btn btn-secondary mr-3" @click="getData">
+                        <i class="fas fa-sync-alt mr-1"></i> Refresh
+                      </button>
+                      <client-only>
+                        <download-excel
+                          class="btn btn-excel d-inline-block"
+                          :data="excel_items"
+                          :fields="excel_fields"
+                          worksheet="Orders"
+                          name="Orders.xls"
+                        >
+                          <i class="fas fa-file-excel mr-2"></i> Export
+                        </download-excel>
+                      </client-only>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="card">
@@ -276,9 +282,7 @@ export default {
     items: [],
     loading: true,
     fmt: "YYYY-MM-DD hh:mm:ss A",
-    fmt: "YYYY-MM-DD hh:mm:ss A",
     time_zone: "Asia/Kolkata",
-    searchData: "",
     excel_fields: {
       "Order ID": "id",
       User: "user_name",
@@ -289,6 +293,7 @@ export default {
     excel_items: [],
     currentPage: 1,
     perPage: 10,
+    searchTimeout: null,
   }),
   mounted() {
     if (this.$route.query.search) this.searchData = this.$route.query.search;
@@ -408,13 +413,18 @@ export default {
             : "Placed",
       }));
     },
-    async search() {
-      if (this.searchData != "") {
-        this.loading = true;
-        let items = await this.$axios.get(`/orders?search=${this.searchData}`);
-        this.items = items.data.data;
-        this.loading = false;
-      }
+    search() {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = setTimeout(async () => {
+        if (this.searchData.length >= 1) {
+          this.loading = true;
+          let items = await this.$axios.get(`/orders?search=${this.searchData}`);
+          this.items = items.data.data;
+          this.loading = false;
+        } else if (this.searchData.length === 0) {
+          this.getData();
+        }
+      }, 300);
     },
     async del(id) {
       if (

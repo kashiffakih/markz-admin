@@ -109,13 +109,10 @@
                   type="text"
                   class="form-control"
                   v-model="searchQuery"
-                  @keyup.enter="searchWholesalers"
+                  @input="searchWholesalers"
                   placeholder="Search by name, email, or business name"
                 />
               </div>
-              <button class="btn btn-primary mb-3" @click="searchWholesalers">
-                Search
-              </button>
 
               <table class="table table-sm" v-if="searchResults.length > 0">
                 <thead>
@@ -164,6 +161,7 @@ export default {
       loading: false,
       searchQuery: "",
       searchResults: [],
+      searchTimeout: null,
     };
   },
   mounted() {
@@ -201,16 +199,22 @@ export default {
       this.searchResults = [];
       if (typeof $ !== "undefined") $("#addFavouriteModal").modal("show");
     },
-    async searchWholesalers() {
-      if (!this.searchQuery) return;
-      try {
-        const response = await this.$axios.get(
-          `/users?role_id=3&search=${this.searchQuery}`
-        );
-        this.searchResults = response.data.data;
-      } catch (error) {
-        console.error("Search error:", error);
-      }
+    searchWholesalers() {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = setTimeout(async () => {
+        if (this.searchQuery.length >= 3) {
+          try {
+            const response = await this.$axios.get(
+              `/users?role_id=3&search=${this.searchQuery}`
+            );
+            this.searchResults = response.data.data;
+          } catch (error) {
+            console.error("Search error:", error);
+          }
+        } else if (this.searchQuery.length === 0) {
+          this.searchResults = [];
+        }
+      }, 300);
     },
     async addToFavourites(user) {
       try {

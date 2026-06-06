@@ -790,3 +790,100 @@ input[type="date"]:focus {
   font-size: 12px;
   margin-top: 0.25rem;
 }
+
+/* --- Drawer Backdrop Overlay --- */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.4); /* Darker sleek overlay */
+  z-index: 1030;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s var(--smooth), visibility 0.3s var(--smooth);
+}
+
+.drawer-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- Refresh Button Fix --- */
+.refresh {
+  color: var(--primary) !important;
+  font-weight: 600 !important;
+  margin-left: 8px;
+  display: inline-block;
+}
+
+.refresh:hover {
+  text-decoration: underline !important;
+  color: var(--primary-hover) !important;
+}
+
+/* --- Responsive Layout Overrides --- */
+@media (max-width: 991.98px) {
+  .content-wrapper {
+    margin-left: 0 !important;
+    padding: 1rem !important;
+  }
+
+  .main-header {
+    margin: 12px 12px 0 12px !important;
+    margin-left: 12px !important;
+  }
+
+  .main-footer {
+    margin-left: 0 !important;
+    margin: 12px !important;
+    padding: 1rem !important;
+  }
+
+  .main-sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    z-index: 1040;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s var(--smooth) !important;
+    box-shadow: none !important;
+  }
+
+  body.sidebar-open .main-sidebar {
+    transform: translateX(0) !important;
+    box-shadow: var(--glass-shadow) !important;
+  }
+}
+
+/* --- Desktop Sidebar Collapse Spacing --- */
+@media (min-width: 992px) {
+  .drawer-overlay {
+    display: none !important;
+  }
+
+  .main-sidebar,
+  .content-wrapper,
+  .main-header,
+  .main-footer {
+    transition: margin-left 0.3s var(--smooth), margin-right 0.3s var(--smooth), width 0.3s var(--smooth), transform 0.3s var(--smooth) !important;
+  }
+
+  body.sidebar-collapse .content-wrapper {
+    margin-left: 100px !important;
+  }
+
+  body.sidebar-collapse .main-header {
+    margin: 12px 12px 0 100px !important;
+  }
+
+  body.sidebar-collapse .main-footer {
+    margin-left: 100px !important;
+  }
+}
+
+

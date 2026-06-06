@@ -31,38 +31,54 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
-          <div class="card">
-            <div class="col-md-12" style="padding: 10px">
-              <input
-                type="file"
-                id="file"
-                name="file"
-                ref="file"
-                accept="application/ms-excel"
-                @input="handleFileUpload()"
-              />
-            </div>
-            <div class="col-md-12" style="padding: 10px">
-              <button
-                class="btn btn-primary"
-                :disabled="isProcessing"
-                @click="processFile"
-              >
-                Process File
-              </button>
-              <button
-                class="btn btn-danger"
-                :disabled="isProcessing"
-                @click="truncateProducts"
-              >
-                Truncate Products
-              </button>
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-12 mb-3">
+                  <label for="file" class="d-block mb-2">Upload Excel File</label>
+                  <div class="custom-file" style="height: 44px; position: relative;">
+                    <input
+                      type="file"
+                      class="custom-file-input"
+                      id="file"
+                      name="file"
+                      ref="file"
+                      accept="application/ms-excel"
+                      @change="handleFileUpload"
+                      style="height: 44px; cursor: pointer; opacity: 0; position: absolute; top: 0; left: 0; width: 100%; z-index: 2;"
+                    />
+                    <div 
+                      class="custom-file-label d-flex align-items-center" 
+                      style="height: 44px; padding: 0.65rem 1rem; border: 1.5px solid #e2e8f0; border-radius: var(--radius-md); background-color: #fff; pointer-events: none;"
+                    >
+                      <i class="fas fa-file-excel mr-2 text-success" style="font-size: 18px;"></i>
+                      <span>{{ selectedFileName || 'Choose Excel file...' }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 d-flex flex-wrap" style="gap: 10px;">
+                  <button
+                    class="btn btn-primary flex-grow-1 flex-md-grow-0 d-inline-flex align-items-center justify-content-center"
+                    :disabled="isProcessing"
+                    @click="processFile"
+                    style="height: 44px; min-width: 140px;"
+                  >
+                    <i class="fas fa-cogs mr-2"></i> Process File
+                  </button>
+                  <button
+                    class="btn btn-danger flex-grow-1 flex-md-grow-0 d-inline-flex align-items-center justify-content-center"
+                    :disabled="isProcessing"
+                    @click="truncateProducts"
+                    style="height: 44px; min-width: 140px;"
+                  >
+                    <i class="fas fa-trash-alt mr-2"></i> Truncate Products
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           <div class="row">
             <div class="col-12">
-              <!-- <input type="text" class="form-control" v-model="searchData" @keydown.enter="search" placeholder="Search by product name">
-              <a class="refresh" href="#" @click="getData">Refresh</a> -->
               <br />
               <div class="card">
                 <!-- /.card-header -->
@@ -170,6 +186,7 @@ export default {
       error_msg: "",
       path: "",
       selectedFile: null,
+      selectedFileName: "",
       uploadProgress: 0,
       isDraggingOver: false,
       headers: [
@@ -320,6 +337,7 @@ export default {
       this.isUploadingError = false;
       this.error_msg = "";
       this.products = this.$refs.file.files[0];
+      this.selectedFileName = this.products ? this.products.name : "";
       let formData = new FormData();
       formData.append("products", this.products);
       this.changeValue = 100;
@@ -363,6 +381,7 @@ export default {
       await this.$root.alert("Truncated Successfully");
       this.getData();
       this.crude_products = [];
+      this.selectedFileName = "";
     },
   },
 };
