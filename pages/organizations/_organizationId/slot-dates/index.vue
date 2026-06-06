@@ -33,8 +33,9 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
-              <a class="refresh" href="#" @click="getData">Refresh</a>
-              <br />
+              <button class="btn btn-secondary mb-3 d-inline-flex align-items-center" @click="getData" style="height: 42px;" type="button">
+                <i class="fas fa-sync-alt mr-1"></i> Refresh
+              </button>
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Manage Delivery Time Slot Dates</h3>

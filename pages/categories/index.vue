@@ -33,15 +33,20 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
-              <input
+              <div class="d-flex align-items-center mb-3" style="gap: 12px;">
+                <div class="flex-grow-1">
+                  <input
                 type="text"
                 class="form-control"
                 v-model="searchData"
                 @input="search"
                 placeholder="Search by category"
               />
-              <a class="refresh" href="#" @click="getData">Refresh</a>
-              <br />
+                </div>
+                <button class="btn btn-secondary d-flex align-items-center" @click="getData" style="height: 42px;" type="button">
+                  <i class="fas fa-sync-alt mr-1"></i> Refresh
+                </button>
+              </div>
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Manage Categories</h3>
