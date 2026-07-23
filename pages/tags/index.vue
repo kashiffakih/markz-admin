@@ -131,16 +131,21 @@ export default {
     searchData: "",
     items: [],
     loading: true,
+    page: 1,
+    rowsPerPage: 10,
     searchTimeout: null,
   }),
   mounted() {
     this.getData();
   },
   methods: {
-    async getData() {
+    async getData(page = 1) {
       this.items = [];
       this.loading = true;
-      let items = await this.$axios.get(`/tags`);
+      this.page = page;
+      let items = await this.$axios.get(
+        `/tags?page=${this.page}&rowsPerPage=${this.rowsPerPage}`
+      );
       this.items = items.data.data;
       this.loading = false;
     },
