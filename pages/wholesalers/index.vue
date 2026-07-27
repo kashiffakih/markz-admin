@@ -170,6 +170,14 @@
                           >
                             <i class="fa fa-unlock"></i>
                           </button>
+                          &nbsp;
+                          <button
+                            title="Delete Wholesaler"
+                            class="btn btn-sm btn-outline-danger"
+                            @click="del(wholesaler.id)"
+                          >
+                            <i class="fa fa-trash"></i>
+                          </button>
                         </td>
                         <td>
                           <span
@@ -468,6 +476,21 @@ export default {
         this.getData();
       } catch (error) {
         await this.$root.alert(`Failed to ${this.reasonAction} wholesaler`);
+      }
+    },
+    async del(id) {
+      if (
+        await this.$root.confirm(
+          "Are you sure you want to delete this wholesaler?"
+        )
+      ) {
+        try {
+          await this.$axios.delete(`/users/${id}`);
+          this.getData();
+        } catch (error) {
+          console.error("Delete wholesaler error:", error);
+          await this.$root.alert("Failed to delete wholesaler.");
+        }
       }
     },
   },

@@ -109,6 +109,10 @@
                     <button v-else class="btn btn-warning" @click="unblock">
                       <i class="fa fa-unlock"></i> Unblock Wholesaler
                     </button>
+                    &nbsp;
+                    <button class="btn btn-outline-danger" @click="del">
+                      <i class="fa fa-trash"></i> Delete Wholesaler
+                    </button>
                   </div>
                 </div>
               </div>
@@ -499,6 +503,21 @@ export default {
       // Using Bootstrap's modal via jQuery (if available)
       if (typeof $ !== "undefined") {
         $("#imageModal").modal("show");
+      }
+    },
+    async del() {
+      if (
+        await this.$root.confirm(
+          "Are you sure you want to delete this wholesaler?"
+        )
+      ) {
+        try {
+          await this.$axios.delete(`/users/${this.$route.params.id}`);
+          this.$router.push("/wholesalers");
+        } catch (error) {
+          console.error("Delete wholesaler error:", error);
+          await this.$root.alert("Failed to delete wholesaler.");
+        }
       }
     },
   },

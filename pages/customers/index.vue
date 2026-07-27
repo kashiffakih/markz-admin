@@ -111,11 +111,14 @@
                           >
                             <i class="fa fa-map-marker"></i> </nuxt-link
                           >&nbsp;&nbsp;
-                          <!-- <nuxt-link title="Delete Inspector" class="icon" to="">
-                            <span @click="del(emp.id)">
-                              <i class="fa fa-trash"></i>
-                            </span>
-                          </nuxt-link> -->
+                          <a
+                            title="Delete Customer"
+                            class="icon text-danger cursor-pointer"
+                            href="#"
+                            @click.prevent="del(emp.id)"
+                          >
+                            <i class="fa fa-trash"></i>
+                          </a>
                         </td>
                         <td>
                           <img
@@ -231,10 +234,15 @@ export default {
     },
     async del(id) {
       if (
-        await this.$root.confirm("Are you sure you want to delete the data?")
+        await this.$root.confirm("Are you sure you want to delete this customer?")
       ) {
-        await this.$axios.delete(`/users/${id}`);
-        this.getData();
+        try {
+          await this.$axios.delete(`/users/${id}`);
+          this.getData();
+        } catch (error) {
+          console.error("Delete customer error:", error);
+          await this.$root.alert("Failed to delete customer.");
+        }
       }
     },
     sort(s) {
