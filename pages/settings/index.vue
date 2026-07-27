@@ -596,8 +596,46 @@
                       </div>
                     </div> -->
 
+                    <hr />
+                    <h5>App Version & Compulsory Update Controls</h5>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Minimum Required Android Version</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="e.g. 1.0.5"
+                            v-model="form.min_android_version"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Android Play Store URL</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="https://play.google.com/store/apps/details?id=..."
+                            v-model="form.android_update_url"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="form-label">Force Update Popup Message</label>
+                          <textarea
+                            class="form-control"
+                            rows="2"
+                            placeholder="A mandatory update is available. Please update the app to continue."
+                            v-model="form.force_update_message"
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+
                     <button
-                      class="btn btn-primary btn-block"
+                      class="btn btn-primary btn-block mt-3"
                       @click="updateSettings"
                     >
                       Update Details
@@ -661,6 +699,11 @@ export default {
       banner_4_tag_id: "",
       banner_5_tag_id: "",
       banner_6_tag_id: "",
+      min_android_version: "1.0.0",
+      min_ios_version: "1.0.0",
+      android_update_url: "",
+      ios_update_url: "",
+      force_update_message: "",
     },
     tags: [],
     loading: false,
