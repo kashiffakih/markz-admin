@@ -237,7 +237,7 @@ export default {
         await this.$root.confirm("Are you sure you want to delete this customer?")
       ) {
         try {
-          await this.$axios.delete(`/users/${id}`);
+          await this.$axios.delete(`/users/${id}?role_id=6`);
           this.getData();
         } catch (error) {
           console.error("Delete customer error:", error);

@@ -222,7 +222,7 @@ export default {
       if (
         await this.$root.confirm("Are you sure you want to delete the data?")
       ) {
-        await this.$axios.delete(`/users/${id}`);
+        await this.$axios.delete(`/users/${id}?role_id=5`);
       }
       this.getData();
     },

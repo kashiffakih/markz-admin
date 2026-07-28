@@ -512,7 +512,7 @@ export default {
         )
       ) {
         try {
-          await this.$axios.delete(`/users/${this.$route.params.id}`);
+          await this.$axios.delete(`/users/${this.$route.params.id}?role_id=3`);
           this.$router.push("/wholesalers");
         } catch (error) {
           console.error("Delete wholesaler error:", error);

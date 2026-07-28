@@ -485,7 +485,7 @@ export default {
         )
       ) {
         try {
-          await this.$axios.delete(`/users/${id}`);
+          await this.$axios.delete(`/users/${id}?role_id=3`);
           this.getData();
         } catch (error) {
           console.error("Delete wholesaler error:", error);
