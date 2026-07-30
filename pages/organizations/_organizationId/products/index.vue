@@ -143,7 +143,7 @@
                         v-for="(product, i) in paginatedItems"
                         :key="`product${i}`"
                       >
-                        <td>{{ (currentPage - 1) * perPage + i + 1 }}</td>
+                        <td>{{ (Number(currentPage) - 1) * Number(perPage || 10) + i + 1 }}</td>
                         <td class="w-1">
                           <nuxt-link
                             title="Edit Details"
@@ -213,8 +213,8 @@
                 </div>
                 <!-- /.card-body -->
                 <Pagination
-                  v-if="items.length > 0"
-                  :total-items="items.length"
+                  v-if="totalItems > 0 || items.length > 0"
+                  :total-items="isServerPaginated ? totalItems : items.length"
                   :per-page="perPage"
                   :current-page="currentPage"
                   @page-changed="onPageChanged"
@@ -299,6 +299,8 @@ export default {
         code: "",
       },
     ],
+    totalItems: 0,
+    isServerPaginated: false,
     allItems: [],
     excel_fields: {
       Photo: "image",
@@ -314,6 +316,9 @@ export default {
   },
   computed: {
     paginatedItems() {
+      if (this.isServerPaginated) {
+        return this.items;
+      }
       const start = (this.currentPage - 1) * this.perPage;
       const end = start + this.perPage;
       return this.items.slice(start, end);
@@ -322,18 +327,43 @@ export default {
   methods: {
     onPageChanged(page) {
       this.currentPage = page;
+      if (this.isServerPaginated) {
+        this.getData();
+      }
     },
     onPerPageChanged(perPage) {
       this.perPage = perPage;
       this.currentPage = 1;
+      if (this.isServerPaginated) {
+        this.getData();
+      }
     },
     async getData() {
       this.items = [];
       this.loading = true;
-      let items = await this.$axios.get(`/products`);
-      this.items = items.data.data;
-      this.allItems = this.items;
-      this.items = items.data.data;
+      let params = {
+        page: this.currentPage,
+        rowsPerPage: this.perPage,
+      };
+      if (this.searchData) {
+        params.search = this.searchData;
+      }
+      if (this.category_id) {
+        params.categoryId = this.category_id;
+      }
+      if (this.sub_category_id) {
+        params.subCategoryId = this.sub_category_id;
+      }
+      let response = await this.$axios.get(`/products`, { params });
+      if (response.data.total !== undefined) {
+        this.isServerPaginated = true;
+        this.items = response.data.data;
+        this.totalItems = response.data.total;
+      } else {
+        this.isServerPaginated = false;
+        this.items = response.data.data;
+        this.totalItems = response.data.data.length;
+      }
       this.allItems = this.items;
       this.prepareExcelData();
       this.loading = false;
@@ -350,17 +380,8 @@ export default {
     search() {
       clearTimeout(this.searchTimeout);
       this.searchTimeout = setTimeout(async () => {
-        if (this.searchData.length >= 3) {
-          this.loading = true;
-          let items = await this.$axios.get(
-            `/products?search=${this.searchData}`
-          );
-          this.items = items.data.data;
-          this.allItems = this.items;
-          this.loading = false;
-        } else if (this.searchData.length === 0) {
-          this.getData();
-        }
+        this.currentPage = 1;
+        this.getData();
       }, 300);
     },
     async del(id) {

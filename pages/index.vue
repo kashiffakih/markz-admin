@@ -721,88 +721,48 @@ export default {
       };
 
       try {
-        // 1. Sales Trend
-        const salesRes = await this.$axios.get("analytics/sales", {
-          params,
-        });
+        const [
+          salesRes,
+          prodRes,
+          leastRes,
+          catRes,
+          subCatRes,
+          sub2CatRes,
+          priceRes,
+          custRes,
+          statusRes,
+          recentRes,
+          payRes,
+          topCustRes,
+          cityRes,
+        ] = await Promise.all([
+          this.$axios.get("analytics/sales", { params }),
+          this.$axios.get("analytics/top_products", { params }),
+          this.$axios.get("analytics/least_products", { params }),
+          this.$axios.get("analytics/top_categories", { params }),
+          this.$axios.get("analytics/top_sub_categories", { params }),
+          this.$axios.get("analytics/top_sub_2_categories", { params }),
+          this.$axios.get("analytics/sales_by_price", { params }),
+          this.$axios.get("analytics/customer_growth", { params }),
+          this.$axios.get("analytics/order_statuses", { params }),
+          this.$axios.get("analytics/recent_orders", { params }),
+          this.$axios.get("analytics/payment_methods", { params }),
+          this.$axios.get("analytics/top_customers", { params }),
+          this.$axios.get("analytics/sales_by_city", { params }),
+        ]);
+
         this.processSalesData(salesRes.data.data);
-
-        // 2. Top Products
-        const prodRes = await this.$axios.get("analytics/top_products", {
-          params,
-        });
         this.processProductData(prodRes.data.data);
-
-        // 2b. Least Products
-        const leastRes = await this.$axios.get("analytics/least_products", {
-          params,
-        });
         this.processLeastProductData(leastRes.data.data);
-
-        // 3. Top Categories
-        const catRes = await this.$axios.get("analytics/top_categories", {
-          params,
-        });
         this.processCategoryData(catRes.data.data);
-
-        // 3b. Top Sub Categories
-        const subCatRes = await this.$axios.get(
-          "analytics/top_sub_categories",
-          {
-            params,
-          }
-        );
         this.processSubCategoryData(subCatRes.data.data);
-
-        // 3c. Top Sub 2 Categories
-        const sub2CatRes = await this.$axios.get(
-          "analytics/top_sub_2_categories",
-          {
-            params,
-          }
-        );
         this.processSub2CategoryData(sub2CatRes.data.data);
-
-        // 4. Sales by Price
-        const priceRes = await this.$axios.get("analytics/sales_by_price", {
-          params,
-        });
         this.processPriceData(priceRes.data.data);
-
-        // 5. Customer Growth
-        const custRes = await this.$axios.get("analytics/customer_growth", {
-          params,
-        });
         this.processCustomerGrowthData(custRes.data.data);
-
-        // 6. Order Statuses
-        const statusRes = await this.$axios.get("analytics/order_statuses", {
-          params,
-        });
         this.processOrderStatusData(statusRes.data.data);
-
-        // 7. Recent Orders
-        const recentRes = await this.$axios.get("analytics/recent_orders", {
-          params,
-        });
         this.recentOrders = recentRes.data.data;
-
-        // 8. Payment Methods
-        const payRes = await this.$axios.get("analytics/payment_methods", {
-          params,
-        });
         this.processPaymentMethodData(payRes.data.data);
-
-        // 9. Top Customers
-        const topCustRes = await this.$axios.get("analytics/top_customers", {
-          params,
-        });
         this.topCustomers = topCustRes.data.data;
-
-        // 10. Sales By City
-        const cityRes = await this.$axios.get("analytics/sales_by_city", {
-          params,
-        });
         this.salesByCity = cityRes.data.data;
       } catch (error) {
         console.error("Error fetching analytics:", error);

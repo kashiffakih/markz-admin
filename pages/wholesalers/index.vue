@@ -124,7 +124,7 @@
                         v-for="(wholesaler, i) in paginatedItems"
                         :key="`wholesaler${i}`"
                       >
-                        <td>{{ (currentPage - 1) * perPage + i + 1 }}</td>
+                        <td>{{ (Number(currentPage) - 1) * Number(perPage || 10) + i + 1 }}</td>
                         <td class="w-1">
                           <nuxt-link
                             title="View Details"
@@ -318,6 +318,8 @@ export default {
     loading: true,
     currentPage: 1,
     perPage: 10,
+    totalItems: 0,
+    isServerPaginated: false,
     filter: "all",
     reasonText: "",
     reasonAction: "", // 'block' or 'reject'
@@ -377,24 +379,18 @@ export default {
     async getData() {
       this.items = [];
       this.loading = true;
-      // role_id=3 is for Distributors/Wholesalers
-      let items = await this.$axios.get(`/users?role_id=3`);
-      this.items = items.data.data;
+      let params = { role_id: 3 };
+      if (this.searchData) params.search = this.searchData;
+      let response = await this.$axios.get(`/users`, { params });
+      this.items = response.data.data;
+      this.totalItems = this.items.length;
       this.loading = false;
     },
     search() {
       clearTimeout(this.searchTimeout);
       this.searchTimeout = setTimeout(async () => {
-        if (this.searchData.length >= 3) {
-          this.loading = true;
-          let items = await this.$axios.get(
-            `/users?role_id=3&search=${this.searchData}`
-          );
-          this.items = items.data.data;
-          this.loading = false;
-        } else if (this.searchData.length === 0) {
-          this.getData();
-        }
+        this.currentPage = 1;
+        this.getData();
       }, 300);
     },
     async approve(id) {

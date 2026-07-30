@@ -84,13 +84,14 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
           <!-- Brand Logo -->
           <div
-            class="brand-link d-flex align-items-center justify-content-between"
+            class="brand-link d-flex align-items-center justify-content-center text-center position-relative"
             style="
-              background-color: rgba(255, 255, 255, 0.4) !important;
-              padding: 0.8125rem 0.5rem;
+              background-color: rgba(255, 255, 255, 0.08) !important;
+              padding: 0.85rem 1rem;
+              border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             "
           >
-            <nuxt-link to="/" class="d-flex align-items-center">
+            <nuxt-link to="/" class="d-flex justify-content-center align-items-center w-100">
               <img
                 :src="
                   organization
@@ -100,16 +101,16 @@
                     : mediaUrl + 'company.png'
                 "
                 alt="Logo"
-                style="opacity: 0.8; height: 50px"
+                style="max-width: 85%; width: 140px; height: auto; max-height: 65px; object-fit: contain;"
               />
             </nuxt-link>
             <!-- Close Button for Mobile -->
             <a
-              class="d-block d-lg-none px-3"
+              class="d-block d-lg-none px-2 position-absolute"
               href="#"
               role="button"
               @click.prevent="toggleSidebar"
-              style="color: black !important; font-size: 22px"
+              style="color: white !important; font-size: 20px; right: 12px; top: 50%; transform: translateY(-50%);"
             >
               <i class="fas fa-times"></i>
             </a>
@@ -132,7 +133,7 @@
           </div> -->
 
             <!-- Sidebar Menu -->
-            <nav class="mt-2">
+            <nav class="mt-2 pb-5 mb-5">
               <ul
                 class="nav nav-pills nav-sidebar flex-column"
                 data-widget="treeview"
@@ -156,9 +157,7 @@
                     <nuxt-link
                       :target="item.target"
                       :to="item.link"
-                      :class="`nav-link ${
-                        $route.path == item.link ? 'active' : ''
-                      }`"
+                      :class="['nav-link', isNavActive(item.link) ? 'active' : '']"
                     >
                       <i :class="`nav-icon ${item.icon}`"></i>
                       <p>
@@ -177,9 +176,7 @@
                       >
                         <nuxt-link
                           :to="sub1Item.link"
-                          :class="`nav-link ${
-                            $route.path == sub1Item.link ? 'active' : ''
-                          }`"
+                          :class="['nav-link', isNavActive(sub1Item.link) ? 'active' : '']"
                         >
                           <i class="far fa-circle nav-icon"></i>
                           <p>{{ sub1Item.name }}</p>
@@ -575,6 +572,14 @@ export default {
     };
   },
   methods: {
+    isNavActive(link) {
+      if (!link || link === "" || link === "#") return false;
+      const currentPath = this.$route.path;
+      if (link === "/") {
+        return currentPath === "/";
+      }
+      return currentPath === link || currentPath.startsWith(link + "/");
+    },
     toggleSidebar() {
       this.isSidebarOpen = !this.isSidebarOpen;
       this.updateBodyClass();
@@ -650,13 +655,64 @@ table {
   white-space: nowrap;
 }
 
+/* Enhanced Sidebar Theme, High Contrast & Active Nav Styles */
 .main-sidebar {
-  background-color: rgb(9, 8, 13) !important;
+  background-color: #0f172a !important; /* Deep Slate Blue Background */
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
-.nav-link,
-.brand-text,
-.d-block {
-  color: white !important;
+.main-sidebar .nav-header {
+  color: #94a3b8 !important; /* High contrast Slate Header text */
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  padding: 1rem 1rem 0.35rem 1rem !important;
+}
+
+.main-sidebar .nav-link {
+  color: #cbd5e1 !important; /* Crisp high-contrast Off-White */
+  border-radius: 6px !important;
+  margin: 2px 8px !important;
+  padding: 8px 12px !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.main-sidebar .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+
+.main-sidebar .nav-link.active {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; /* Vibrant Indigo Active Pill */
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35) !important;
+}
+
+.main-sidebar .nav-link.active p,
+.main-sidebar .nav-link.active i {
+  color: #ffffff !important;
+}
+
+.main-sidebar .nav-icon {
+  color: #94a3b8 !important;
+  margin-right: 10px !important;
+  transition: color 0.2s ease-in-out !important;
+}
+
+.main-sidebar .nav-link:hover .nav-icon,
+.main-sidebar .nav-link.active .nav-icon {
+  color: #ffffff !important;
+}
+
+.main-sidebar .sidebar {
+  padding-bottom: 100px !important;
+  overflow-y: auto !important;
+}
+
+.main-sidebar .nav-sidebar {
+  padding-bottom: 100px !important;
+  margin-bottom: 60px !important;
 }
 </style>
