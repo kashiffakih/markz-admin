@@ -113,16 +113,34 @@
                   <h3 class="card-title">Manage Products</h3>
                   &nbsp;
                   <nuxt-link
-                    class="btn btn-sm btn-info float-sm-right"
+                    class="btn btn-sm btn-info float-sm-right ml-2"
                     :to="`/organizations/${organization.value}/products/create`"
                     >Add New</nuxt-link
                   >
+                  <button
+                    v-if="selectedProducts.length > 0"
+                    class="btn btn-sm btn-danger float-sm-right"
+                    @click="bulkDelete"
+                  >
+                    <i class="fa fa-trash mr-1"></i> Delete Selected ({{ selectedProducts.length }})
+                  </button>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
-                  <table class="table table-head-fixed table-striped">
+                  <table class="table table-head-fixed table-striped align-middle">
                     <thead>
                       <tr>
+                        <th class="text-center align-middle" style="width: 45px">
+                          <div class="custom-control custom-checkbox">
+                            <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              id="selectAllCheck"
+                              v-model="isAllSelected"
+                            />
+                            <label class="custom-control-label" for="selectAllCheck"></label>
+                          </div>
+                        </th>
                         <th>Sr. No.</th>
                         <th>Actions</th>
                         <!-- <th>Position</th> -->
@@ -137,12 +155,24 @@
                     </thead>
                     <tbody>
                       <tr v-if="loading">
-                        <td colspan="13">Loading...</td>
+                        <td colspan="14">Loading...</td>
                       </tr>
                       <tr
                         v-for="(product, i) in paginatedItems"
                         :key="`product${i}`"
                       >
+                        <td class="text-center align-middle">
+                          <div class="custom-control custom-checkbox">
+                            <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              :id="`check_${product.id}`"
+                              :value="product.id"
+                              v-model="selectedProducts"
+                            />
+                            <label class="custom-control-label" :for="`check_${product.id}`"></label>
+                          </div>
+                        </td>
                         <td>{{ (Number(currentPage) - 1) * Number(perPage || 10) + i + 1 }}</td>
                         <td class="w-1">
                           <nuxt-link
@@ -310,6 +340,7 @@ export default {
       "Sub Category": "sub_category_name",
     },
     excel_items: [],
+    selectedProducts: [],
   }),
   mounted() {
     this.getData();
@@ -322,6 +353,27 @@ export default {
       const start = (this.currentPage - 1) * this.perPage;
       const end = start + this.perPage;
       return this.items.slice(start, end);
+    },
+    isAllSelected: {
+      get() {
+        if (!this.paginatedItems.length) return false;
+        return this.paginatedItems.every((item) =>
+          this.selectedProducts.includes(item.id)
+        );
+      },
+      set(value) {
+        if (value) {
+          const currentPageIds = this.paginatedItems.map((item) => item.id);
+          this.selectedProducts = Array.from(
+            new Set([...this.selectedProducts, ...currentPageIds])
+          );
+        } else {
+          const currentPageIds = new Set(this.paginatedItems.map((item) => item.id));
+          this.selectedProducts = this.selectedProducts.filter(
+            (id) => !currentPageIds.has(id)
+          );
+        }
+      },
     },
   },
   methods: {
@@ -389,7 +441,31 @@ export default {
         await this.$root.confirm("Are you sure you want to delete the data?")
       ) {
         await this.$axios.delete(`/products/${id}`);
+        this.selectedProducts = this.selectedProducts.filter(
+          (selectedId) => selectedId !== id
+        );
         this.getData();
+      }
+    },
+    async bulkDelete() {
+      if (!this.selectedProducts.length) return;
+      if (
+        await this.$root.confirm(
+          `Are you sure you want to delete ${this.selectedProducts.length} selected products?`
+        )
+      ) {
+        try {
+          this.loading = true;
+          await this.$axios.post("/products/bulk-delete", {
+            ids: this.selectedProducts,
+          });
+          this.selectedProducts = [];
+          await this.getData();
+        } catch (error) {
+          console.error("Bulk delete failed:", error);
+        } finally {
+          this.loading = false;
+        }
       }
     },
     getSubCategories(categoryId) {
@@ -481,3 +557,28 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.custom-control-label {
+  cursor: pointer;
+}
+.custom-control-input:checked ~ .custom-control-label::before {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+  box-shadow: 0 2px 4px rgba(23, 162, 184, 0.3);
+}
+.custom-control-label::before {
+  border-radius: 4px;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 2px solid #adb5bd;
+  transition: all 0.2s ease-in-out;
+}
+.custom-control-label::after {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+.custom-control-input:focus ~ .custom-control-label::before {
+  box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+}
+</style>
