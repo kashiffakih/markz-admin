@@ -166,6 +166,70 @@
                     </div>
                   </div>
 
+                  <div class="col-md-3">
+                    <label for="weight-input" class="form-label">Weight (g)</label>
+                    <input
+                      id="weight-input"
+                      type="number"
+                      step="0.01"
+                      class="form-control"
+                      v-model="form.weight"
+                      placeholder="e.g. 500"
+                      :class="{ 'is-invalid': errors.weight }"
+                    />
+                    <div class="invalid-feedback" v-if="errors.weight">
+                      {{ errors.weight[0] }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <label for="length-input" class="form-label">Length (cm)</label>
+                    <input
+                      id="length-input"
+                      type="number"
+                      step="0.01"
+                      class="form-control"
+                      v-model="form.length"
+                      placeholder="e.g. 10"
+                      :class="{ 'is-invalid': errors.length }"
+                    />
+                    <div class="invalid-feedback" v-if="errors.length">
+                      {{ errors.length[0] }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <label for="breadth-input" class="form-label">Breadth (cm)</label>
+                    <input
+                      id="breadth-input"
+                      type="number"
+                      step="0.01"
+                      class="form-control"
+                      v-model="form.breadth"
+                      placeholder="e.g. 15"
+                      :class="{ 'is-invalid': errors.breadth }"
+                    />
+                    <div class="invalid-feedback" v-if="errors.breadth">
+                      {{ errors.breadth[0] }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <label for="height-input" class="form-label">Height (cm)</label>
+                    <input
+                      id="height-input"
+                      type="number"
+                      step="0.01"
+                      class="form-control"
+                      v-model="form.height"
+                      placeholder="e.g. 5"
+                      :class="{ 'is-invalid': errors.height }"
+                    />
+                    <div class="invalid-feedback" v-if="errors.height">
+                      {{ errors.height[0] }}
+                    </div>
+                  </div>
+
                   <div class="col-12 mt-3">
                     <button
                       class="btn btn-primary"
@@ -304,6 +368,10 @@ export default {
       is_default: false,
       value: "",
       points: "",
+      weight: "",
+      length: "",
+      breadth: "",
+      height: "",
       product_prices: [
         {
           price: null,
@@ -429,6 +497,10 @@ export default {
         is_default: false,
         value: "",
         points: "",
+        weight: "",
+        length: "",
+        breadth: "",
+        height: "",
         product_prices: [
           {
             price: null,

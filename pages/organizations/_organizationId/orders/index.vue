@@ -67,12 +67,19 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Manage Orders</h3>
-                  &nbsp;&nbsp;
+                  
                   <nuxt-link
-                    class="btn btn-sm btn-info float-sm-right"
+                    class="btn btn-sm btn-info float-sm-right ml-2"
                     :to="`/organizations/${organization.value}/orders/create`"
                     >Add New</nuxt-link
                   >
+                  <button
+                    class="btn btn-sm btn-primary float-sm-right"
+                    @click="schedulePickup"
+                    :disabled="schedulingPickup"
+                  >
+                    {{ schedulingPickup ? 'Scheduling...' : 'Schedule Delhivery Pickup' }}
+                  </button>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
@@ -281,6 +288,7 @@ export default {
     searchData: "",
     items: [],
     loading: true,
+    schedulingPickup: false,
     fmt: "YYYY-MM-DD hh:mm:ss A",
     time_zone: "Asia/Kolkata",
     excel_fields: {
@@ -448,6 +456,25 @@ export default {
       ) {
         await this.$axios.delete(`/orders/${id}`);
         this.getData();
+      }
+    },
+    async schedulePickup() {
+      if (
+        await this.$root.confirm("Are you sure you want to schedule a Delhivery pickup for today?")
+      ) {
+        this.schedulingPickup = true;
+        try {
+          let res = await this.$axios.post('/delhivery/schedule_pickup');
+          if (res.data && res.data.pr_id) {
+             alert('Pickup scheduled successfully! ID: ' + res.data.pr_id);
+          } else {
+             alert('Pickup scheduled successfully!');
+          }
+        } catch (e) {
+          alert('Failed to schedule pickup. Please check console for details.');
+          console.error(e);
+        }
+        this.schedulingPickup = false;
       }
     },
     convertToDubaiTime(time) {

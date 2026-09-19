@@ -162,6 +162,18 @@
                     }}</span>
                   </div>
                   <div class="form-group">
+                    <label class="form-label">HSN Code (Optional)</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Enter HSN Code (e.g. 851712)"
+                      v-model="form.hsn_code"
+                    />
+                    <span class="help-block" v-if="errors.hsn_code">{{
+                      errors.hsn_code[0]
+                    }}</span>
+                  </div>
+                  <div class="form-group">
                     <label class="form-label">Small Description</label>
 
                     <VueEditor v-model="form.small_description" />
@@ -328,6 +340,7 @@ export default {
       user_id: "",
       location: "",
       is_active: 1,
+      hsn_code: "",
     },
     sub_categories: [
       {

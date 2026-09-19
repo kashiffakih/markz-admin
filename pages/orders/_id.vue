@@ -66,6 +66,14 @@
                         >{{ errors.details[0] }}</span>
                       </div>
                     </div>
+                    <div class="col-md-4" v-if="form.expected_delivery_date">
+                      <div class="form-group">
+                        <label class="form-label">Expected Delivery Date</label>
+                        <input type="text" class="form-control" readonly
+                          :value="form.expected_delivery_date"
+                        >
+                      </div>
+                    </div>
                   </div>
                   <b>or Create a new User</b>
                   <div class="row">

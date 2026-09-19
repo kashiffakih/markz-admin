@@ -175,13 +175,66 @@
                     </div>
                   </div>
                   <!-- End row -->
-                  <div class="form-footer">
-                    <button class="btn btn-primary btn-block"
-                      @click="store"
-                      :disabled="loading"
-                    >
-                      {{ loading ? 'Saving...': 'Update Order' }}
-                    </button>
+                  <div class="row" v-if="cost >= 50000 && form.delhivery_waybill">
+                    <div class="col-md-12 mt-3 mb-2">
+                      <hr>
+                      <h5>E-Waybill Details (Required for High Value Orders)</h5>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">E-Waybill Number</label>
+                        <input type="text" class="form-control" placeholder="Enter E-Waybill Number"
+                          v-model="ewaybill.ewbn"
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="form-label">Document Number</label>
+                        <input type="text" class="form-control" placeholder="Enter Document Number"
+                          v-model="ewaybill.dcn"
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <button class="btn btn-warning mt-4"
+                        @click="updateEwaybill"
+                        :disabled="updatingEwaybill"
+                      >
+                         <i class="fas fa-truck-loading mr-1"></i>
+                         {{ updatingEwaybill ? 'Updating...': 'Update E-Waybill' }}
+                      </button>
+                    </div>
+                  </div>
+                  <div class="form-footer mt-4">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <button class="btn btn-primary btn-block"
+                          @click="store"
+                          :disabled="loading"
+                        >
+                          {{ loading ? 'Saving...': 'Update Order' }}
+                        </button>
+                      </div>
+                      <div class="col-md-4" v-if="form.delhivery_waybill">
+                        <button class="btn btn-info btn-block"
+                          @click="generateLabel"
+                          :disabled="generatingLabel"
+                        >
+                          <i class="fas fa-file-pdf mr-1"></i>
+                          {{ generatingLabel ? 'Generating...': 'Generate Label' }}
+                        </button>
+                      </div>
+                      <div class="col-md-4" v-if="form.delhivery_waybill">
+                        <button class="btn btn-secondary btn-block"
+                          @click="editShipment"
+                          :disabled="editingShipment"
+                        >
+                          <i class="fas fa-sync mr-1"></i>
+                          {{ editingShipment ? 'Syncing...': 'Sync Delhivery Shipment' }}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <!-- end form start -->
@@ -254,7 +307,14 @@ export default {
     }
   },
   data: () => ({
-    loading: false
+    loading: false,
+    generatingLabel: false,
+    editingShipment: false,
+    updatingEwaybill: false,
+    ewaybill: {
+      ewbn: '',
+      dcn: ''
+    }
   }),
   
   computed: {
@@ -313,6 +373,83 @@ export default {
         this.loading = false
       }
     },
+    async generateLabel() {
+      this.generatingLabel = true;
+      try {
+        let res = await this.$axios.post(`/delhivery/generate_label`, {
+          order_id: this.form.id
+        });
+        if (res.data && res.data.success && res.data.label_url) {
+          window.open(res.data.label_url, '_blank');
+        } else {
+          alert('Failed to fetch the label URL from Delhivery.');
+        }
+      } catch (e) {
+        let errorMsg = 'Failed to generate label.';
+        if (e.response && e.response.data && e.response.data.error) {
+          errorMsg = typeof e.response.data.error === 'string' ? e.response.data.error : JSON.stringify(e.response.data.error);
+        }
+        alert(errorMsg);
+        console.error(e);
+      }
+      this.generatingLabel = false;
+    },
+    async editShipment() {
+      this.editingShipment = true;
+      try {
+        let payload = {
+          order_id: this.form.id,
+          name: this.user.first_name + ' ' + (this.user.last_name || ''),
+          phone: this.user.phone,
+          // Add/pin could be updated here if we have address inputs in this form. 
+          // For now we will hit the endpoint; backend will fallback to order address if not provided.
+        };
+        let res = await this.$axios.post(`/delhivery/update_shipment`, payload);
+        
+        if (res.data && !res.data.error) {
+          alert('Successfully synced shipment details with Delhivery!');
+        } else {
+          alert('Failed to sync shipment details: ' + JSON.stringify(res.data.error));
+        }
+      } catch (e) {
+        let errorMsg = 'Failed to sync shipment.';
+        if (e.response && e.response.data && e.response.data.error) {
+          errorMsg = typeof e.response.data.error === 'string' ? e.response.data.error : JSON.stringify(e.response.data.error);
+        }
+        alert(errorMsg);
+        console.error(e);
+      }
+      this.editingShipment = false;
+    },
+    async updateEwaybill() {
+      if (!this.ewaybill.ewbn || !this.ewaybill.dcn) {
+        alert('Please provide both E-Waybill Number and Document Number.');
+        return;
+      }
+      this.updatingEwaybill = true;
+      try {
+        let payload = {
+          waybill: this.form.delhivery_waybill,
+          ewbn: this.ewaybill.ewbn,
+          dcn: this.ewaybill.dcn
+        };
+        let res = await this.$axios.post(`/delhivery/update_ewaybill`, payload);
+        
+        if (res.data && res.data.success) {
+          alert('E-Waybill details updated successfully in Delhivery.');
+        } else {
+          alert('Failed to update E-Waybill: ' + JSON.stringify(res.data.error || ''));
+        }
+      } catch (e) {
+        let errorMsg = 'Failed to update E-Waybill.';
+        if (e.response && e.response.data && e.response.data.error) {
+          errorMsg = typeof e.response.data.error === 'string' ? e.response.data.error : JSON.stringify(e.response.data.error);
+        }
+        alert(errorMsg);
+        console.error(e);
+      }
+      this.updatingEwaybill = false;
+    }
   }
 }
 </script>

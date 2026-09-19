@@ -144,6 +144,12 @@
                                   {{ order.created_at }}
                                 </td>
                               </tr>
+                              <tr v-if="order.expected_delivery_date">
+                                <td>Expected Delivery</td>
+                                <td>
+                                  {{ order.expected_delivery_date }}
+                                </td>
+                              </tr>
                               <tr
                                 v-for="(status, d) in order.order_statuses"
                                 :key="`status${d}`"
