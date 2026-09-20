@@ -89,6 +89,25 @@ export default {
     let order_status = order.order_statuses.find(status => status.id == params.id)
     let s = await $axios.get(`/statuses`)
     s = s.data.data
+
+    const orderSequence = [
+      'Order Placed',
+      'Order Processing',
+      'Create Shipment',
+      'Request Pickup',
+      'Out For Delivery',
+      'Delivered',
+      'Cancel Shipment',
+      'Cancelled'
+    ];
+    s.sort((a, b) => {
+      let indexA = orderSequence.indexOf(a.name);
+      let indexB = orderSequence.indexOf(b.name);
+      if (indexA === -1) indexA = 999;
+      if (indexB === -1) indexB = 999;
+      return indexA - indexB;
+    });
+
     let statuses = []
     statuses.push({
       label: 'Select Status',

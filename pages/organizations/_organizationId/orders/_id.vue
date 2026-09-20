@@ -225,13 +225,22 @@
                           {{ generatingLabel ? 'Generating...': 'Generate Label' }}
                         </button>
                       </div>
-                      <div class="col-md-4" v-if="form.delhivery_waybill">
+                      <div class="col-md-3" v-if="form.delhivery_waybill">
                         <button class="btn btn-secondary btn-block"
                           @click="editShipment"
                           :disabled="editingShipment"
                         >
                           <i class="fas fa-sync mr-1"></i>
-                          {{ editingShipment ? 'Syncing...': 'Sync Delhivery Shipment' }}
+                          {{ editingShipment ? 'Syncing...': 'Sync Shipment' }}
+                        </button>
+                      </div>
+                      <div class="col-md-3" v-if="form.delhivery_waybill">
+                        <button class="btn btn-warning btn-block"
+                          data-toggle="modal"
+                          data-target="#createReturnModal"
+                        >
+                          <i class="fas fa-undo mr-1"></i>
+                          Schedule Return
                         </button>
                       </div>
                     </div>
@@ -245,6 +254,7 @@
         </div>
       </section>
       <!-- /.content -->
+      <create-return-modal :order="form" />
       </div>
     <!-- /.content-wrapper -->
   </section>
@@ -252,13 +262,15 @@
 
 <script type="text/javascript">
 import BackButton from "@/components/BackButton.vue";
+import CreateReturnModal from "./components/CreateReturnModal.vue";
 import 'vue-select/dist/vue-select.css';
 import moment from 'moment'
 
 export default {
   name: 'UpdateOrder',
   components: {
-    BackButton
+    BackButton,
+    CreateReturnModal
   },
   async asyncData({$axios, params}) {
     let u = await $axios.get(`/users?role_id=6`)

@@ -73,6 +73,12 @@
                     :to="`/organizations/${organization.value}/orders/create`"
                     >Add New</nuxt-link
                   >
+                  <nuxt-link
+                    class="btn btn-sm btn-warning float-sm-right ml-2"
+                    :to="`/organizations/${organization.value}/ndr`"
+                  >
+                    NDR Management
+                  </nuxt-link>
                   <button
                     class="btn btn-sm btn-primary float-sm-right"
                     @click="schedulePickup"

@@ -183,7 +183,17 @@
                     </div>
                   </div>
                   <!-- End row -->
-                  <div class="form-footer">
+                  <div class="row mt-4" v-if="form.delhivery_waybill">
+                    <div class="col-md-12">
+                      <h5>Delhivery Shipping Actions</h5>
+                      <p>Waybill: {{ form.delhivery_waybill }}</p>
+                      <button class="btn btn-danger btn-sm mr-2" @click.prevent="cancelShipment">Cancel Shipment</button>
+                      <button class="btn btn-info btn-sm mr-2" @click.prevent="printPackingSlip">Print Packing Slip</button>
+                      <button class="btn btn-secondary btn-sm" @click.prevent="downloadPOD" v-if="form.is_delivered">Download POD</button>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="form-footer mt-4">
                     <button class="btn btn-primary btn-block"
                       @click="store"
                       :disabled="loading"
@@ -321,6 +331,40 @@ export default {
         this.loading = false
       }
     },
+    async cancelShipment() {
+      if(!confirm('Are you sure you want to cancel the shipment on Delhivery?')) return;
+      try {
+        await this.$axios.post(`/delhivery/cancel`, { order_id: this.form.id })
+        alert('Shipment cancelled successfully')
+      } catch(e) {
+        alert(e.response?.data?.error || 'Failed to cancel shipment')
+      }
+    },
+    async printPackingSlip() {
+      try {
+        let res = await this.$axios.post(`/delhivery/generate_label`, { order_id: this.form.id })
+        if (res.data.success && res.data.label_url) {
+           window.open(res.data.label_url, '_blank');
+        } else {
+           alert('Failed to generate packing slip');
+        }
+      } catch(e) {
+        alert(e.response?.data?.error || 'Failed to generate packing slip')
+      }
+    },
+    async downloadPOD() {
+      try {
+        if (!this.form.delhivery_waybill) return;
+        let res = await this.$axios.get(`/delhivery/document/download?waybill=${this.form.delhivery_waybill}&doc_type=POD`)
+        if (res.data && res.data.packages && res.data.packages.length > 0 && res.data.packages[0].document_link) {
+           window.open(res.data.packages[0].document_link, '_blank');
+        } else {
+           alert('POD not available yet');
+        }
+      } catch(e) {
+        alert(e.response?.data?.error || 'Failed to download POD')
+      }
+    }
   }
 }
 </script>

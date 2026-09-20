@@ -281,10 +281,34 @@
                         <td>
                           <button
                             type="button"
-                            class="btn btn-sm btn-info"
+                            class="btn btn-sm btn-info btn-block mb-1"
                             @click="showOrderDetails(order)"
                           >
                             Order Details
+                          </button>
+                          <button
+                            v-if="order.delhivery_waybill"
+                            type="button"
+                            class="btn btn-sm btn-danger btn-block mb-1"
+                            @click="cancelShipment(order)"
+                          >
+                            Cancel Shipment
+                          </button>
+                          <button
+                            v-if="order.delhivery_waybill && isNDR(order)"
+                            type="button"
+                            class="btn btn-sm btn-warning btn-block mb-1"
+                            @click="reattemptDelivery(order)"
+                          >
+                            Re-attempt Delivery
+                          </button>
+                          <button
+                            v-if="order.delhivery_waybill"
+                            type="button"
+                            class="btn btn-sm btn-success btn-block"
+                            @click="printPackingSlip(order)"
+                          >
+                            Print Packing Slip
                           </button>
                         </td>
                       </tr>
@@ -528,7 +552,26 @@ export default {
 
     // Fetch order statuses
     let os = await $axios.get(`/statuses`);
-    os = os.data.data;
+    let s = os.data.data;
+    
+    const orderSequence = [
+      'Order Placed',
+      'Order Processing',
+      'Create Shipment',
+      'Request Pickup',
+      'Out For Delivery',
+      'Delivered',
+      'Cancel Shipment',
+      'Cancelled'
+    ];
+    s.sort((a, b) => {
+      let indexA = orderSequence.indexOf(a.name);
+      let indexB = orderSequence.indexOf(b.name);
+      if (indexA === -1) indexA = 999;
+      if (indexB === -1) indexB = 999;
+      return indexA - indexB;
+    });
+
     let order_statuses = [];
     order_statuses.push({
       label: "Select Order Status",
@@ -538,7 +581,7 @@ export default {
       label: "Order Placed",
       code: 0,
     });
-    os.forEach((status) => {
+    s.forEach((status) => {
       order_statuses.push({
         label: status.name,
         code: status.id,
@@ -588,6 +631,45 @@ export default {
       const $ = window.jQuery || window.$ || (typeof $ !== "undefined" ? $ : null);
       if ($) {
         $("#orderDetailsModal").modal("show");
+      }
+    },
+    isNDR(order) {
+      if (order.order_statuses && order.order_statuses.length > 0) {
+        let latest = order.order_statuses[order.order_statuses.length - 1];
+        return latest.status_id == 12;
+      }
+      return false;
+    },
+    async reattemptDelivery(order) {
+      if(!confirm('Are you sure you want to request a delivery re-attempt on Delhivery?')) return;
+      try {
+        await this.$axios.post(`/delhivery/ndr/update`, { waybills: order.delhivery_waybill, action: 'RE-ATTEMPT' });
+        alert('Re-attempt requested successfully');
+        this.getData();
+      } catch(e) {
+        alert(e.response?.data?.error || e.response?.data?.message || 'Failed to request re-attempt');
+      }
+    },
+    async cancelShipment(order) {
+      if(!confirm('Are you sure you want to cancel the shipment on Delhivery?')) return;
+      try {
+        await this.$axios.post(`/delhivery/cancel`, { order_id: order.id });
+        alert('Shipment cancelled successfully');
+        this.getData();
+      } catch(e) {
+        alert(e.response?.data?.error || 'Failed to cancel shipment');
+      }
+    },
+    async printPackingSlip(order) {
+      try {
+        let res = await this.$axios.post(`/delhivery/generate_label`, { order_id: order.id });
+        if (res.data.success && res.data.label_url) {
+           window.open(res.data.label_url, '_blank');
+        } else {
+           alert('Failed to generate packing slip');
+        }
+      } catch(e) {
+        alert(e.response?.data?.error || 'Failed to generate packing slip');
       }
     },
     onPageChanged(page) {

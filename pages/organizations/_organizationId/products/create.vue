@@ -341,6 +341,7 @@ export default {
       location: "",
       is_active: 1,
       hsn_code: "",
+      is_fragile: 0,
     },
     sub_categories: [
       {
