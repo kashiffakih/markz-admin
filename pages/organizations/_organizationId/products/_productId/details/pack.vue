@@ -167,7 +167,9 @@
                   </div>
 
                   <div class="col-md-3">
-                    <label for="weight-input" class="form-label">Weight (g)</label>
+                    <label for="weight-input" class="form-label"
+                      >Weight (g)</label
+                    >
                     <input
                       id="weight-input"
                       type="number"
@@ -183,7 +185,9 @@
                   </div>
 
                   <div class="col-md-3">
-                    <label for="length-input" class="form-label">Length (cm)</label>
+                    <label for="length-input" class="form-label"
+                      >Length (cm)</label
+                    >
                     <input
                       id="length-input"
                       type="number"
@@ -199,7 +203,9 @@
                   </div>
 
                   <div class="col-md-3">
-                    <label for="breadth-input" class="form-label">Breadth (cm)</label>
+                    <label for="breadth-input" class="form-label"
+                      >Breadth (cm)</label
+                    >
                     <input
                       id="breadth-input"
                       type="number"
@@ -215,7 +221,9 @@
                   </div>
 
                   <div class="col-md-3">
-                    <label for="height-input" class="form-label">Height (cm)</label>
+                    <label for="height-input" class="form-label"
+                      >Height (cm)</label
+                    >
                     <input
                       id="height-input"
                       type="number"
@@ -265,15 +273,19 @@
                     <th>Customer Offer Price</th>
                     <th>Vendor Price</th>
                     <th>Vendor Offer Price</th>
+                    <th>Weight (g)</th>
+                    <th>L (cm)</th>
+                    <th>B (cm)</th>
+                    <th>H (cm)</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-if="loading">
-                    <td colspan="10" class="text-center">Loading...</td>
+                    <td colspan="14" class="text-center">Loading...</td>
                   </tr>
                   <tr v-else-if="!filteredPacks.length">
-                    <td colspan="10" class="text-center">
+                    <td colspan="14" class="text-center">
                       No packs available for selected unit
                     </td>
                   </tr>
@@ -323,6 +335,10 @@
                           : "N/A"
                       }}
                     </td>
+                    <td>{{ pack.weight ?? "N/A" }}</td>
+                    <td>{{ pack.length ?? "N/A" }}</td>
+                    <td>{{ pack.breadth ?? "N/A" }}</td>
+                    <td>{{ pack.height ?? "N/A" }}</td>
                     <td>
                       <nuxt-link
                         title="Edit pack"

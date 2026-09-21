@@ -43,7 +43,7 @@
                         v-model="searchData"
                         @input="search"
                         placeholder="Search by order id"
-                        style="height: 44px;"
+                        style="height: 44px"
                       />
                     </div>
                     <div class="col-12 col-sm-4 col-md-3 mb-2 mb-sm-0">
@@ -53,7 +53,7 @@
                         :options="categories"
                         @input="filter"
                         placeholder="Select Category"
-                        style="min-height: 44px;"
+                        style="min-height: 44px"
                       ></v-select>
                     </div>
                     <div class="col-12 col-sm-4 col-md-3 mb-2 mb-sm-0">
@@ -63,7 +63,7 @@
                         :options="order_statuses"
                         @input="filter"
                         placeholder="Select Order Status"
-                        style="min-height: 44px;"
+                        style="min-height: 44px"
                       ></v-select>
                     </div>
                     <div class="col-12 col-sm-4 col-md-2 mb-2 mb-sm-0">
@@ -73,11 +73,18 @@
                         :options="roles"
                         @input="filter"
                         placeholder="Select Role"
-                        style="min-height: 44px;"
+                        style="min-height: 44px"
                       ></v-select>
                     </div>
-                    <div class="col-12 col-md-1 text-center text-md-right mt-2 mt-md-0">
-                      <a class="btn btn-secondary w-100 d-inline-flex align-items-center justify-content-center" href="#" @click.prevent="getData" style="height: 44px;">
+                    <div
+                      class="col-12 col-md-1 text-center text-md-right mt-2 mt-md-0"
+                    >
+                      <a
+                        class="btn btn-secondary w-100 d-inline-flex align-items-center justify-content-center"
+                        href="#"
+                        @click.prevent="getData"
+                        style="height: 44px"
+                      >
                         <i class="fas fa-sync mr-1"></i> Refresh
                       </a>
                     </div>
@@ -100,13 +107,10 @@
                     <thead>
                       <tr>
                         <th>Sr. No.</th>
-                        <!-- <th>Actions</th> -->
+                        <th>Order Details</th>
                         <th>Order Status</th>
-                        <!-- <th>Delivery Boy Details</th>
-                        <th>Store</th> -->
                         <th>Order ID</th>
                         <th>Customer</th>
-                        <th>Order Details</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -118,6 +122,89 @@
                         :key="`order${i}`"
                       >
                         <td>{{ (currentPage - 1) * perPage + i + 1 }}</td>
+                        <td>
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-info btn-block mb-1"
+                            @click="showOrderDetails(order)"
+                          >
+                            Order Details
+                          </button>
+                          <button
+                            v-if="order.delhivery_waybill"
+                            type="button"
+                            class="btn btn-sm btn-danger btn-block mb-1"
+                            @click="cancelShipment(order)"
+                          >
+                            Cancel Shipment
+                          </button>
+                          <button
+                            v-if="order.delhivery_waybill && isNDR(order)"
+                            type="button"
+                            class="btn btn-sm btn-warning btn-block mb-1"
+                            @click="reattemptDelivery(order)"
+                          >
+                            Re-attempt Delivery
+                          </button>
+                          <button
+                            v-if="order.delhivery_waybill"
+                            type="button"
+                            class="btn btn-sm btn-success btn-block"
+                            @click="printPackingSlip(order)"
+                          >
+                            Print Packing Slip
+                          </button>
+                          <div class="mt-2 text-left" style="font-size: 13px">
+                            <b>Tracking URL:</b>
+                            <input
+                              type="text"
+                              class="form-control form-control-sm mb-1 mt-1"
+                              v-model="order.delhivery_tracking_url"
+                              placeholder="Enter tracking URL"
+                            />
+                            <button
+                              class="btn btn-sm btn-primary btn-block mb-1"
+                              @click="updateTrackingUrl(order)"
+                            >
+                              Update Tracking URL
+                            </button>
+                            <a
+                              v-if="
+                                order.delhivery_tracking_url &&
+                                !order.delhivery_waybill
+                              "
+                              :href="order.delhivery_tracking_url"
+                              target="_blank"
+                              class="btn btn-sm btn-success btn-block"
+                            >
+                              <i class="fas fa-external-link-alt"></i> Track
+                              Order
+                            </a>
+                            <!-- <button
+                              v-if="
+                                order.delivery_method &&
+                                order.delivery_method !== 'Regular' &&
+                                $auth.user &&
+                                $auth.user.roles &&
+                                $auth.user.roles[0].name !== 'Distributor'
+                              "
+                              type="button"
+                              class="btn btn-sm btn-warning btn-block mt-1"
+                              @click="openInstantDeliveryModal(order)"
+                            >
+                              <i class="fas fa-bolt"></i> Manage Instant
+                              Delivery
+                            </button> -->
+                            <button
+                              v-if="order.delhivery_waybill"
+                              type="button"
+                              class="btn btn-sm btn-info btn-block mt-1"
+                              @click="viewTransitHistory(order)"
+                            >
+                              <i class="fas fa-truck"></i> Live Transit History
+                            </button>
+                          </div>
+                        </td>
                         <!-- <td class="w-1"> -->
                         <!-- <a target="_blank" :href="`${baseUrl}/orders/${order.id}/invoice`">
                             Invoice
@@ -141,7 +228,42 @@
                               <tr>
                                 <td>Order Placed</td>
                                 <td>
-                                  {{ order.created_at }}
+                                  {{ order.created_at }}<br />
+                                  <b>Order ID: </b> {{ order.id }}<br />
+                                  <b>Amount: </b>₹{{ order.total_amount }}
+                                  <div
+                                    v-if="
+                                      order.delivery_method &&
+                                      order.delivery_method ==
+                                        'Instant Delivery'
+                                    "
+                                    class="mt-2"
+                                  >
+                                    <span
+                                      class="badge badge-danger"
+                                      style="font-size: 14px"
+                                      ><i
+                                        class="fas fa-exclamation-triangle"
+                                      ></i>
+                                      INSTANT DELIVERY</span
+                                    >
+                                    <div
+                                      v-if="order.delivery_method !== 'Instant'"
+                                      class="mt-1"
+                                    >
+                                      <small
+                                        ><b>Partner:</b>
+                                        {{ order.delivery_method }}</small
+                                      >
+                                    </div>
+                                    <div v-if="order.extra_charges > 0">
+                                      <small
+                                        ><b>Extra Charge:</b> ₹{{
+                                          order.extra_charges
+                                        }}</small
+                                      >
+                                    </div>
+                                  </div>
                                 </td>
                               </tr>
                               <tr v-if="order.expected_delivery_date">
@@ -278,39 +400,6 @@
                                 (order.user.pincode || "")
                           }}
                         </td>
-                        <td>
-                          <button
-                            type="button"
-                            class="btn btn-sm btn-info btn-block mb-1"
-                            @click="showOrderDetails(order)"
-                          >
-                            Order Details
-                          </button>
-                          <button
-                            v-if="order.delhivery_waybill"
-                            type="button"
-                            class="btn btn-sm btn-danger btn-block mb-1"
-                            @click="cancelShipment(order)"
-                          >
-                            Cancel Shipment
-                          </button>
-                          <button
-                            v-if="order.delhivery_waybill && isNDR(order)"
-                            type="button"
-                            class="btn btn-sm btn-warning btn-block mb-1"
-                            @click="reattemptDelivery(order)"
-                          >
-                            Re-attempt Delivery
-                          </button>
-                          <button
-                            v-if="order.delhivery_waybill"
-                            type="button"
-                            class="btn btn-sm btn-success btn-block"
-                            @click="printPackingSlip(order)"
-                          >
-                            Print Packing Slip
-                          </button>
-                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -386,8 +475,21 @@
                         }}
                       </td>
                       <td>{{ detail.quantity }}</td>
-                      <td>Rs. {{ (parseFloat(detail.order_detail_cost || 0) / (detail.quantity || 1)).toFixed(2) }}</td>
-                      <td>Rs. {{ parseFloat(detail.order_detail_cost || 0).toFixed(2) }}</td>
+                      <td>
+                        Rs.
+                        {{
+                          (
+                            parseFloat(detail.order_detail_cost || 0) /
+                            (detail.quantity || 1)
+                          ).toFixed(2)
+                        }}
+                      </td>
+                      <td>
+                        Rs.
+                        {{
+                          parseFloat(detail.order_detail_cost || 0).toFixed(2)
+                        }}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -408,44 +510,114 @@
                         <tr>
                           <td>Item total</td>
                           <td>
-                            Rs. {{ parseFloat(selectedOrder.order_cost || 0).toFixed(2) }}
+                            Rs.
+                            {{
+                              parseFloat(selectedOrder.order_cost || 0).toFixed(
+                                2
+                              )
+                            }}
                           </td>
                         </tr>
                         <tr v-if="isMaharashtraOrder(selectedOrder)">
                           <td>CGST 2.5%</td>
-                          <td>Rs. {{ (parseFloat(selectedOrder.tax_amount || 0) / 2).toFixed(2) }}</td>
+                          <td>
+                            Rs.
+                            {{
+                              (
+                                parseFloat(selectedOrder.tax_amount || 0) / 2
+                              ).toFixed(2)
+                            }}
+                          </td>
                         </tr>
                         <tr v-if="isMaharashtraOrder(selectedOrder)">
                           <td>SGST 2.5%</td>
-                          <td>Rs. {{ (parseFloat(selectedOrder.tax_amount || 0) / 2).toFixed(2) }}</td>
+                          <td>
+                            Rs.
+                            {{
+                              (
+                                parseFloat(selectedOrder.tax_amount || 0) / 2
+                              ).toFixed(2)
+                            }}
+                          </td>
                         </tr>
                         <tr v-else>
                           <td>IGST 5%</td>
-                          <td>Rs. {{ parseFloat(selectedOrder.tax_amount || 0).toFixed(2) }}</td>
+                          <td>
+                            Rs.
+                            {{
+                              parseFloat(selectedOrder.tax_amount || 0).toFixed(
+                                2
+                              )
+                            }}
+                          </td>
                         </tr>
                         <tr>
                           <td>Delivery charge</td>
-                          <td>Rs. {{ parseFloat(selectedOrder.delivery_amount || 0).toFixed(2) }}</td>
+                          <td>
+                            Rs.
+                            {{
+                              parseFloat(
+                                selectedOrder.delivery_amount || 0
+                              ).toFixed(2)
+                            }}
+                          </td>
                         </tr>
                         <tr>
                           <td>Packing charge</td>
-                          <td>Rs. {{ parseFloat(selectedOrder.packaging_amount || 0).toFixed(2) }}</td>
+                          <td>
+                            Rs.
+                            {{
+                              parseFloat(
+                                selectedOrder.packaging_amount || 0
+                              ).toFixed(2)
+                            }}
+                          </td>
                         </tr>
-                        <tr v-if="parseFloat(selectedOrder.platform_fee || 0) > 0">
+                        <tr
+                          v-if="parseFloat(selectedOrder.platform_fee || 0) > 0"
+                        >
                           <td>Platform Fee</td>
-                          <td>Rs. {{ parseFloat(selectedOrder.platform_fee).toFixed(2) }}</td>
+                          <td>
+                            Rs.
+                            {{
+                              parseFloat(selectedOrder.platform_fee).toFixed(2)
+                            }}
+                          </td>
                         </tr>
                         <tr>
                           <td>Coupon Value</td>
-                          <td>- Rs. {{ parseFloat(selectedOrder.coupon_amount || 0).toFixed(2) }}</td>
+                          <td>
+                            - Rs.
+                            {{
+                              parseFloat(
+                                selectedOrder.coupon_amount || 0
+                              ).toFixed(2)
+                            }}
+                          </td>
                         </tr>
                         <tr v-if="selectedOrder.role !== 'Distributor'">
                           <td>Reward</td>
-                          <td>- Rs. {{ parseFloat(selectedOrder.wallet_amount_used || 0).toFixed(2) }}</td>
+                          <td>
+                            - Rs.
+                            {{
+                              parseFloat(
+                                selectedOrder.wallet_amount_used || 0
+                              ).toFixed(2)
+                            }}
+                          </td>
                         </tr>
-                        <tr style="font-weight: bold; border-top: 2px solid #ccc;">
+                        <tr
+                          style="font-weight: bold; border-top: 2px solid #ccc"
+                        >
                           <td>Grand Total</td>
-                          <td>Rs. {{ parseFloat(selectedOrder.total_amount || 0).toFixed(2) }}</td>
+                          <td>
+                            Rs.
+                            {{
+                              parseFloat(
+                                selectedOrder.total_amount || 0
+                              ).toFixed(2)
+                            }}
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -516,6 +688,166 @@
           </div>
         </div>
       </div>
+      <!-- Tracking Modal -->
+      <div
+        class="modal fade"
+        id="trackingModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="trackingModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="trackingModalLabel">
+                Live Transit History
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div v-if="trackingLoading" class="text-center">
+                Loading tracking data...
+              </div>
+              <div
+                v-else-if="
+                  trackingData &&
+                  trackingData.ShipmentData &&
+                  trackingData.ShipmentData.length > 0
+                "
+              >
+                <div
+                  v-for="(shipment, idx) in trackingData.ShipmentData"
+                  :key="idx"
+                  class="mb-4"
+                >
+                  <h6>Waybill: {{ shipment.Shipment.AWB }}</h6>
+                  <div class="timeline mt-3">
+                    <div
+                      v-for="(scan, sIdx) in shipment.Shipment.Scans"
+                      :key="sIdx"
+                      class="time-label"
+                      style="display: flex; margin-bottom: 15px"
+                    >
+                      <div style="flex: 0 0 auto; margin-right: 15px">
+                        <span class="badge badge-primary">{{
+                          scan.ScanDetail.ScanDateTime
+                        }}</span>
+                      </div>
+                      <div>
+                        <strong>{{ scan.ScanDetail.Scan }}</strong
+                        ><br />
+                        <small class="text-muted">{{
+                          scan.ScanDetail.ScannedLocation
+                        }}</small>
+                        <div v-if="scan.ScanDetail.Instructions">
+                          <small>{{ scan.ScanDetail.Instructions }}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-center">
+                No tracking history found or shipment not picked up yet.
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Instant Delivery Modal -->
+      <div
+        class="modal fade"
+        id="instantDeliveryModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="instantDeliveryModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="instantDeliveryModalLabel">
+                Manage Instant Delivery
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" v-if="activeInstantOrder">
+              <form @submit.prevent="saveInstantDelivery">
+                <div class="form-group">
+                  <label>Delivery Partner</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="activeInstantOrder.delivery_method"
+                    placeholder="e.g. Dunzo, Porter, etc."
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Extra Charges (₹)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    class="form-control"
+                    v-model="activeInstantOrder.extra_charges"
+                    placeholder="Enter extra charges"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Tracking URL</label>
+                  <input
+                    type="url"
+                    class="form-control"
+                    v-model="activeInstantOrder.delhivery_tracking_url"
+                    placeholder="https://..."
+                  />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="saveInstantDelivery"
+              >
+                Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- /.content-wrapper -->
   </section>
@@ -553,16 +885,16 @@ export default {
     // Fetch order statuses
     let os = await $axios.get(`/statuses`);
     let s = os.data.data;
-    
+
     const orderSequence = [
-      'Order Placed',
-      'Order Processing',
-      'Create Shipment',
-      'Request Pickup',
-      'Out For Delivery',
-      'Delivered',
-      'Cancel Shipment',
-      'Cancelled'
+      "Order Placed",
+      "Order Processing",
+      "Create Shipment",
+      "Request Pickup",
+      "Out For Delivery",
+      "Delivered",
+      "Cancel Shipment",
+      "Cancelled",
     ];
     s.sort((a, b) => {
       let indexA = orderSequence.indexOf(a.name);
@@ -617,6 +949,9 @@ export default {
       { label: "Distributor", code: "Distributor" },
     ],
     searchTimeout: null,
+    trackingLoading: false,
+    trackingData: null,
+    activeInstantOrder: null,
   }),
   computed: {
     paginatedItems() {
@@ -628,7 +963,8 @@ export default {
   methods: {
     showOrderDetails(order) {
       this.selectedOrder = order;
-      const $ = window.jQuery || window.$ || (typeof $ !== "undefined" ? $ : null);
+      const $ =
+        window.jQuery || window.$ || (typeof $ !== "undefined" ? $ : null);
       if ($) {
         $("#orderDetailsModal").modal("show");
       }
@@ -641,35 +977,125 @@ export default {
       return false;
     },
     async reattemptDelivery(order) {
-      if(!confirm('Are you sure you want to request a delivery re-attempt on Delhivery?')) return;
+      if (
+        !confirm(
+          "Are you sure you want to request a delivery re-attempt on Delhivery?"
+        )
+      )
+        return;
       try {
-        await this.$axios.post(`/delhivery/ndr/update`, { waybills: order.delhivery_waybill, action: 'RE-ATTEMPT' });
-        alert('Re-attempt requested successfully');
+        await this.$axios.post(`/delhivery/ndr/update`, {
+          waybills: order.delhivery_waybill,
+          action: "RE-ATTEMPT",
+        });
+        alert("Re-attempt requested successfully");
         this.getData();
-      } catch(e) {
-        alert(e.response?.data?.error || e.response?.data?.message || 'Failed to request re-attempt');
+      } catch (e) {
+        alert(
+          e.response?.data?.error ||
+            e.response?.data?.message ||
+            "Failed to request re-attempt"
+        );
+      }
+    },
+    async updateTrackingUrl(order) {
+      try {
+        await this.$axios.post(`/orders`, {
+          id: order.id,
+          delhivery_tracking_url: order.delhivery_tracking_url,
+        });
+        alert("Tracking URL updated successfully!");
+      } catch (e) {
+        alert("Failed to update tracking URL. Please try again.");
+        console.error(e);
+      }
+    },
+    async viewTransitHistory(order) {
+      this.trackingData = null;
+      this.trackingLoading = true;
+      const $ =
+        window.jQuery || window.$ || (typeof $ !== "undefined" ? $ : null);
+      if ($) {
+        $("#trackingModal").modal("show");
+      }
+
+      try {
+        const response = await this.$axios.get(
+          `/delhivery/track?order_id=${order.id}`
+        );
+        this.trackingData = response.data;
+      } catch (e) {
+        console.error("Failed to load tracking data", e);
+      } finally {
+        this.trackingLoading = false;
+      }
+    },
+    openInstantDeliveryModal(order) {
+      this.activeInstantOrder = JSON.parse(JSON.stringify(order));
+      const $ =
+        window.jQuery || window.$ || (typeof $ !== "undefined" ? $ : null);
+      if ($) {
+        $("#instantDeliveryModal").modal("show");
+      }
+    },
+    async saveInstantDelivery() {
+      try {
+        await this.$axios.post(`/orders/instant_delivery`, {
+          id: this.activeInstantOrder.id,
+          delivery_method: this.activeInstantOrder.delivery_method,
+          extra_charges: this.activeInstantOrder.extra_charges,
+          delhivery_tracking_url:
+            this.activeInstantOrder.delhivery_tracking_url,
+        });
+
+        const index = this.paginatedItems.findIndex(
+          (o) => o.id === this.activeInstantOrder.id
+        );
+        if (index !== -1) {
+          this.paginatedItems[index].delivery_method =
+            this.activeInstantOrder.delivery_method;
+          this.paginatedItems[index].extra_charges =
+            this.activeInstantOrder.extra_charges;
+          this.paginatedItems[index].delhivery_tracking_url =
+            this.activeInstantOrder.delhivery_tracking_url;
+        }
+
+        const $ =
+          window.jQuery || window.$ || (typeof $ !== "undefined" ? $ : null);
+        if ($) {
+          $("#instantDeliveryModal").modal("hide");
+        }
+        alert("Instant Delivery details updated successfully!");
+      } catch (e) {
+        console.error("Failed to update instant delivery", e);
+        alert("Failed to update details.");
       }
     },
     async cancelShipment(order) {
-      if(!confirm('Are you sure you want to cancel the shipment on Delhivery?')) return;
+      if (
+        !confirm("Are you sure you want to cancel the shipment on Delhivery?")
+      )
+        return;
       try {
         await this.$axios.post(`/delhivery/cancel`, { order_id: order.id });
-        alert('Shipment cancelled successfully');
+        alert("Shipment cancelled successfully");
         this.getData();
-      } catch(e) {
-        alert(e.response?.data?.error || 'Failed to cancel shipment');
+      } catch (e) {
+        alert(e.response?.data?.error || "Failed to cancel shipment");
       }
     },
     async printPackingSlip(order) {
       try {
-        let res = await this.$axios.post(`/delhivery/generate_label`, { order_id: order.id });
+        let res = await this.$axios.post(`/delhivery/generate_label`, {
+          order_id: order.id,
+        });
         if (res.data.success && res.data.label_url) {
-           window.open(res.data.label_url, '_blank');
+          window.open(res.data.label_url, "_blank");
         } else {
-           alert('Failed to generate packing slip');
+          alert("Failed to generate packing slip");
         }
-      } catch(e) {
-        alert(e.response?.data?.error || 'Failed to generate packing slip');
+      } catch (e) {
+        alert(e.response?.data?.error || "Failed to generate packing slip");
       }
     },
     onPageChanged(page) {
@@ -881,7 +1307,9 @@ export default {
                 ? item.user.bill_nationality + ", "
                 : "";
 
-              item.user.prefix = item.user.prefix ? item.user.prefix + ", " : "";
+              item.user.prefix = item.user.prefix
+                ? item.user.prefix + ", "
+                : "";
               item.user.first_name = item.user.first_name
                 ? item.user.first_name + " "
                 : "";
