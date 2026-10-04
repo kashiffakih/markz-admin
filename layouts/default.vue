@@ -151,8 +151,7 @@
                   <li
                     class="nav-item has-treeview"
                     v-for="(item, j) in category.items"
-                    :key="item.id"
-                    v-if="item.permission"
+                    :key="'item-' + i + '-' + j"
                   >
                     <nuxt-link
                       :target="item.target"
@@ -541,7 +540,12 @@ export default {
         ],
       });
 
-      return categories;
+      return categories.map(category => {
+        if (category.items) {
+          category.items = category.items.filter(item => item.permission);
+        }
+        return category;
+      });
     },
   },
 

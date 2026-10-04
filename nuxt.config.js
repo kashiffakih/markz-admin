@@ -14,7 +14,7 @@ module.exports = {
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
-      { rel: 'stylesheet', href: '/plugins/fontawesome-free/css/all.min.css' },
+      { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css' },
       { rel: 'stylesheet', href: 'https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css' },
       { rel: 'stylesheet', href: '/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' },
       { rel: 'stylesheet', href: '/dist/css/adminlte.min.css' },
@@ -31,6 +31,7 @@ module.exports = {
       { src: '/plugins/jquery-mapael/maps/usa_states.min.js' },
       { src: '/plugins/chart.js/Chart.min.js' },
       { src: '/dist/js/pages/dashboard2.js' },
+      { src: '/dist/js/adminlte.min.js' },
       { src: '/dist/js/demo.js' },
     ]
   },
@@ -48,6 +49,7 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    '@/assets/css/modern-dashboard.css'
   ],
 
   router: {
@@ -105,7 +107,7 @@ module.exports = {
   axios: {
     // baseURL: 'http://api.venkon.aaibuzz.com/api'
     // baseURL: 'http://192.168.29.9:8080/api'
-    baseURL: 'http://localhost:8080/api'
+    baseURL: 'http://localhost:9090/api'
   },
   
   build: {
