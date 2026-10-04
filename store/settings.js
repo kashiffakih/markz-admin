@@ -13,9 +13,10 @@ export const state = () => ({
     name: '',
   },
 
-  mediaUrl: 'https://az1-medias.s3.ap-south-1.amazonaws.com/pinewraps/',
+  // mediaUrl: 'https://az1-medias.s3.ap-south-1.amazonaws.com/pinewraps/',
+  mediaUrl: 'http://localhost:9090/storage/Aadab/',
   // baseUrl: 'http://api.aethon.aaibuzz.com/api',
-  baseUrl: 'http://localhost:8080/api',
+  baseUrl: 'http://localhost:9090/api',
 })
 
 export const getters = {
@@ -52,10 +53,10 @@ export const mutations = {
 }
 
 export const actions = {
-  setOrganization({commit}, organization) {
+  setOrganization({ commit }, organization) {
     commit('SET_ORGANIZATION', organization);
   },
-  setCity({commit}, city) {
+  setCity({ commit }, city) {
     commit('SET_CITY', city);
   }
 }

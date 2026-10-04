@@ -589,6 +589,10 @@ export default {
       }
     },
     async deleteImage(product_image_id) {
+      if (!product_image_id || product_image_id === 0) {
+        alert("Cannot delete placeholder image.");
+        return;
+      }
       if (
         await this.$root.confirm("Are you sure you want to delete the data?")
       ) {

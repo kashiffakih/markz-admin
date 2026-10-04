@@ -30,7 +30,6 @@ module.exports = {
       { src: '/plugins/jquery-mapael/jquery.mapael.min.js' },
       { src: '/plugins/jquery-mapael/maps/usa_states.min.js' },
       { src: '/plugins/chart.js/Chart.min.js' },
-      { src: '/dist/js/pages/dashboard2.js' },
       { src: '/dist/js/adminlte.min.js' },
       { src: '/dist/js/demo.js' },
     ]
