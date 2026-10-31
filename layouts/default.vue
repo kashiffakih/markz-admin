@@ -1,216 +1,87 @@
 <template>
   <div id="app-root">
-    <section
-      class="hold-transition sidebar-mini layout-fixed"
-      v-if="authenticated"
-    >
-      <!-- Site wrapper -->
+    <section class="hold-transition sidebar-mini layout-fixed" v-if="authenticated">
       <div class="wrapper">
-        <!-- Drawer Backdrop Overlay -->
-        <div
-          class="drawer-overlay"
-          :class="{ show: isSidebarOpen }"
-          @click="closeSidebar"
-        ></div>
+        <!-- backdrop for the mobile drawer -->
+        <div class="drawer-overlay" :class="{ show: isSidebarOpen }" @click="closeSidebar"></div>
 
-        <!-- Navbar -->
-        <nav
-          class="main-header navbar navbar-white navbar-light d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between p-2"
-        >
-          <!-- Left side: Hamburger, logout, warning, and selects -->
-          <div
-            class="d-flex flex-grow-1 flex-wrap align-items-center"
-            style="gap: 8px"
-          >
-            <!-- Hamburger menu toggle -->
-            <a
-              class="nav-link px-2"
-              href="#"
-              role="button"
-              @click.prevent="toggleSidebar"
-            >
-              <i class="fas fa-bars" style="color: black; font-size: 20px"></i>
+        <!-- ============================ TOP BAR ============================ -->
+        <nav class="main-header navbar navbar-white navbar-light">
+          <div class="pn-top">
+            <a class="pn-top__burger" href="#" role="button" @click.prevent="toggleSidebar" aria-label="Menu">
+              <i class="fas fa-bars"></i>
+            </a>
+            <span class="pn-top__title">{{ isSuper ? "Admin Console" : "Seller Hub" }}</span>
+
+            <div class="pn-top__spacer"></div>
+
+            <!-- Super Admin can work inside any seller's account -->
+            <div v-if="isSuper" class="pn-top__org">
+              <select-organization></select-organization>
+            </div>
+
+            <a :href="storeUrl" target="_blank" rel="noopener" class="pn-btn-ghost d-none d-md-inline-flex">
+              <i class="fas fa-external-link-alt"></i> View store
             </a>
 
-            <!-- Logout Button -->
-            <button
-              class="btn btn-link nav-link px-2 mr-2"
-              @click="logout"
-              style="color: black !important"
-            >
-              Logout
-            </button>
-
-            <!-- Selection Status Warning -->
-            <span
-              v-if="selectionWarning"
-              class="mr-2"
-              style="font-size: 13px; color: #e65100; font-weight: 600;"
-            >
-              ⚠️ {{ selectionWarning }}
+            <span class="pn-chip">
+              <span class="pn-chip__avatar">{{ initials }}</span>
+              <span class="pn-chip__name">{{ displayName }}</span>
+              <span class="pn-chip__role">{{ roleLabel }}</span>
             </span>
 
-            <!-- Selects (City & Organization) -->
-            <div
-              v-if="
-                permissions.indexOf(1) != -1 || permissions.indexOf(2) != -1
-              "
-              class="d-flex flex-wrap align-items-center flex-grow-1 flex-md-grow-0"
-              style="gap: 8px"
-            >
-              <div
-                class="flex-grow-1 flex-md-grow-0"
-                style="min-width: 140px; max-width: 180px"
-              >
-                <select-city :cities="cities"></select-city>
-              </div>
-              <div
-                class="flex-grow-1 flex-md-grow-0"
-                style="min-width: 180px; max-width: 240px"
-              >
-                <select-organization></select-organization>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right side: Title (hidden on extra small screens) -->
-          <div class="d-none d-sm-block pl-2">
-            <h3 class="m-0"><b style="color: black">Aadab</b></h3>
+            <button class="pn-btn-ghost" @click="logout"><i class="fas fa-sign-out-alt"></i><span class="d-none d-sm-inline">Logout</span></button>
           </div>
         </nav>
-        <!-- /.navbar -->
 
-        <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
-          <!-- Brand Logo -->
-          <div
-            class="brand-link d-flex align-items-center justify-content-center text-center position-relative"
-            style="
-              background-color: rgba(255, 255, 255, 0.08) !important;
-              padding: 0.85rem 1rem;
-              border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            "
-          >
-            <nuxt-link to="/" class="d-flex justify-content-center align-items-center w-100">
-              <img
-                :src="
-                  organization
-                    ? organization.logo_path
-                      ? mediaUrl + organization.logo_path
-                      : mediaUrl + 'company.png'
-                    : mediaUrl + 'company.png'
-                "
-                alt="Logo"
-                style="max-width: 85%; width: 140px; height: auto; max-height: 65px; object-fit: contain;"
-              />
-            </nuxt-link>
-            <!-- Close Button for Mobile -->
-            <a
-              class="d-block d-lg-none px-2 position-absolute"
-              href="#"
-              role="button"
-              @click.prevent="toggleSidebar"
-              style="color: white !important; font-size: 20px; right: 12px; top: 50%; transform: translateY(-50%);"
-            >
+        <!-- ============================ SIDEBAR ============================ -->
+        <aside class="main-sidebar elevation-4">
+          <nuxt-link to="/" class="brand-link pn-brand">
+            <span class="pn-brand__mark">M</span>
+            <span>
+              <div class="pn-brand__name">MARKZ</div>
+              <div class="pn-brand__sub">{{ isSuper ? "Admin Console" : "Seller Hub" }}</div>
+            </span>
+            <a class="d-block d-lg-none ml-auto" href="#" role="button" @click.prevent.stop="toggleSidebar" style="color:#fff !important;font-size:18px">
               <i class="fas fa-times"></i>
             </a>
-          </div>
+          </nuxt-link>
 
-          <!-- Sidebar -->
           <div class="sidebar">
-            <!-- Sidebar user (optional) -->
-            <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="image">
-              <img
-                class="img-circle elevation-2"
-                alt="User Image"
-                :src="mediaUrl + organization.logo_path"
-              />
-            </div>
-            <div class="info">
-              <a href="#" class="d-block">{{ user.name }}</a>
-            </div>
-          </div> -->
-
-            <!-- Sidebar Menu -->
-            <nav class="mt-2 pb-5 mb-5">
-              <ul
-                class="nav nav-pills nav-sidebar flex-column"
-                data-widget="treeview"
-                role="menu"
-                data-accordion="false"
-              >
-                <template v-for="(category, i) in categories">
-                  <li
-                    class="nav-header"
-                    v-if="category.title"
-                    :key="`header-${i}`"
-                  >
-                    {{ category.title }}
-                  </li>
-                  <li
-                    class="nav-item has-treeview"
-                    v-for="(item, j) in category.items"
-                    :key="'item-' + i + '-' + j"
-                  >
-                    <nuxt-link
-                      :target="item.target"
-                      :to="item.link"
-                      :class="['nav-link', isNavActive(item.link) ? 'active' : '']"
-                    >
+            <nav class="mt-1 pb-5 mb-5">
+              <ul class="nav nav-pills nav-sidebar flex-column" role="menu">
+                <template v-for="(group, i) in menu">
+                  <li class="nav-header" v-if="group.title" :key="`h-${i}`">{{ group.title }}</li>
+                  <li class="nav-item" v-for="(item, j) in group.items" :key="`i-${i}-${j}`">
+                    <nuxt-link :to="item.link" :class="['nav-link', isNavActive(item.link) ? 'active' : '']">
                       <i :class="`nav-icon ${item.icon}`"></i>
-                      <p>
-                        {{ item.name }}
-                        <i
-                          class="fas fa-angle-left right"
-                          v-if="item.sub1Items"
-                        ></i>
-                      </p>
+                      <p>{{ item.name }}</p>
+                      <span v-if="item.badge && badges[item.badge]" class="pn-badge">{{ badges[item.badge] }}</span>
                     </nuxt-link>
-                    <ul class="nav nav-treeview">
-                      <li
-                        class="nav-item"
-                        v-for="(sub1Item, k) in item.sub1Items"
-                        :key="`sub1Item${k}`"
-                      >
-                        <nuxt-link
-                          :to="sub1Item.link"
-                          :class="['nav-link', isNavActive(sub1Item.link) ? 'active' : '']"
-                        >
-                          <i class="far fa-circle nav-icon"></i>
-                          <p>{{ sub1Item.name }}</p>
-                        </nuxt-link>
-                      </li>
-                    </ul>
                   </li>
                 </template>
               </ul>
             </nav>
-            <!-- /.sidebar-menu -->
           </div>
-          <!-- /.sidebar -->
+          <div class="pn-sidebar-foot">Markz Marketplace &middot; v2.0</div>
         </aside>
 
-        <!-- Page Content -->
+        <!-- new-order alert (sellers) -->
+        <div v-if="alertToast" class="pn-alert-toast" @click="openShip">
+          <i class="fas fa-bell"></i>
+          <div>
+            <b>{{ alertToast }}</b>
+            <small>Dekhne ke liye yahan dabao</small>
+          </div>
+          <button class="pn-alert-x" @click.stop="alertToast = null" aria-label="Close">&times;</button>
+        </div>
+
+        <!-- ============================ PAGE ============================ -->
         <nuxt></nuxt>
 
-        <footer class="main-footer">
-          <!-- <div class="float-right d-none d-sm-block">
-          <img :src="organization.logo_path ? (mediaUrl + organization.logo_path) : mediaUrl + 'company.png'" alt="Logo" style="width: 150px;">
-        </div> -->
-          <!-- <strong>Copyright &copy; <a href="https://www.aaibuzz.com">LUSH FARMS</a></strong>
-        | -->
-          <!-- <strong>Developed By <a href="https://www.aaibuzz.com">AaiBuzz</a>.</strong> -->
-          <b>Version</b> 1.0.0
-        </footer>
-
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-          <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
+        <footer class="main-footer"><b>Markz</b> &middot; Marketplace panel</footer>
+        <aside class="control-sidebar control-sidebar-dark"></aside>
       </div>
-      <!-- ./wrapper -->
     </section>
     <section v-else>
       <nuxt></nuxt>
@@ -221,27 +92,27 @@
 
 <script>
 import SelectOrganization from "@/components/select-organization.vue";
-import SelectCity from "@/components/select-city.vue";
 import ConfirmModal from "@/components/ConfirmModal.vue";
 
 export default {
   name: "Root",
-  components: {
-    SelectOrganization,
-    SelectCity,
-    ConfirmModal,
-  },
+  components: { SelectOrganization, ConfirmModal },
   data() {
     return {
-      clipped: true,
-      fixed: false,
-      cities: [],
       isSidebarOpen: false,
+      storeUrl: "https://aadab.online",
+      badges: { applications: 0, approvals: 0, catreq: 0, toship: 0, pickups: 0 },
+      alertToast: null,
+      lastNew: 0,
+      pollTimer: null,
     };
   },
   watch: {
     $route() {
       this.closeSidebar();
+    },
+    authenticated(v) {
+      if (v) this.loadBadges();
     },
   },
   computed: {
@@ -251,338 +122,238 @@ export default {
     user() {
       return this.$auth.user;
     },
-    drawer() {
-      return this.authenticated;
+    isSuper() {
+      return !!(this.user && this.user.roles && this.user.roles.some((r) => r.id === 1));
     },
-    title() {
-      return this.user
-        ? this.user.companies.length
-          ? this.user.companies[0].name + " [" + this.user.roles[0].name + "]"
-          : this.$store.getters["settings/organization"]
-          ? this.$store.getters["settings/organization"].text
-          : "" + " [By Super Admin]"
-        : "";
+    permissions() {
+      if (!this.user || !this.user.roles || !this.user.roles.length) return [];
+      const ids = [];
+      this.user.roles.forEach((r) => (r.permissions || []).forEach((p) => ids.push(p.id)));
+      return ids;
+    },
+    displayName() {
+      if (!this.user) return "";
+      return this.user.first_name || this.user.name || this.user.email || "";
+    },
+    initials() {
+      const n = (this.displayName || "A").trim();
+      return n.slice(0, 1).toUpperCase();
+    },
+    roleLabel() {
+      if (this.isSuper) return "Super Admin";
+      return "Seller";
     },
     organizationId() {
       const organization = this.$store.state.settings.organization;
-      if (organization && organization.value) {
-        return organization.value;
-      }
-      if (this.user && this.user.companies && this.user.companies.length > 0) {
-        return this.user.companies[0].id;
-      }
+      if (organization && organization.value) return organization.value;
+      if (this.user && this.user.companies && this.user.companies.length > 0) return this.user.companies[0].id;
       return "";
     },
-    selectionWarning() {
-      const city = this.$store.state.settings.city;
-      const organization = this.$store.state.settings.organization;
-      const citySelected = city && city.id;
-      const orgSelected = organization && organization.value;
+    orgBase() {
+      return this.organizationId ? `/organizations/${this.organizationId}` : "";
+    },
 
-      if (!citySelected && !orgSelected) {
-        return "Please select location & organization";
-      }
-      if (!citySelected) {
-        return "Please select a location";
-      }
-      if (!orgSelected) {
-        return "Please select an organization";
-      }
-      // Both selected — no warning
-      return null;
-    },
-    role() {
-      return this.user ? this.user.roles[0].name : "";
-    },
-    permissions() {
-      return this.user ? this.user.roles[0].permissions.map((p) => p.id) : "";
-    },
-    organization() {
-      return this.$store.state.settings.organization;
-    },
-    categories() {
-      let categories = [];
-      categories.push({
-        // title: 'Dashboard',
-        items: [
-          {
-            name: "Settings",
-            icon: "fas fa-wrench",
-            link: "/settings",
-            permission: this.permissions.indexOf(1) != -1 ? true : false,
-          },
-          {
-            name: "Organizations",
-            icon: "fa-building",
-            link: "/organizations",
-            permission: this.permissions.indexOf(5) != -1 ? true : false,
-          },
-          // {
-          //   name: "Permissions",
-          //   icon: "fas fa-shield-alt",
-          //   link: `/permissions`,
-          //   permission: this.permissions.indexOf(2) != -1 ? true : false,
-          // },
-          // {
-          //   name: "Pages",
-          //   icon: "fas fa-wrench",
-          //   link: `/details`,
-          //   permission: this.permissions.indexOf(2) != -1 ? true : false,
-          // },
-          {
-            name: "Statuses",
-            icon: "fas fa-thermometer-half",
-            link: `/statuses`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          {
-            name: "Units",
-            icon: "fas fa-balance-scale",
-            link: `/units`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          {
-            name: "Categories",
-            icon: "fas fa-clipboard-list",
-            link: `/categories`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          {
-            name: "Tags",
-            icon: "fas fa-tags",
-            link: `/tags`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          {
-            name: "Notifications",
-            icon: "fas fa-bell",
-            link: `/notifications`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          {
-            name: "Locations",
-            icon: "fas fa-map-marker-alt",
-            link: `/cities`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          // {
-          //   name: "Offers",
-          //   icon: "fas fa-tags",
-          //   link: `/offers`,
-          //   permission: this.permissions.indexOf(3) != -1 ? true : false,
-          // },
-          // {
-          //   name: "Delivery Riders",
-          //   icon: "fas fa-user-friends",
-          //   link: `/delivery-users`,
-          //   permission: this.permissions.indexOf(4) != -1 ? true : false,
-          // },
-          {
-            name: "Customers",
-            icon: "fas fa-users",
-            link: `/customers`,
-            permission: this.permissions.indexOf(4) != -1 ? true : false,
-          },
-          {
-            name: "Wholesalers",
-            icon: "fas fa-store",
-            link: `/wholesalers`,
-            permission: this.permissions.indexOf(4) != -1 ? true : false,
-          },
-          {
-            name: "Favourite Wholesalers",
-            icon: "fas fa-star",
-            link: `/favourite-wholesalers`,
-            permission: this.permissions.indexOf(4) != -1 ? true : false,
-          },
-          {
-            name: "Orders",
-            icon: "fas fa-shopping-cart",
-            link: `/orders`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-        ],
-      });
-      categories.push({
-        title: "Company",
-        items: [
-          {
-            name: "Home",
-            icon: "fas fa-home",
-            link: "/",
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-            // sub1Items: [
-            //   { name: 'D1', link: '/a' },
-            //   { name: 'D2', link: '/b' }
-            // ]
-          },
-          // {
-          //   name: "Users",
-          //   icon: "fas fa-user-friends",
-          //   link: `/organizations/${this.organizationId}/users`,
-          //   permission: this.permissions.indexOf(4) != -1 ? true : false,
-          // },
-          // {
-          //   name: "Reset Password",
-          //   icon: "fas fa-unlock-alt",
-          //   link: `/auth/reset-password`,
-          //   permission: this.permissions.indexOf(4) != -1 ? true : false,
-          // },
-          // {
-          //   name: "My CWallet",
-          //   icon: "fas fa-shield-alt",
-          //   link: `/organizations/${this.organizationId}/company_wallets`,
-          //   permission: this.permissions.indexOf(3) != -1 ? true : false,
-          // },
-          {
-            name: "Coupons",
-            icon: "fas fa-ticket-alt",
-            link: `/organizations/${this.organizationId}/coupons`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          // {
-          //   name: 'Images', icon: 'fas fa-images', link: `/organizations/${this.organizationId}/images`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          // }
-        ],
-      });
-      categories.push({
-        title: "Products",
-        items: [
-          {
-            name: "Products",
-            icon: "fas fa-box",
-            link: `/organizations/${this.organizationId}/products`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          {
-            name: "Bulk Upload",
-            icon: "fas fa-upload",
-            link: `/organizations/${this.organizationId}/products/bulk-upload`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          {
-            name: "Product Notify",
-            icon: "fas fa-bell",
-            link: `/organizations/${this.organizationId}/product-notifications`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-        ],
-      });
-      // categories.push({
-      //   title: "Orders",
-      //   items: [
-      //     {
-      //       name: "Orders",
-      //       icon: "fas fa-credit-card",
-      //       link: `/organizations/${this.organizationId}/orders`,
-      //       permission: this.permissions.indexOf(3) != -1 ? true : false,
-      //     },
-      //   ],
-      // });
-      categories.push({
-        title: "Reports",
-        items: [
-          {
-            name: "Order Report",
-            icon: "fas fa-file-alt",
-            link: `/organizations/${this.organizationId}/reports/order-report`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          {
-            name: "Sales Report",
-            icon: "fas fa-chart-line",
-            link: `/organizations/${this.organizationId}/reports/sales-report`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          {
-            name: "Payment Methods",
-            icon: "fas fa-credit-card",
-            link: `/organizations/${this.organizationId}/reports/payment-methods`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          {
-            name: "Top Customers",
-            icon: "fas fa-users",
-            link: `/organizations/${this.organizationId}/reports/top-customers`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          {
-            name: "Sales by City",
-            icon: "fas fa-map-marker-alt",
-            link: `/organizations/${this.organizationId}/reports/sales-by-city`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          {
-            name: "Product Performance",
-            icon: "fas fa-box-open",
-            link: `/organizations/${this.organizationId}/reports/product-performance`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          {
-            name: "Low Stock Products",
-            icon: "fas fa-exclamation-triangle",
-            link: `/organizations/${this.organizationId}/reports/low-stock`,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-          // {
-          //   name: 'Daily MIS Report', icon: 'far fa-window-restore', link: `/organizations/${this.organizationId}/reports/daily-mis-report`, permission: this.permissions.indexOf(3) != -1 ? true : false
-          // },
-        ],
-      });
-      categories.push({
-        items: [
-          {
-            name: "",
-            icon: "",
-            link: ``,
-            permission: this.permissions.indexOf(3) != -1 ? true : false,
-          },
-        ],
-      });
+    /* The whole menu. `show` decides visibility, so adding an item is one line. */
+    menu() {
+      const has = (n) => this.permissions.indexOf(n) !== -1;
+      const base = this.orgBase;
+      const groups = [];
 
-      return categories.map(category => {
-        if (category.items) {
-          category.items = category.items.filter(item => item.permission);
-        }
-        return category;
-      });
+      if (this.isSuper) {
+        groups.push({ items: [{ name: "Dashboard", icon: "fas fa-chart-pie", link: "/", show: true }] });
+        groups.push({
+          title: "Sellers",
+          items: [
+            { name: "Seller Applications", icon: "fas fa-user-plus", link: "/seller/applications", badge: "applications", show: true },
+            { name: "All Sellers", icon: "fas fa-store", link: "/organizations", show: has(5) || true },
+            { name: "Commission", icon: "fas fa-percentage", link: "/seller/commission", show: true },
+            { name: "Seller Payouts", icon: "fas fa-money-bill-wave", link: "/seller/payouts", show: true },
+            { name: "Payments Ledger", icon: "fas fa-wallet", link: "/seller/payments", show: true },
+          ],
+        });
+        groups.push({
+          title: "Catalog",
+          items: [
+            { name: "Product Approvals", icon: "fas fa-clipboard-check", link: "/seller/products", badge: "approvals", show: true },
+            { name: "Categories", icon: "fas fa-th-large", link: "/categories", show: true },
+            { name: "Category Requests", icon: "fas fa-lightbulb", link: "/seller/category-requests", badge: "catreq", show: true },
+            { name: "Tags", icon: "fas fa-tags", link: "/tags", show: true },
+            { name: "Units", icon: "fas fa-balance-scale", link: "/units", show: true },
+          ],
+        });
+        groups.push({
+          title: "Orders",
+          items: [
+            { name: "Pickups", icon: "fas fa-truck-loading", link: "/seller/pickups", badge: "pickups", show: true },
+            { name: "All Orders", icon: "fas fa-shopping-bag", link: "/orders", show: true },
+            { name: "Returns & Refunds", icon: "fas fa-undo-alt", link: "/seller/returns", show: true },
+          ],
+        });
+        groups.push({
+          title: "Resellers",
+          items: [{ name: "Resellers & Withdrawals", icon: "fas fa-user-tag", link: "/seller/resellers", show: true }],
+        });
+        groups.push({
+          title: "Customers",
+          items: [
+            { name: "Customers", icon: "fas fa-users", link: "/customers", show: true },
+            { name: "Chat", icon: "fas fa-comments", link: "/seller/chat", show: true },
+            { name: "Notifications", icon: "fas fa-bell", link: "/notifications", show: true },
+          ],
+        });
+        groups.push({
+          title: "Growth",
+          items: [
+            { name: "Home Banners", icon: "fas fa-image", link: "/seller/banners", show: true },
+            { name: "Referrals & Offers", icon: "fas fa-gift", link: "/settings", show: true },
+            { name: "Coupons", icon: "fas fa-ticket-alt", link: `${base}/coupons`, show: !!base },
+          ],
+        });
+        groups.push({
+          title: "Selected seller" ,
+          items: [
+            { name: "Analytics", icon: "fas fa-chart-line", link: "/analytics", show: !!base },
+            { name: "Seller's Products", icon: "fas fa-box", link: `${base}/products`, show: !!base },
+            { name: "Add Product", icon: "fas fa-plus-circle", link: "/seller/add-product", show: !!base },
+            { name: "Bulk Upload", icon: "fas fa-upload", link: `${base}/products/bulk-upload`, show: !!base },
+            { name: "Sales Report", icon: "fas fa-file-invoice-dollar", link: `${base}/reports/sales-report`, show: !!base },
+            { name: "Order Report", icon: "fas fa-file-alt", link: `${base}/reports/order-report`, show: !!base },
+            { name: "Low Stock", icon: "fas fa-exclamation-triangle", link: `${base}/reports/low-stock`, show: !!base },
+          ],
+        });
+        groups.push({
+          title: "Platform",
+          items: [
+            { name: "Order Statuses", icon: "fas fa-stream", link: "/statuses", show: true },
+            { name: "Sign-up Leads", icon: "fas fa-address-book", link: "/seller/leads", show: true },
+            { name: "Delivery & Returns Policy", icon: "fas fa-balance-scale-right", link: "/seller/policy", show: true },
+            { name: "Roles & Permissions", icon: "fas fa-shield-alt", link: "/permissions", show: true },
+            { name: "My Profile", icon: "fas fa-user-circle", link: "/profile", show: true },
+          ],
+        });
+      } else {
+        groups.push({ items: [{ name: "Dashboard", icon: "fas fa-home", link: "/", show: true }] });
+        groups.push({
+          title: "Orders",
+          items: [
+            { name: "Orders to ship", icon: "fas fa-box-open", link: "/seller/fulfilment", badge: "toship", show: has(3) },
+            { name: "Orders", icon: "fas fa-shopping-bag", link: "/orders", show: has(3) },
+            { name: "Customer Chat", icon: "fas fa-comments", link: "/seller/chat", show: has(3) },
+          ],
+        });
+        groups.push({
+          title: "Catalog",
+          items: [
+            { name: "My Products", icon: "fas fa-box", link: `${base}/products`, show: !!base && has(3) },
+            { name: "Add Product", icon: "fas fa-plus-circle", link: "/seller/add-product", show: !!base && has(3) },
+            { name: "Bulk Upload", icon: "fas fa-upload", link: `${base}/products/bulk-upload`, show: !!base && has(3) },
+            { name: "Request New Category", icon: "fas fa-lightbulb", link: "/seller/category-requests", show: has(3) },
+            { name: "Low Stock Alerts", icon: "fas fa-exclamation-triangle", link: `${base}/reports/low-stock`, show: !!base && has(3) },
+          ],
+        });
+        groups.push({
+          title: "Growth",
+          items: [
+            { name: "Coupons", icon: "fas fa-ticket-alt", link: `${base}/coupons`, show: !!base && has(3) },
+            { name: "Product Performance", icon: "fas fa-chart-line", link: `${base}/reports/product-performance`, show: !!base && has(3) },
+          ],
+        });
+        groups.push({
+          title: "Reports",
+          items: [
+            { name: "Sales Report", icon: "fas fa-file-invoice-dollar", link: `${base}/reports/sales-report`, show: !!base && has(3) },
+            { name: "Order Report", icon: "fas fa-file-alt", link: `${base}/reports/order-report`, show: !!base && has(3) },
+            { name: "Payment Methods", icon: "fas fa-credit-card", link: `${base}/reports/payment-methods`, show: !!base && has(3) },
+            { name: "Top Customers", icon: "fas fa-users", link: `${base}/reports/top-customers`, show: !!base && has(3) },
+          ],
+        });
+        groups.push({
+          title: "Account",
+          items: [
+            { name: "Payments", icon: "fas fa-wallet", link: "/seller/payments", show: has(3) },
+            { name: "My Profile", icon: "fas fa-user-circle", link: "/profile", show: true },
+          ],
+        });
+      }
+
+      // drop hidden items, then drop groups that ended up empty
+      return groups
+        .map((g) => ({ title: g.title, items: g.items.filter((it) => it.show) }))
+        .filter((g) => g.items.length);
     },
   },
 
   mounted() {
-    this.getCities();
+    if (this.authenticated) {
+      this.loadBadges();
+      this.pollAlerts();
+      this.pollTimer = setInterval(() => this.pollAlerts(), 40000);
+    }
 
-    // Register global confirm and alert methods
+    // global confirm / alert helpers used by many legacy pages
     this.$root.confirm = (message, title = "Confirm") => {
-      if (this.$refs.confirmModal) {
-        return this.$refs.confirmModal.show({ message, title });
-      } else {
-        console.error("ConfirmModal ref not found");
-        return Promise.resolve(false);
-      }
+      if (this.$refs.confirmModal) return this.$refs.confirmModal.show({ message, title });
+      console.error("ConfirmModal ref not found");
+      return Promise.resolve(false);
     };
-
     this.$root.alert = (message, title = "Alert") => {
-      if (this.$refs.confirmModal) {
-        return this.$refs.confirmModal.show({
-          message,
-          title,
-          showCancelButton: false,
-        });
-      } else {
-        console.error("ConfirmModal ref not found");
-        return Promise.resolve(false);
-      }
+      if (this.$refs.confirmModal) return this.$refs.confirmModal.show({ message, title, showCancelButton: false });
+      console.error("ConfirmModal ref not found");
+      return Promise.resolve(false);
     };
   },
+  beforeDestroy() {
+    if (this.pollTimer) clearInterval(this.pollTimer);
+  },
   methods: {
-    isNavActive(link) {
-      if (!link || link === "" || link === "#") return false;
-      const currentPath = this.$route.path;
-      if (link === "/") {
-        return currentPath === "/";
+    /* sellers: new-order alert + "to ship" counter. Super Admin: late pickups counter. Runs every 40 s. */
+    async pollAlerts() {
+      if (!this.authenticated) return;
+      try {
+        if (this.isSuper) {
+          const r = await this.$axios.get("fulfilment/pickups", { params: { rowsPerPage: 1 } });
+          const c = (r.data && r.data.counts) || {};
+          this.badges.pickups = (c.awaiting_ready_late || 0) + (c.awaiting_pickup_late || 0);
+          return;
+        }
+        const r = await this.$axios.get("fulfilment/alerts");
+        const d = (r.data && r.data.data) || {};
+        this.badges.toship = d.to_ship || 0;
+        const n = d.new_orders || 0;
+        if (n > this.lastNew) {
+          this.alertToast = n === 1 ? "Naya order aaya hai!" : n + " naye orders aaye hain!";
+          this.beep();
+        }
+        if (n === 0) this.alertToast = this.$route.path.indexOf("/seller/fulfilment") === 0 ? null : this.alertToast;
+        this.lastNew = n;
+      } catch (e) {
+        /* silent: alerts are a convenience */
       }
-      return currentPath === link || currentPath.startsWith(link + "/");
+    },
+    beep() {
+      try {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;
+        const ctx = new Ctx();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.connect(g);
+        g.connect(ctx.destination);
+        o.frequency.value = 880;
+        g.gain.value = 0.08;
+        o.start();
+        setTimeout(() => { o.stop(); ctx.close(); }, 250);
+      } catch (e) {}
+    },
+    openShip() {
+      this.alertToast = null;
+      this.$router.push("/seller/fulfilment");
+    },
+    isNavActive(link) {
+      if (!link || link === "#") return false;
+      const p = this.$route.path;
+      if (link === "/") return p === "/";
+      return p === link || p.startsWith(link + "/");
     },
     toggleSidebar() {
       this.isSidebarOpen = !this.isSidebarOpen;
@@ -593,27 +364,24 @@ export default {
       this.updateBodyClass();
     },
     updateBodyClass() {
-      const $ =
-        window.jQuery || window.$ || (typeof $ !== "undefined" ? $ : null);
-      if ($) {
-        if (window.innerWidth < 992) {
-          if (this.isSidebarOpen) {
-            $("body").addClass("sidebar-open");
-          } else {
-            $("body").removeClass("sidebar-open");
-          }
-        } else {
-          if (this.isSidebarOpen) {
-            $("body").addClass("sidebar-collapse");
-          } else {
-            $("body").removeClass("sidebar-collapse");
-          }
-        }
+      const $ = window.jQuery || window.$ || null;
+      if (!$) return;
+      if (window.innerWidth < 992) {
+        this.isSidebarOpen ? $("body").addClass("sidebar-open") : $("body").removeClass("sidebar-open");
+      } else {
+        this.isSidebarOpen ? $("body").addClass("sidebar-collapse") : $("body").removeClass("sidebar-collapse");
       }
     },
-    async getCities() {
-      let cities = await this.$axios.get("/cities");
-      this.cities = cities.data.data;
+    /* red counters next to "things waiting for you" (Super Admin only) */
+    async loadBadges() {
+      if (!this.isSuper) return;
+      const get = (url, pick) => this.$axios.get(url).then((r) => pick(r.data)).catch(() => 0);
+      const [a, p, c] = await Promise.all([
+        get("seller_applications/counts", (d) => d.pending || 0),
+        get("seller_products/status_counts", (d) => d.pending || 0),
+        get("category_requests", (d) => (d.status_counts && d.status_counts.pending) || 0),
+      ]);
+      this.badges = { applications: a, approvals: p, catreq: c };
     },
     logout() {
       this.$auth.logout();
@@ -623,100 +391,5 @@ export default {
 </script>
 
 <style>
-.help-block {
-  color: red !important;
-}
-.ck-editor__editable {
-  min-height: 500px;
-}
-
-.content-wrapper,
-.login-page {
-  /* background: url("/background.jpg") !important; */
-  background-repeat: no-repeat !important;
-  background-size: cover !important;
-}
-
-.text-dark,
-.breadcrumb-item,
-.breadcrumb-item a,
-.login-logo a,
-.refresh {
-  color: white !important;
-}
-
-.table td,
-.table th {
-  padding: 0.4rem !important;
-}
-
-body {
-  font-size: 0.9rem;
-}
-
-table {
-  overflow: scroll;
-  white-space: nowrap;
-}
-
-/* Enhanced Sidebar Theme, High Contrast & Active Nav Styles */
-.main-sidebar {
-  background-color: #0f172a !important; /* Deep Slate Blue Background */
-  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-.main-sidebar .nav-header {
-  color: #94a3b8 !important; /* High contrast Slate Header text */
-  font-size: 0.75rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.06em !important;
-  padding: 1rem 1rem 0.35rem 1rem !important;
-}
-
-.main-sidebar .nav-link {
-  color: #cbd5e1 !important; /* Crisp high-contrast Off-White */
-  border-radius: 6px !important;
-  margin: 2px 8px !important;
-  padding: 8px 12px !important;
-  transition: all 0.2s ease-in-out !important;
-}
-
-.main-sidebar .nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.08) !important;
-  color: #ffffff !important;
-}
-
-.main-sidebar .nav-link.active {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; /* Vibrant Indigo Active Pill */
-  color: #ffffff !important;
-  font-weight: 600 !important;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35) !important;
-}
-
-.main-sidebar .nav-link.active p,
-.main-sidebar .nav-link.active i {
-  color: #ffffff !important;
-}
-
-.main-sidebar .nav-icon {
-  color: #94a3b8 !important;
-  margin-right: 10px !important;
-  transition: color 0.2s ease-in-out !important;
-}
-
-.main-sidebar .nav-link:hover .nav-icon,
-.main-sidebar .nav-link.active .nav-icon {
-  color: #ffffff !important;
-}
-
-.main-sidebar .sidebar {
-  padding-bottom: 100px !important;
-  overflow-y: auto !important;
-}
-
-.main-sidebar .nav-sidebar {
-  padding-bottom: 100px !important;
-  margin-bottom: 60px !important;
-}
+.ck-editor__editable { min-height: 500px; }
 </style>

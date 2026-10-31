@@ -7,7 +7,7 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: pkg.name,
+    title: 'Markz Panel',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' },
@@ -48,7 +48,9 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    '@/assets/css/modern-dashboard.css'
+    'vue-select/dist/vue-select.css',
+    '@/assets/css/modern-dashboard.css',
+    '@/assets/css/panel.css'
   ],
 
   router: {
@@ -106,7 +108,7 @@ module.exports = {
   axios: {
     // baseURL: 'http://api.venkon.aaibuzz.com/api'
     // baseURL: 'http://192.168.29.9:8080/api'
-    baseURL: 'http://localhost:9090/api'
+    baseURL: 'http://localhost:8000/api'
   },
   
   build: {

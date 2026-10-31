@@ -5,7 +5,7 @@
       v-model="organizationId"
       @change="updateDetails"
     >
-      <option value="">Select Organization</option>
+      <option value="">Working as: select a seller</option>
       <option
         v-for="(org, i) in organizations"
         :key="`org'${i}`"

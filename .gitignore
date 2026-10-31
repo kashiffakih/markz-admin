@@ -84,3 +84,5 @@ nuxt.config.js
 store/settings.js
 deployment-config.json
 
+ 
+*.bak*

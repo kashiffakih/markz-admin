@@ -3,9 +3,19 @@
     <div class="content-wrapper">
       <div class="content-header">
         <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
-              <h1 class="m-0 text-dark">Analytics Dashboard</h1>
+          <div class="pn-hello">
+            <div>
+              <h2>Namaste, {{ firstName }} 👋</h2>
+              <p v-if="isSuper">Poore marketplace ka live overview - jo kaam pending hai wo neeche dikh raha hai.</p>
+              <p v-else>Aapki dukaan ka aaj ka haal aur jo kaam baaki hai.</p>
+            </div>
+            <div class="d-flex align-items-center" style="gap:10px">
+              <div class="pn-seg">
+                <button v-for="p in periods" :key="p.v" :class="{ on: period === p.v }" @click="setPeriod(p.v)">{{ p.t }}</button>
+              </div>
+              <button class="pn-btn-ghost" @click="load" :disabled="loading">
+                <i class="fas fa-sync-alt" :class="{ 'fa-spin': loading }"></i>
+              </button>
             </div>
           </div>
         </div>
@@ -13,551 +23,192 @@
 
       <section class="content">
         <div class="container-fluid">
-          <!-- Filters -->
-          <div class="card mb-3">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-3">
-                  <label>Filter Type</label>
-                  <select
-                    class="form-control"
-                    v-model="filterType"
-                    @change="onFilterChange"
-                  >
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="monthly">Monthly</option>
-                    <option value="yearly">Yearly</option>
-                    <option value="custom">Custom Range</option>
-                  </select>
-                </div>
-                <!-- Custom Date Range -->
-                <div class="col-md-3" v-if="filterType === 'custom'">
-                  <label>Start Date</label>
-                  <client-only>
-                    <date-picker v-model="startDate" format="yyyy-MM-dd" />
-                  </client-only>
-                </div>
-                <div class="col-md-3" v-if="filterType === 'custom'">
-                  <label>End Date</label>
-                  <client-only>
-                    <date-picker v-model="endDate" format="yyyy-MM-dd" />
-                  </client-only>
-                </div>
-
-                <div class="col-md-2 d-flex align-items-end">
-                  <button
-                    class="btn btn-primary btn-block"
-                    @click="fetchAllData"
-                  >
-                    <i class="fas fa-search mr-1"></i> Apply Filters
-                  </button>
-                </div>
-                <div class="col-md-2">
-                  <label>Low Stock Threshold</label>
-                  <input
-                    type="number"
-                    class="form-control"
-                    v-model.number="lowStockThreshold"
-                    min="1"
-                    placeholder="Enter qty"
-                    @change="fetchLowStockProducts"
-                  />
-                </div>
-              </div>
-            </div>
+          <!-- ===== things waiting for you ===== -->
+          <div class="pn-tasks">
+            <nuxt-link v-for="t in tasks" :key="t.key" :to="t.link" class="pn-task" :class="{ 'is-zero': !t.num }">
+              <span class="pn-task__ico"><i :class="t.icon"></i></span>
+              <span>
+                <div class="pn-task__num">{{ t.num }}</div>
+                <div class="pn-task__txt">{{ t.text }}</div>
+              </span>
+            </nuxt-link>
           </div>
 
-          <!-- Key Metrics (Cards) -->
+          <!-- ===== KPI row ===== -->
           <div class="row">
-            <div class="col-lg-3 col-6">
-              <div class="small-box bg-info">
-                <div class="inner">
-                  <h3>{{ totalSales || 0 }}</h3>
-                  <p>Total Revenue</p>
-                </div>
-                <div class="icon"><i class="ion ion-bag"></i></div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-6">
+            <div class="col-xl-3 col-sm-6">
               <div class="small-box bg-success">
-                <div class="inner">
-                  <h3>{{ totalOrders || 0 }}</h3>
-                  <p>Total Orders</p>
-                </div>
-                <div class="icon"><i class="ion ion-stats-bars"></i></div>
+                <div class="inner"><h3>{{ money(stats.total_revenue) }}</h3><p>Sales</p></div>
+                <div class="icon"><i class="fas fa-rupee-sign"></i></div>
               </div>
             </div>
-            <!-- Average Order Value -->
-            <div class="col-lg-3 col-6">
+            <div class="col-xl-3 col-sm-6">
+              <div class="small-box bg-info">
+                <div class="inner"><h3>{{ stats.total_orders || 0 }}</h3><p>Orders</p></div>
+                <div class="icon"><i class="fas fa-shopping-bag"></i></div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
               <div class="small-box bg-warning">
-                <div class="inner">
-                  <h3>{{ averageOrderValue }}</h3>
-                  <p>Avg Order Value</p>
-                </div>
-                <div class="icon"><i class="ion ion-pie-graph"></i></div>
+                <div class="inner"><h3>{{ stats.pending_orders || 0 }}</h3><p>Orders to process</p></div>
+                <div class="icon"><i class="fas fa-clock"></i></div>
               </div>
             </div>
-            <!-- New Customers -->
-            <div class="col-lg-3 col-6">
+            <div class="col-xl-3 col-sm-6">
+              <div class="small-box bg-gradient-primary">
+                <div class="inner">
+                  <h3>{{ money(isSuper ? stats.commission_earned : stats.total_earnings) }}</h3>
+                  <p>{{ isSuper ? "Aadab commission" : "Your earnings" }}</p>
+                </div>
+                <div class="icon"><i class="fas fa-wallet"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-6">
+              <div class="small-box bg-success">
+                <div class="inner"><h3>{{ money(stats.paid_amount) }}</h3><p>{{ isSuper ? "Paid to sellers" : "Received in bank" }}</p></div>
+                <div class="icon"><i class="fas fa-check-circle"></i></div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
               <div class="small-box bg-danger">
-                <div class="inner">
-                  <h3>{{ totalNewCustomers }}</h3>
-                  <p>New Customers</p>
-                </div>
-                <div class="icon"><i class="ion ion-person-add"></i></div>
+                <div class="inner"><h3>{{ money(stats.pending_amount) }}</h3><p>{{ isSuper ? "Payouts pending" : "Yet to be paid" }}</p></div>
+                <div class="icon"><i class="fas fa-hourglass-half"></i></div>
+              </div>
+            </div>
+            <div class="col-md-4" v-if="isSuper">
+              <div class="small-box bg-info">
+                <div class="inner"><h3>{{ stats.active_sellers || 0 }} <small style="font-size:14px;color:#6b7a72">/ {{ stats.total_products || 0 }} products</small></h3><p>Active sellers</p></div>
+                <div class="icon"><i class="fas fa-store"></i></div>
+              </div>
+            </div>
+            <div class="col-md-4" v-else>
+              <div class="small-box bg-info">
+                <div class="inner"><h3>{{ stats.total_products || 0 }}</h3><p>Products listed</p></div>
+                <div class="icon"><i class="fas fa-box"></i></div>
               </div>
             </div>
           </div>
 
-          <!-- Low Stock Alert Card -->
-          <div class="row">
-            <div class="col-lg-4 col-6">
-              <div
-                class="small-box"
-                :class="
-                  lowStockProducts.length > 0 ? 'bg-warning' : 'bg-success'
-                "
-              >
-                <div class="inner">
-                  <h3>{{ lowStockProducts.length }}</h3>
-                  <p>Low Stock Products (&lt; {{ lowStockThreshold }} qty)</p>
-                </div>
-                <div class="icon">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Charts Row 1 -->
-          <div class="row">
-            <!-- Sales Over Time -->
-            <div class="col-md-6">
-              <div class="card">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Sales Trend</h3>
-                </div>
-                <div class="card-body">
-                  <GChart
-                    type="LineChart"
-                    :data="salesChartData"
-                    :options="chartOptions.sales"
-                  />
-                </div>
-              </div>
-            </div>
-            <!-- Customer Growth -->
-            <div class="col-md-6">
-              <div class="card">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Customer Growth</h3>
-                </div>
-                <div class="card-body">
-                  <GChart
-                    type="LineChart"
-                    :data="customerGrowthChartData"
-                    :options="chartOptions.sales"
-                  />
-                </div>
+          <!-- ===== quick actions ===== -->
+          <div class="card">
+            <div class="card-body">
+              <div class="pn-actions">
+                <template v-if="isSuper">
+                  <nuxt-link class="btn btn-primary" to="/seller/applications"><i class="fas fa-user-check mr-1"></i> Review sellers</nuxt-link>
+                  <nuxt-link class="btn btn-outline-primary" to="/seller/products"><i class="fas fa-clipboard-check mr-1"></i> Approve products</nuxt-link>
+                  <nuxt-link class="btn btn-outline-primary" to="/seller/category-requests"><i class="fas fa-lightbulb mr-1"></i> Category requests</nuxt-link>
+                  <nuxt-link class="btn btn-outline-primary" to="/seller/payouts"><i class="fas fa-money-bill-wave mr-1"></i> Seller payouts</nuxt-link>
+                  <nuxt-link class="btn btn-outline-primary" to="/categories"><i class="fas fa-th-large mr-1"></i> Categories</nuxt-link>
+                </template>
+                <template v-else>
+                  <nuxt-link class="btn btn-primary" :to="`${orgBase}/products/create`" v-if="orgBase"><i class="fas fa-plus mr-1"></i> Add product</nuxt-link>
+                  <nuxt-link class="btn btn-outline-primary" :to="`${orgBase}/products/bulk-upload`" v-if="orgBase"><i class="fas fa-upload mr-1"></i> Bulk upload</nuxt-link>
+                  <nuxt-link class="btn btn-outline-primary" to="/orders"><i class="fas fa-shopping-bag mr-1"></i> Orders</nuxt-link>
+                  <nuxt-link class="btn btn-outline-primary" to="/seller/category-requests"><i class="fas fa-lightbulb mr-1"></i> Request category</nuxt-link>
+                  <nuxt-link class="btn btn-outline-primary" to="/seller/chat"><i class="fas fa-comments mr-1"></i> Customer chat</nuxt-link>
+                </template>
               </div>
             </div>
           </div>
 
           <div class="row">
-            <!-- Category Distribution -->
-            <div class="col-md-4">
+            <!-- recent orders -->
+            <div class="col-lg-8">
               <div class="card">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Top Categories</h3>
-                </div>
-                <div class="card-body">
-                  <GChart
-                    type="PieChart"
-                    :data="categoryChartData"
-                    :options="chartOptions.pie"
-                  />
-                </div>
-              </div>
-            </div>
-            <!-- Top Sub Categories -->
-            <div class="col-md-4">
-              <div class="card">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Top Sub Categories</h3>
-                </div>
-                <div class="card-body">
-                  <GChart
-                    type="PieChart"
-                    :data="subCategoryChartData"
-                    :options="chartOptions.pie"
-                  />
-                </div>
-              </div>
-            </div>
-            <!-- Top Sub 2 Categories -->
-            <div class="col-md-4">
-              <div class="card">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Top Sub 2 Categories</h3>
-                </div>
-                <div class="card-body">
-                  <GChart
-                    type="PieChart"
-                    :data="sub2CategoryChartData"
-                    :options="chartOptions.pie"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Charts Row 2 -->
-          <div class="row">
-            <!-- Top Products -->
-            <div class="col-md-6">
-              <div class="card">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Top Selling Products</h3>
-                </div>
-                <div class="card-body">
-                  <GChart
-                    type="BarChart"
-                    :data="productChartData"
-                    :options="chartOptions.bar"
-                  />
-                </div>
-              </div>
-            </div>
-            <!-- Least Products -->
-            <div class="col-md-6">
-              <div class="card">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Least Selling Products</h3>
-                </div>
-                <div class="card-body">
-                  <GChart
-                    type="BarChart"
-                    :data="leastProductChartData"
-                    :options="chartOptions.bar"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Charts Row 3 -->
-          <div class="row">
-            <!-- Order Status -->
-            <div class="col-md-4">
-              <div class="card">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Order Statuses</h3>
-                </div>
-                <div class="card-body">
-                  <GChart
-                    type="PieChart"
-                    :data="orderStatusChartData"
-                    :options="chartOptions.pie"
-                  />
-                </div>
-              </div>
-            </div>
-            <!-- Payment Methods -->
-            <div class="col-md-4">
-              <div class="card">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Payment Methods</h3>
-                </div>
-                <div class="card-body">
-                  <GChart
-                    type="PieChart"
-                    :data="paymentMethodChartData"
-                    :options="chartOptions.pie"
-                  />
-                </div>
-              </div>
-            </div>
-            <!-- Sales by Price Range -->
-            <div class="col-md-4">
-              <div class="card">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Sales by Price Range</h3>
-                </div>
-                <div class="card-body">
-                  <GChart
-                    type="ColumnChart"
-                    :data="priceRangeChartData"
-                    :options="chartOptions.column"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Tables Row -->
-          <div class="row">
-            <!-- Recent Orders -->
-            <div class="col-md-6">
-              <div class="card">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Recent Orders</h3>
+                <div class="card-header d-flex align-items-center justify-content-between">
+                  <h3 class="card-title">Recent orders</h3>
+                  <nuxt-link to="/orders" class="btn btn-sm btn-outline-primary">View all</nuxt-link>
                 </div>
                 <div class="card-body table-responsive p-0">
-                  <table class="table table-striped table-valign-middle">
+                  <table class="table">
                     <thead>
-                      <tr>
-                        <th>Order ID</th>
-                        <th>User</th>
-                        <th>Status</th>
-                        <th>Total</th>
-                      </tr>
+                      <tr><th>Order</th><th v-if="isSuper">Seller</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th></tr>
                     </thead>
                     <tbody>
-                      <tr v-for="order in recentOrders" :key="order.id">
-                        <td>{{ order.id }}</td>
-                        <td>
-                          {{ order.user ? order.user.first_name : "N/A" }}
-                        </td>
-                        <td>
-                          <span
-                            class="badge badge-info"
-                            v-if="
-                              order.order_statuses &&
-                              order.order_statuses.length &&
-                              order.order_statuses[0].status
-                            "
-                          >
-                            {{ order.order_statuses[0].status.name }}
-                          </span>
-                          <span class="badge badge-secondary" v-else
-                            >Placed</span
-                          >
-                        </td>
-                        <td>{{ order.order_cost }}</td>
+                      <tr v-for="o in recentOrders" :key="o.id">
+                        <td><strong>#{{ o.id }}</strong></td>
+                        <td v-if="isSuper">{{ o.company ? o.company.name : "-" }}</td>
+                        <td>{{ o.user ? o.user.first_name : "-" }}</td>
+                        <td>{{ money(o.order_cost) }}</td>
+                        <td><span class="badge" :class="statusClass(o)">{{ statusText(o) }}</span></td>
+                        <td>{{ fmt(o.created_at) }}</td>
+                      </tr>
+                      <tr v-if="!recentOrders.length">
+                        <td :colspan="isSuper ? 6 : 5"><div class="pn-empty"><i class="fas fa-inbox"></i>Abhi koi order nahi aaya</div></td>
                       </tr>
                     </tbody>
                   </table>
-                  <div
-                    class="mt-2 text-center"
-                    v-if="recentOrders && !recentOrders.length"
-                  >
-                    <span>No recent orders found.</span>
-                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Top Products Table -->
-            <div class="col-md-6">
+            <!-- top products -->
+            <div class="col-lg-4">
               <div class="card">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Top Performing Products</h3>
-                </div>
-                <div class="card-body table-responsive p-0">
-                  <table class="table table-striped table-valign-middle">
-                    <thead>
-                      <tr>
-                        <th>Product</th>
-                        <th>Tally Name</th>
-                        <th>Size</th>
-                        <th>Color</th>
-                        <th>Quantity Sold</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        v-for="(product, index) in topProductsList"
-                        :key="index"
-                      >
-                        <td>
-                          {{ product.product_name }}
-                        </td>
-                        <td>
-                          {{ product.tally_product_name }}
-                        </td>
-                        <td>
-                          {{ product.size }}
-                        </td>
-                        <td>
-                          {{ product.color }}
-                        </td>
-                        <td>
-                          {{ product.total_qty }}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div class="mt-2 text-center" v-if="!topProductsList.length">
-                    <span>No data available.</span>
+                <div class="card-header"><h3 class="card-title">Best sellers</h3></div>
+                <div class="card-body p-0">
+                  <div v-for="(p, i) in topProducts" :key="i" class="d-flex align-items-center px-3 py-2" style="border-bottom:1px solid #eef2ef">
+                    <span class="pn-task__ico" style="width:34px;height:34px;flex-basis:34px;font-size:13px;margin-right:12px">{{ i + 1 }}</span>
+                    <div style="min-width:0;flex:1">
+                      <div style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</div>
+                      <div class="text-muted" style="font-size:12px">{{ money(p.revenue) }} revenue</div>
+                    </div>
+                    <span class="badge badge-info">{{ p.total_qty }} sold</span>
                   </div>
+                  <div v-if="!topProducts.length" class="pn-empty"><i class="fas fa-box-open"></i>Abhi sales data nahi hai</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Tables Row 2: Top Customers & Sales by City -->
-          <div class="row">
-            <!-- Top Customers -->
-            <div class="col-md-6">
-              <div class="card">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Top Customers</h3>
-                </div>
-                <div class="card-body table-responsive p-0">
-                  <table class="table table-striped table-valign-middle">
-                    <thead>
-                      <tr>
-                        <th>Customer</th>
-                        <th>Orders</th>
-                        <th>Total Spent</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="cust in topCustomers" :key="cust.id">
-                        <td>{{ cust.first_name }}</td>
-                        <td>{{ cust.total_orders }}</td>
-                        <td>{{ cust.total_spent }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div class="mt-2 text-center" v-if="!topCustomers.length">
-                    <span>No data available.</span>
-                  </div>
-                </div>
-              </div>
+          <!-- returns by product -->
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h3 class="card-title">Kaunsa product kitna return ho raha hai <span class="text-muted" style="font-weight:400">(pichhle 90 din)</span></h3>
             </div>
-            <!-- Sales by City -->
-            <div class="col-md-6">
-              <div class="card">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Sales by City</h3>
-                </div>
-                <div class="card-body table-responsive p-0">
-                  <table class="table table-striped table-valign-middle">
-                    <thead>
-                      <tr>
-                        <th>City</th>
-                        <th>Orders</th>
-                        <th>Revenue</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(city, index) in salesByCity" :key="index">
-                        <td>{{ city.city }}</td>
-                        <td>{{ city.total_orders }}</td>
-                        <td>{{ city.total_revenue }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div class="mt-2 text-center" v-if="!salesByCity.length">
-                    <span>No data available.</span>
-                  </div>
-                </div>
-              </div>
+            <div class="card-body p-0 table-responsive">
+              <table class="table">
+                <thead>
+                  <tr><th>Product</th><th class="text-right">Bika</th><th class="text-right">Return</th><th class="text-right">Return rate</th><th class="text-right">Seller ki galti</th><th>Sabse badi wajah</th><th class="text-right">Refund</th></tr>
+                </thead>
+                <tbody>
+                  <tr v-for="r in returnsByProduct" :key="r.product_id">
+                    <td><strong>{{ r.name }}</strong></td>
+                    <td class="text-right">{{ r.units_sold }}</td>
+                    <td class="text-right">{{ r.returns }}</td>
+                    <td class="text-right"><span :style="{ color: r.return_rate >= 15 ? '#b02a2a' : r.return_rate >= 8 ? '#9a6205' : '#12794a', fontWeight: 700 }">{{ r.return_rate === null ? "-" : r.return_rate + "%" }}</span></td>
+                    <td class="text-right">{{ r.seller_fault }}</td>
+                    <td>{{ r.top_reason }}</td>
+                    <td class="text-right">&#8377;{{ Number(r.refunded).toLocaleString("en-IN") }}</td>
+                  </tr>
+                  <tr v-if="!returnsByProduct.length"><td colspan="7"><div class="pn-empty"><i class="fas fa-smile"></i>Koi return nahi aaya, badhiya!</div></td></tr>
+                </tbody>
+              </table>
             </div>
+            <div class="card-footer text-muted" style="font-size:12.5px" v-if="returnsByProduct.length">Return rate 15% se upar ho to product ki photo / description / size chart check karo. "Seller ki galti" wale returns par return shipping aapse katti hai aur seller score ghat-ta hai.</div>
           </div>
 
-          <!-- Low Stock Products Report -->
-          <div class="row">
-            <div class="col-md-12">
-              <div class="card">
-                <div
-                  class="card-header border-0 d-flex justify-content-between align-items-center"
-                >
-                  <h3 class="card-title">
-                    <i
-                      class="fas fa-exclamation-triangle text-warning mr-2"
-                    ></i>
-                    Low Stock Products Report (Stock &lt;
-                    {{ lowStockThreshold }})
-                  </h3>
-                  <span
-                    class="badge"
-                    :class="
-                      lowStockProducts.length > 0
-                        ? 'badge-warning'
-                        : 'badge-success'
-                    "
-                  >
-                    {{ lowStockProducts.length }} Products
-                  </span>
-                </div>
-                <div class="card-body table-responsive p-0">
-                  <table class="table table-striped table-valign-middle">
-                    <thead>
-                      <tr>
-                        <th>Sr. No.</th>
-                        <th>App Display Name</th>
-                        <th>Product Name</th>
-                        <th>Points</th>
-                        <th>Main Category</th>
-                        <th>Second Category</th>
-                        <th>Third Category</th>
-                        <th>Colour</th>
-                        <th>Size</th>
-                        <th>Retail Price</th>
-                        <th>Retail Offer Price</th>
-                        <th>Wholesale Price</th>
-                        <th>Wholesale Offer Price</th>
-                        <th>Qty</th>
-                        <!-- <th>UOM</th> -->
-                        <th>Is Active</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        v-for="(product, index) in lowStockProducts"
-                        :key="index"
-                      >
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ product.app_display_name }}</td>
-                        <td>{{ product.product_tally_name }}</td>
-                        <td>{{ product.points }}</td>
-                        <td>{{ product.main_category }}</td>
-                        <td>{{ product.second_category }}</td>
-                        <td>{{ product.third_category }}</td>
-                        <td>{{ product.color }}</td>
-                        <td>{{ product.size }}</td>
-                        <td>{{ product.price }}</td>
-                        <td>{{ product.retail_offer_price }}</td>
-                        <td>{{ product.wholesale_price }}</td>
-                        <td>{{ product.wholesale_offer_price }}</td>
-                        <td>
-                          <span
-                            class="font-weight-bold"
-                            :class="
-                              product.qty < 5 ? 'text-danger' : 'text-warning'
-                            "
-                          >
-                            {{ product.qty }}
-                          </span>
-                        </td>
-                        <!-- <td>{{ product.uom }}</td> -->
-                        <td>{{ product.is_active }}</td>
-                        <td>
-                          <span
-                            v-if="parseInt(product.qty) < 5"
-                            class="badge badge-danger"
-                            >Critical</span
-                          >
-                          <span v-else class="badge badge-warning">Low</span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div
-                    class="mt-2 text-center p-3"
-                    v-if="!lowStockProducts.length"
-                  >
-                    <i class="fas fa-check-circle text-success fa-2x mb-2"></i>
-                    <p class="text-success">
-                      All products have sufficient stock!
-                    </p>
-                  </div>
-                </div>
-              </div>
+          <!-- earnings -->
+          <div class="card">
+            <div class="card-header"><h3 class="card-title">Earnings summary</h3></div>
+            <div class="card-body p-0 table-responsive">
+              <table class="table" v-if="earnings.length">
+                <thead>
+                  <tr><th>Period</th><th class="text-right">Sales</th><th class="text-right">Commission</th><th class="text-right">Seller earnings</th><th class="text-right">Orders</th></tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(e, i) in earnings" :key="i">
+                    <td>{{ e.period }}</td>
+                    <td class="text-right">{{ money(e.revenue) }}</td>
+                    <td class="text-right">{{ money(e.commission) }}</td>
+                    <td class="text-right">{{ money(e.seller_earnings) }}</td>
+                    <td class="text-right">{{ e.orders || 0 }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div v-else class="pn-empty"><i class="fas fa-chart-bar"></i>Is period me koi earning nahi</div>
             </div>
           </div>
         </div>
@@ -568,387 +219,119 @@
 
 <script>
 import moment from "moment";
-import { GChart } from "vue-google-charts";
 
 export default {
-  name: "AnalyticsDashboard",
-  components: {
-    GChart,
-  },
+  name: "PanelHome",
   data() {
     return {
-      filterType: "monthly",
-      startDate: "",
-      endDate: "",
       loading: false,
-
-      // Metrics
-      totalSales: 0,
-      totalOrders: 0,
-      totalNewCustomers: 0,
-
-      // Chart Data Containers
-      salesChartData: [
-        [
-          { type: "string", label: "Date" },
-          { type: "number", label: "Revenue" },
-          { type: "number", label: "Orders" },
-        ],
+      period: "month",
+      periods: [
+        { v: "today", t: "Today" },
+        { v: "week", t: "Week" },
+        { v: "month", t: "Month" },
+        { v: "year", t: "Year" },
       ],
-      productChartData: [
-        [
-          { type: "string", label: "Product" },
-          { type: "number", label: "Quantity" },
-        ],
-      ],
-      // Tables Data
+      stats: {},
       recentOrders: [],
-      topProductsList: [],
-      leastProductChartData: [
-        [
-          { type: "string", label: "Product" },
-          { type: "number", label: "Quantity" },
-        ],
-      ],
-      categoryChartData: [
-        [
-          { type: "string", label: "Category" },
-          { type: "number", label: "Quantity" },
-        ],
-      ],
-      subCategoryChartData: [
-        [
-          { type: "string", label: "Sub Category" },
-          { type: "number", label: "Quantity" },
-        ],
-      ],
-      sub2CategoryChartData: [
-        [
-          { type: "string", label: "Sub 2 Category" },
-          { type: "number", label: "Quantity" },
-        ],
-      ],
-      customerGrowthChartData: [
-        [
-          { type: "string", label: "Date" },
-          { type: "number", label: "New Customers" },
-        ],
-      ],
-      orderStatusChartData: [
-        [
-          { type: "string", label: "Status" },
-          { type: "number", label: "Orders" },
-        ],
-      ],
-      priceRangeChartData: [
-        [
-          { type: "string", label: "Price Range" },
-          { type: "number", label: "Orders" },
-        ],
-      ],
-      // New Analytics
-      paymentMethodChartData: [
-        [
-          { type: "string", label: "Payment Method" },
-          { type: "number", label: "Orders" },
-        ],
-      ],
-      topCustomers: [],
-      salesByCity: [],
-
-      // Low Stock Products
-      lowStockThreshold: 10,
-      lowStockProducts: [],
-
-      // Chart Options
-      chartOptions: {
-        sales: {
-          title: "Revenue over Time",
-          curveType: "function",
-          legend: { position: "bottom" },
-          height: 400,
-        },
-        pie: {
-          pieHole: 0.4,
-          height: 350,
-          chartArea: { width: "90%", height: "80%" },
-        },
-        bar: {
-          // Top Products (BarChart): Domain acts on Y-Axis (vAxis)
-          legend: { position: "none" },
-          height: 350,
-          chartArea: { width: "80%", height: "80%" },
-          vAxis: { type: "category" },
-        },
-        column: {
-          // Price Range (ColumnChart): Domain acts on X-Axis (hAxis)
-          legend: { position: "none" },
-          height: 350,
-          chartArea: { width: "80%", height: "80%" },
-          hAxis: { type: "category" },
-        },
-      },
+      topProducts: [],
+      returnsByProduct: [],
+      earnings: [],
+      pending: { applications: 0, approvals: 0, catreq: 0, chat: 0 },
     };
   },
   computed: {
-    averageOrderValue() {
-      if (!this.totalSales || !this.totalOrders || this.totalOrders == 0)
-        return "0.00";
-      return (parseFloat(this.totalSales) / parseInt(this.totalOrders)).toFixed(
-        2
-      );
+    user() {
+      return this.$auth.user;
+    },
+    isSuper() {
+      return !!(this.user && this.user.roles && this.user.roles.some((r) => r.id === 1));
+    },
+    firstName() {
+      return (this.user && (this.user.first_name || this.user.name)) || "";
+    },
+    orgBase() {
+      const o = this.$store.state.settings.organization;
+      const id = o && o.value ? o.value : this.user && this.user.companies && this.user.companies.length ? this.user.companies[0].id : "";
+      return id ? `/organizations/${id}` : "";
+    },
+    tasks() {
+      if (this.isSuper) {
+        return [
+          { key: "a", icon: "fas fa-user-plus", num: this.pending.applications, text: "Seller applications to review", link: "/seller/applications" },
+          { key: "p", icon: "fas fa-clipboard-check", num: this.pending.approvals, text: "Products waiting approval", link: "/seller/products" },
+          { key: "c", icon: "fas fa-lightbulb", num: this.pending.catreq, text: "Category requests", link: "/seller/category-requests" },
+          { key: "o", icon: "fas fa-clock", num: this.stats.pending_orders || 0, text: "Orders to process", link: "/orders" },
+        ];
+      }
+      return [
+        { key: "o", icon: "fas fa-clock", num: this.stats.pending_orders || 0, text: "Orders to process", link: "/orders" },
+        { key: "m", icon: "fas fa-comments", num: this.pending.chat, text: "Unread customer messages", link: "/seller/chat" },
+        { key: "c", icon: "fas fa-lightbulb", num: this.pending.catreq, text: "Category requests pending", link: "/seller/category-requests" },
+      ];
     },
   },
   mounted() {
-    // Default Dates
-    this.startDate = moment().startOf("month").format("YYYY-MM-DD");
-    this.endDate = moment().endOf("month").format("YYYY-MM-DD");
-    this.fetchAllData();
-    this.fetchLowStockProducts();
+    this.load();
   },
   methods: {
-    onFilterChange() {
-      if (this.filterType !== "custom") {
-        this.fetchAllData();
-      }
+    setPeriod(v) {
+      this.period = v;
+      this.load();
     },
-    async fetchAllData() {
+    async load() {
       this.loading = true;
-      const params = {
-        type: this.filterType,
-        start_date: moment(this.startDate).format("YYYY-MM-DD"),
-        end_date: moment(this.endDate).format("YYYY-MM-DD"),
-      };
-
+      const params = { period: this.period };
+      const safe = (p, fallback) => p.catch(() => ({ data: fallback }));
       try {
-        const [
-          salesRes,
-          prodRes,
-          leastRes,
-          catRes,
-          subCatRes,
-          sub2CatRes,
-          priceRes,
-          custRes,
-          statusRes,
-          recentRes,
-          payRes,
-          topCustRes,
-          cityRes,
-        ] = await Promise.all([
-          this.$axios.get("analytics/sales", { params }),
-          this.$axios.get("analytics/top_products", { params }),
-          this.$axios.get("analytics/least_products", { params }),
-          this.$axios.get("analytics/top_categories", { params }),
-          this.$axios.get("analytics/top_sub_categories", { params }),
-          this.$axios.get("analytics/top_sub_2_categories", { params }),
-          this.$axios.get("analytics/sales_by_price", { params }),
-          this.$axios.get("analytics/customer_growth", { params }),
-          this.$axios.get("analytics/order_statuses", { params }),
-          this.$axios.get("analytics/recent_orders", { params }),
-          this.$axios.get("analytics/payment_methods", { params }),
-          this.$axios.get("analytics/top_customers", { params }),
-          this.$axios.get("analytics/sales_by_city", { params }),
+        const [s, o, t, e] = await Promise.all([
+          safe(this.$axios.get("seller/dashboard/stats", { params }), {}),
+          safe(this.$axios.get("seller/dashboard/recent_orders", { params }), { data: [] }),
+          safe(this.$axios.get("seller/dashboard/top_products", { params }), { data: [] }),
+          safe(this.$axios.get("seller/dashboard/earnings_summary", { params }), { data: [] }),
         ]);
-
-        this.processSalesData(salesRes.data.data);
-        this.processProductData(prodRes.data.data);
-        this.processLeastProductData(leastRes.data.data);
-        this.processCategoryData(catRes.data.data);
-        this.processSubCategoryData(subCatRes.data.data);
-        this.processSub2CategoryData(sub2CatRes.data.data);
-        this.processPriceData(priceRes.data.data);
-        this.processCustomerGrowthData(custRes.data.data);
-        this.processOrderStatusData(statusRes.data.data);
-        this.recentOrders = recentRes.data.data;
-        this.processPaymentMethodData(payRes.data.data);
-        this.topCustomers = topCustRes.data.data;
-        this.salesByCity = cityRes.data.data;
-      } catch (error) {
-        console.error("Error fetching analytics:", error);
+        this.stats = s.data.data || s.data || {};
+        this.recentOrders = o.data.data || [];
+        this.topProducts = t.data.data || [];
+        this.earnings = e.data.data || [];
       } finally {
         this.loading = false;
       }
+      this.$axios.get("seller/dashboard/returns_by_product").then((r) => (this.returnsByProduct = r.data.data || [])).catch(() => (this.returnsByProduct = []));
+      this.loadPending();
     },
-
-    processSalesData(data) {
-      if (!data) return;
-      const header = [
-        { type: "string", label: "Date" },
-        { type: "number", label: "Revenue" },
-        { type: "number", label: "Orders" },
-      ];
-      const chartData = [header];
-      let revenue = 0;
-      let orders = 0;
-
-      data.forEach((item) => {
-        chartData.push([
-          item.date,
-          parseFloat(item.total_amount),
-          parseInt(item.count),
+    async loadPending() {
+      const get = (url, pick) => this.$axios.get(url).then((r) => pick(r.data)).catch(() => 0);
+      const catreq = get("category_requests", (d) => (d.status_counts && d.status_counts.pending) || 0);
+      if (this.isSuper) {
+        const [a, p, c] = await Promise.all([
+          get("seller_applications/counts", (d) => d.pending || 0),
+          get("seller_products/status_counts", (d) => d.pending || 0),
+          catreq,
         ]);
-        revenue += parseFloat(item.total_amount);
-        orders += parseInt(item.count);
-      });
-
-      this.salesChartData =
-        chartData.length > 1 ? chartData : [header, ["No Data", 0, 0]];
-      this.totalSales = revenue.toFixed(2);
-      this.totalOrders = orders;
-    },
-
-    processProductData(data) {
-      if (!data) return;
-      this.topProductsList = data; // Save raw data for table
-      const header = [
-        { type: "string", label: "Product" },
-        { type: "number", label: "Quantity" },
-      ];
-      const chartData = [header];
-      data.forEach((item) => {
-        chartData.push([item.name, parseInt(item.total_qty)]);
-      });
-      this.productChartData =
-        chartData.length > 1 ? chartData : [header, ["No Data", 0]];
-    },
-
-    processLeastProductData(data) {
-      if (!data) return;
-      const header = [
-        { type: "string", label: "Product" },
-        { type: "number", label: "Quantity" },
-      ];
-      const chartData = [header];
-      data.forEach((item) => {
-        chartData.push([item.name, parseInt(item.total_qty)]);
-      });
-      this.leastProductChartData =
-        chartData.length > 1 ? chartData : [header, ["No Data", 0]];
-    },
-
-    processCategoryData(data) {
-      if (!data) return;
-      const header = [
-        { type: "string", label: "Category" },
-        { type: "number", label: "Quantity" },
-      ];
-      const chartData = [header];
-      data.forEach((item) => {
-        chartData.push([item.name, parseInt(item.total_qty)]);
-      });
-      this.categoryChartData =
-        chartData.length > 1 ? chartData : [header, ["No Data", 0]];
-    },
-
-    processSubCategoryData(data) {
-      if (!data) return;
-      const header = [
-        { type: "string", label: "Sub Category" },
-        { type: "number", label: "Quantity" },
-      ];
-      const chartData = [header];
-      data.forEach((item) => {
-        chartData.push([item.name, parseInt(item.total_qty)]);
-      });
-      this.subCategoryChartData =
-        chartData.length > 1 ? chartData : [header, ["No Data", 0]];
-    },
-
-    processSub2CategoryData(data) {
-      if (!data) return;
-      const header = [
-        { type: "string", label: "Sub 2 Category" },
-        { type: "number", label: "Quantity" },
-      ];
-      const chartData = [header];
-      data.forEach((item) => {
-        chartData.push([item.name, parseInt(item.total_qty)]);
-      });
-      this.sub2CategoryChartData =
-        chartData.length > 1 ? chartData : [header, ["No Data", 0]];
-    },
-
-    processPriceData(data) {
-      if (!data) return;
-      const header = [
-        { type: "string", label: "Price Range" },
-        { type: "number", label: "Orders" },
-      ];
-      const chartData = [header];
-      data.forEach((item) => {
-        chartData.push([item.range, parseInt(item.count)]);
-      });
-      this.priceRangeChartData =
-        chartData.length > 1 ? chartData : [header, ["No Data", 0]];
-    },
-
-    processCustomerGrowthData(data) {
-      if (!data) return;
-      const header = [
-        { type: "string", label: "Date" },
-        { type: "number", label: "New Customers" },
-      ];
-      const chartData = [header];
-      let total = 0;
-      data.forEach((item) => {
-        chartData.push([item.date, parseInt(item.count)]);
-        total += parseInt(item.count);
-      });
-      this.customerGrowthChartData =
-        chartData.length > 1 ? chartData : [header, ["No Data", 0]];
-      this.totalNewCustomers = total;
-    },
-
-    processOrderStatusData(data) {
-      if (!data) return;
-      const header = [
-        { type: "string", label: "Status" },
-        { type: "number", label: "Orders" },
-      ];
-      const chartData = [header];
-      data.forEach((item) => {
-        chartData.push([String(item.status), parseInt(item.count)]);
-      });
-      this.orderStatusChartData =
-        chartData.length > 1 ? chartData : [header, ["No Data", 0]];
-    },
-    processPaymentMethodData(data) {
-      if (!data) return;
-      const header = [
-        { type: "string", label: "Payment Method" },
-        { type: "number", label: "Orders" },
-      ];
-      const chartData = [header];
-      data.forEach((item) => {
-        chartData.push([item.mode, parseInt(item.count)]);
-      });
-      this.paymentMethodChartData =
-        chartData.length > 1 ? chartData : [header, ["No Data", 0]];
-    },
-
-    // Fetch Low Stock Products
-    async fetchLowStockProducts() {
-      try {
-        const response = await this.$axios.get(
-          "/analytics/low_stock_products",
-          {
-            params: { threshold: this.lowStockThreshold },
-          }
-        );
-
-        let products = [];
-        if (response.data.data && Array.isArray(response.data.data)) {
-          products = response.data.data.data || response.data.data;
-        } else if (Array.isArray(response.data)) {
-          products = response.data;
-        }
-
-        this.lowStockProducts = products;
-      } catch (error) {
-        console.error("Error fetching low stock products:", error);
-        this.lowStockProducts = [];
+        this.pending = { applications: a, approvals: p, catreq: c, chat: 0 };
+      } else {
+        const [m, c] = await Promise.all([get("chat/unread_count", (d) => d.seller || 0), catreq]);
+        this.pending = { applications: 0, approvals: 0, catreq: c, chat: m };
       }
+    },
+    money(n) {
+      const v = Number(n || 0);
+      return "₹" + v.toLocaleString("en-IN", { maximumFractionDigits: 2 });
+    },
+    fmt(d) {
+      return d ? moment(d).format("DD MMM YYYY") : "";
+    },
+    statusText(o) {
+      if (o.order_statuses && o.order_statuses.length && o.order_statuses[0].status) return o.order_statuses[0].status.name;
+      return "Placed";
+    },
+    statusClass(o) {
+      const s = this.statusText(o).toLowerCase();
+      if (s === "delivered") return "badge-success";
+      if (s === "cancelled") return "badge-danger";
+      if (s === "shipped" || s === "dispatched") return "badge-info";
+      return "badge-warning";
     },
   },
 };

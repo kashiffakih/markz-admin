@@ -4,6 +4,7 @@ export default function({ store, redirect, route }) {
     route.name == "organizations-organizationId-documents-create" ||
     route.name == "organizations-organizationId-documents" ||
     route.name == "details" ||
+    route.name == "index" ||
     route.name == "auth-login" ||
     route.name == "auth-forgot-password" ||
     route.name == "reset-password" ||
@@ -72,7 +73,8 @@ export default function({ store, redirect, route }) {
     route.name == "orders-orderId-delivery-boys-id" ||
     route.name == "orders-orderId-order-statuses" ||
     route.name == "orders-orderId-order-statuses-create" ||
-    route.name == "orders-orderId-order-statuses-id"
+    route.name == "orders-orderId-order-statuses-id" ||
+    (route.name && String(route.name).indexOf("seller-") === 0)
   )
     return;
 

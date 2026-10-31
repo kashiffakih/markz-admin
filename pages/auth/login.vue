@@ -2,7 +2,7 @@
   <section class="hold-transition login-page">
     <div class="login-box">
       <div class="login-logo">
-        <nuxt-link to="/"><b>AADAB</b></nuxt-link>
+        <nuxt-link to="/"><b>MARKZ</b></nuxt-link>
       </div>
       <!-- /.login-logo -->
       <div class="card">

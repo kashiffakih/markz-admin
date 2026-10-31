@@ -14,9 +14,9 @@ export const state = () => ({
   },
 
   // mediaUrl: 'https://az1-medias.s3.ap-south-1.amazonaws.com/pinewraps/',
-  mediaUrl: 'http://localhost:9090/storage/Aadab/',
+  mediaUrl: 'http://localhost:8000/storage/Aadab/',
   // baseUrl: 'http://api.aethon.aaibuzz.com/api',
-  baseUrl: 'http://localhost:9090/api',
+  baseUrl: 'http://localhost:8000/api',
 })
 
 export const getters = {

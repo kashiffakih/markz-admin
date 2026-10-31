@@ -1,22 +1,27 @@
-export default function({ $axios, store, redirect }) {
+export default function({ $axios, store }) {
   $axios.onError(error => {
-    console.log(error.response.status);
-    store.dispatch("validation/setErrors", error.response.data.errors);
+    if (error && error.response) console.log(error.response.status);
+    store.dispatch(
+      "validation/setErrors",
+      error && error.response && error.response.data && error.response.data.errors
+        ? error.response.data.errors
+        : {}
+    );
   });
+
   $axios.onRequest(config => {
-    let promise = new Promise((resolve, reject) => {
-      let user = store.getters["auth/user"];
-      let organizations = user ? user.companies : "";
-      let id = organizations.length ? organizations[0].id : "";
-      if (!id)
-        id = store.getters["settings/organization"]
-          ? store.getters["settings/organization"].value
-          : "";
-      resolve(id);
-    });
-    promise.then(organizationId => {
-      config.headers.common["company-id"] = organizationId;
-      store.dispatch("validation/clearErrors");
-    });
+    const user = store.getters["auth/user"];
+    const organizations = user && user.companies ? user.companies : [];
+    let id = organizations.length ? organizations[0].id : "";
+    if (!id) {
+      const org = store.getters["settings/organization"];
+      id = org ? org.value : "";
+    }
+    // headers.common can be missing (server-side / newer axios), so make sure it exists
+    if (!config.headers) config.headers = {};
+    if (config.headers.common) config.headers.common["company-id"] = id;
+    config.headers["company-id"] = id;
+    store.dispatch("validation/clearErrors");
+    return config;
   });
 }
